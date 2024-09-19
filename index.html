@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta charset="utf-8" /> 
+		<title>Source code sandboxing</title>
+		<script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+		<script defer src="index.js"></script>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet"
+	         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" />
+		<link rel="stylesheet"
+		 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="index.css" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/default.min.css" />
+	</head>
+	<body>
+		<header>
+			<div>
+				<h1>
+					<strong>DevSecFlops</strong>: Source code sandboxing
+				</h1>
+				<div>
+					<i class="fa fa-github"></i>
+				</div>
+			</div>
+			<p class="byline">
+				In 2024, how easy is it for a developer to <q>sandbox</q> a program
+				by its source code?
+			</p>
+			<p>
+				Assume that the program wants only to manipulate open file
+				descriptors (e.g., standard IO) and manage its own
+				memory&#8212;regular console stuff.  If the running program tries to
+				do anything else, it must be terminated or otherwise unable to
+				acquire the requested resources (opening files, network sockets,
+				shared memory, etc.).
+			</p>
+		</header>
+		<figure id="chart-box">
+			<div>
+				<canvas id="chart"></canvas>
+			</div>
+			<figcaption>
+				<strong>How complex is your system?</strong> This graphs the text
+				length of all resources that must be read to understand the system
+				(manual pages, etc.) to the number of lines in our sample
+				implementations.  Easy-to-understand systems are grouped in the
+				lower-left, while progressively more complicated systems are in the
+				upper-right.
+			</figcaption>
+		</figure>
+		<p>
+			Below is a list of all sandbox source codes.  Click on an example to see its
+			source code and references.  Which method would you choose?
+		</p>
+		<div id="table">
+			<div id="table-head">
+				<div class="table-row" id="table-head-box">
+				</div>
+			</div>
+			<div id="table-body">
+			</div>
+		</div>
+		<dialog id="code">
+			<input type="radio" hidden="hidden" name="view" id="view-code" checked="checked" />
+			<input type="radio" hidden="hidden" name="view" id="view-references" />
+			<header>
+				<div>
+					<div>
+						Example &#8211;
+						<span id="code-system"></span>
+						<span id="code-subsystem"></span>
+						<span id="code-lang"></span>
+					</div>
+					<div id="code-github">
+						<i class="fa fa-github"></i>
+					</div>
+					<form method="dialog">
+						<button>&#x2715;</button>
+					</form>
+				</div>
+				<nav>
+					<label id="code-box-label" for="view-code">Code</label>
+					<label id="code-references-label" for="view-references">References</label>
+				</nav>
+			</header>
+			<div id="code-box">
+			</div>
+			<ul id="code-references">
+			</ul>
+		</dialog>
+	</body>
+</html>

@@ -1,0 +1,47 @@
+{
+	"capsicum": {
+		"link": "https://wiki.freebsd.org/Capsicum",
+		"sources": [
+			"https://man.freebsd.org/cgi/man.cgi?capsicum(4)",
+			"https://man.freebsd.org/cgi/man.cgi?cap_enter(2)"
+		]
+	},
+	"jsm": {
+		"link": "https://docs.oracle.com/javase/tutorial/essential/environment/security.html",
+		"sources": [
+			"https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SecurityManager.html",
+			"https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html"
+		]
+	},
+	"landlock": {
+		"link": "https://docs.kernel.org/userspace-api/landlock.html",
+		"sources": [
+			"https://man7.org/linux/man-pages/man7/landlock.7.html",
+			"https://man7.org/linux/man-pages/man2/landlock_create_ruleset.2.html",
+			"https://man7.org/linux/man-pages/man2/prctl.2.html",
+			"https://man7.org/linux/man-pages/man2/PR_SET_NO_NEW_PRIVS.2const.html"
+		]
+	},
+	"pledge": {
+		"link": "https://man.openbsd.org/pledge",
+		"sources": [
+			"https://man.openbsd.org/pledge"
+		]
+	},
+	"sandbox": {
+		"sources": [
+			"https://www.manpagez.com/man/7/sandbox/",
+			"https://www.manpagez.com/man/3/sandbox_init/"
+		]
+	},
+	"seccomp": {
+		"link": "https://docs.kernel.org/userspace-api/seccomp_filter.html",
+		"sources": [
+			"https://man7.org/linux/man-pages/man2/seccomp.2.html",
+			"https://man7.org/linux/man-pages/man2/prctl.2.html",
+			"https://man7.org/linux/man-pages/man2/PR_SET_NO_NEW_PRIVS.2const.html",
+			"https://man7.org/linux/man-pages/man2/PR_SET_SECCOMP.2const.html",
+			"https://man7.org/linux/man-pages/man2/bpf.2.html"
+		]
+	}
+}
