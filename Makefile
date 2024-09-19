@@ -1,6 +1,7 @@
 .SUFFIXES: .md .html
 
-PREFIX	= /var/www/htdocs
+PREFIX	= /var/www/vhosts/kristaps.bsd.lv/htdocs/devsecflops
+sinclude Makefile.local
 SBLG 	= ../sblg/sblg
 HTMLS	= sources/capsicum-c.html \
 	  sources/capsicum-python.html \
@@ -14,8 +15,8 @@ HTMLS	= sources/capsicum-c.html \
 all: index.js index.html
 
 install: all
-	mkdir -p /var/www/htdocs/leaderboard
-	install -m 0444 index.js index.html index.css /var/www/htdocs/leaderboard
+	mkdir -p $(PREFIX)
+	install -m 0444 index.js index.html index.css $(PREFIX)
 
 data.json: $(HTMLS)
 	$(SBLG) -o$@ -j $(HTMLS)

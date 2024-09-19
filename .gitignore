@@ -2,3 +2,4 @@
 sources/*.html
 data.json
 index.js
+Makefile.local
