@@ -11,6 +11,10 @@ html, body			{ width: calc(100% - 1rem);
 				  font-style: normal; }
 h1				{ font-size: 11.5pt;
 				  color: #fff; }
+body > header > div		{ display: flex;
+				  gap: 0.5rem; }
+body > header > div > h1	{ margin: 0; }
+body > header a			{ color: #fff; }
 .byline				{ font-size: 180%;
 				  line-height: 1.2em;
 				  color: #fff; }

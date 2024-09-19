@@ -108,6 +108,10 @@ function drawDialog(article)
 	}
 	document.getElementById('code-references').replaceChildren(...refs);
 
+	document.getElementById('code-github').href = 
+		'https://github.com/kristapsdz/dev_sec_flops/blob/main/' +
+		article.base + '.md';
+
 	const diag = document.getElementById('code');
 	diag.showModal();
 }
