@@ -45,42 +45,58 @@ body > header a			{ color: #fff; }
 #table-body .table-row:hover > *{ background-color: #fff; }
 #table-body .opener .fa		{ color: blue;
 				  cursor: pointer; }
-dialog				{ max-height: calc(100vh - 4rem);
+#code-mask			{ background-color: rgb(0 0 0 / 80%);
+				  position: fixed;
+				  top: 0;
+				  z-index: 0;
+				  bottom: 0;
+				  left: 0;
+				  right: 0; }
+#code-shown:not(:checked) ~ #code-mask,
+#code-shown:not(:checked) ~ #code
+				{ display: none; }
+#code 				{ position: fixed;
+				  display: flex;
+				  flex-direction: column;
+				  max-height: calc(100vh - 2rem);
+				  top: 1rem;
+				  left: 50%;
+				  transform: translateX(-50%);
 				  width: calc(100% - 2rem);
 				  max-width: 768px;
-				  margin-top: 1rem;
-				  padding: 0;
-				  position: relative; }
-dialog::backdrop		{ background-color: rgb(0 0 0 / 80%); }
-dialog > header			{ position: sticky;
-				  top: 0;
-				  background-color: #4a4a4a;
+				  z-index: 1;
+				  overflow: hidden;
+				  background-color: #eee;
+				  color: #2f2f2f; }
+#code > div, #code > ul		{ overflow: auto; }
+#code header			{ background-color: #4a4a4a;
 				  display: flex;
 				  padding: 0.5rem;
 				  flex-direction: column;
 				  gap: 0.5rem;
 				  color: #e8e8e8;
 				  width: calc(100% - 1rem); }
-dialog > header > div		{ display: flex;
+#code header > div		{ display: flex;
 				  align-items: center;
 				  gap: 0.25rem; }
-dialog > header > div > div	{ font-size: smaller;
+#code header > div > div	{ font-size: smaller;
 				  flex: 1; }
-dialog > header button		{ appearance: none;
+#code header button		{ appearance: none;
 				  border: 0;
 				  background-color: transparent;
 				  color: #fff; }
-dialog > header label,
-dialog > header a		{ color: #fff; }
-dialog > header label		{ cursor: pointer;
+#code header label,
+#code header a			{ color: #fff; }
+#code > div, #code > nav	{ overflow: scroll; }
+#code nav label			{ cursor: pointer;
 				  background-color: rgb(255 255 255 / 5%);
 				  transition: background-color 0.5s linear,
 				  	text-decoration 0.5s linear;
 				  padding: 0.25rem 0.5rem; }
-dialog > header label:hover	{ background-color: rgb(255 255 255 / 10%); }
-dialog pre			{ margin: 0;
+#code nav label:hover		{ background-color: rgb(255 255 255 / 10%); }
+#code pre			{ margin: 0;
 				  font-size: smaller; }
-dialog .code-views		{ display: none; }
+#code .code-views		{ display: none; }
 #view-code:not(:checked) ~ #code-box,
 #view-notes:not(:checked) ~ #code-notes,
 #view-references:not(:checked) ~ #code-references
@@ -98,7 +114,7 @@ dialog .code-views		{ display: none; }
 				  width: 100%; }
 #chart-box > figcaption		{ width: 33%;
 				  padding-top: 1.5rem;
-				  line-height: 1.3em;
+				  line-height: 1.35em;
 				  font-size: smaller;
 				  max-width: 15rem; }
 #chart-box > div		{ flex: 1; }

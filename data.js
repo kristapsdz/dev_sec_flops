@@ -145,7 +145,7 @@ function drawDialog(article)
 	for (let i = 0; i < views.length; i++)
 		views.checked = false;
 	document.getElementById('view-code').checked = true;
-	diag.showModal();
+	document.getElementById('code-shown').checked = true;
 }
 
 /**
@@ -193,7 +193,7 @@ function redraw()
 		for (const key of columnOrder)
 			row.append(redrawColumn(subsys, key, article.keys));
 		const col = document.createElement('div');
-		col.innerHTML = '<i class="fa fa-fw fa-code"></i>';
+		col.innerHTML = '<i class="fa fa-fw fa-folder-open-o"></i>';
 		col.className = 'opener';
 		col.onclick = () => drawDialog(article);
 		row.append(col);
@@ -215,8 +215,6 @@ function drawChart()
 	const subsystemIndex = {};
 	let i = 0;
 	for (const subsystem in subsystems) {
-		if (subsystems[subsystem].deprecated !== null)
-			continue;
 		subsystemIndex[subsystem] = i++;
 		datasets.push({
 			label: subsystem,
@@ -229,8 +227,6 @@ function drawChart()
 	for (const article of data.articles) {
 		const name = article.keys['subsystem'];
 		const subsystem = getSubsystem(name);
-		if (subsystem.deprecated !== null)
-			continue;
 		let bytes = 0;
 		for (const source of subsystem.sources) {
 			if (!(source in subsystemSizes))
