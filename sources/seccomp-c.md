@@ -2,6 +2,8 @@ lang: C/C++
 system: Linux
 system-link: https://linux.org
 subsystem: seccomp
+githubAttestations: 
+    kristapsdz kristapsdz/kcgi,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */

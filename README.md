@@ -33,12 +33,15 @@ In the [sources](sources) directory, find your match.  (If it doesn't
 exist, create it as documented above, please!)
 
 Then add a line or lines to the `githubAttestations`, then make a pull
-request with the modifications.  If your sources aren't on GitHub (e.g.,
-Sourcehut, etc.), please open an issue and I'll add bits for it.
+request with the modifications.  If the project is in GitHub, no need to
+include the domain; if it isn't, then use the full path to your sources.
+If you don't have a GitHub account (e.g., you're using Sourceforge),
+then please open an issue and I'll address that later.
 
 ```
 githubAttestations:
    GITHUBNAME examplename/examplerepo[/exampledir],
+   GITHUBNAME2 https://your.domain/examplerepo[/exampledir],
 ```
 
 For example, `kristapsdz kristapsdz/kcgi,` (note the trailing comma).

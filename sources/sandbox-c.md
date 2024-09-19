@@ -1,6 +1,12 @@
 lang: C/C++
 system: Mac OS X
 subsystem: sandbox
+githubAttestations: 
+    kristapsdz kristapsdz/kcaldav,
+    kristapsdz kristapsdz/kcgi,
+    kristapsdz kristapsdz/lowdown,
+    kristapsdz kristapsdz/sblg,
+    kristapsdz kristapsdz/sqlite2mdoc,
 
 ```c
 #include <sandbox.h> /* sandbox_init(3), etc. */
