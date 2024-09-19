@@ -46,16 +46,22 @@ function getSubsystem(name)
 	return subsystems[name];
 }
 
-/**
- * Like getSubsystem(), but for the size.
- */
-function getSourceSize(name)
+function getSourceSize(source)
 {
-	if (typeof(name) === 'undefined')
+	if (typeof(source) === 'undefined')
 		throw new Error('No source name for size.');
-	if (!(name in subsystemSizes))
+	if (!(source in subsystemSizes.results))
 		throw new Error('No source for ' + name + '.');
-	return subsystemSizes[name];
+	return subsystemSizes.results[source];
+}
+
+function getSourceSizes(name)
+{
+	const subsystem = getSubsystem(name);
+	let bytes = 0;
+	for (const source of subsystem.sources)
+		bytes += getSourceSize(source);
+	return bytes;
 }
 
 /**
@@ -139,7 +145,7 @@ function drawDialog(article)
 	}
 	if (refs.length === 0) {
 		const elem = document.createElement('li');
-		elem.textContent = 'No references given.';
+		elem.textContent = 'No resources given.';
 		refs.push(elem);
 	}
 	document.getElementById('code-references').replaceChildren(...refs);
@@ -238,6 +244,82 @@ function redraw()
  * Draw the scatter chart plotting complexity.  On the x-axis, show line numbers
  * for the example.  On the y-axis, accumulate the reference complexity.
  */
+function drawCasestudy()
+{
+	const data = {
+		labels: Object.keys(casestudy),
+		datasets: [{
+			label: 'Source code',
+			data: Object.keys(casestudy).map(key => casestudySizes.results[casestudy[key]]),
+		}, {
+			label: 'Resources',
+			data: Object.keys(casestudy).map(key => getSourceSizes(key)),
+			yAxisID: 'y2',
+		}]
+	};
+
+	/* Chart.js configuration. */
+
+	new Chart(document.getElementById('chart-casestudy'), {
+		type: 'bar',
+		data: data,
+		options: {
+			plugins: {
+				legend: {
+					display: true,
+					labels: {
+						color: '#fff',
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					title: {
+						display: true,
+						text: 'source code',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y2: {
+					position: 'right',
+					title: {
+						display: true,
+						text: 'resources',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#ddd',
+						callback: (label, index, labels) => (
+							Number(label / 1000) + ' KB'
+						),
+					},
+					grid: {
+						color: '#666',
+					},
+				}
+			}
+		}
+	});
+}
+
+/**
+ * Draw the scatter chart plotting complexity.  On the x-axis, show line numbers
+ * for the example.  On the y-axis, accumulate the reference complexity.
+ */
 function drawChart()
 {
 	const datasets = [];
@@ -258,10 +340,7 @@ function drawChart()
 
 	for (const article of data.articles) {
 		const name = article.keys['subsystem'];
-		const subsystem = getSubsystem(name);
-		let bytes = 0;
-		for (const source of subsystem.sources)
-			bytes += getSourceSize(source);
+		const bytes = getSourceSizes(name);
 		datasets[subsystemIndex[name]].data.push({
 			'x': article.keys.lines,
 			'y': parseInt(bytes),
@@ -288,7 +367,7 @@ function drawChart()
 				x: {
 					title: {
 						display: true,
-						text: 'source code lines',
+						text: 'source code',
 						color: '#fff',
 					},
 					ticks: {
@@ -301,7 +380,7 @@ function drawChart()
 				y: {
 					title: {
 						display: true,
-						text: 'length of collected resources',
+						text: 'resources',
 						color: '#fff',
 					},
 					ticks: {
@@ -321,6 +400,7 @@ function drawChart()
 
 window.addEventListener('load', () => {
 	drawChart();
+	drawCasestudy();
 	const cols = [];
 	for (const key of columnOrder) {
 		const col = document.createElement('div');

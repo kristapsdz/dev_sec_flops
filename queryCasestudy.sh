@@ -2,12 +2,12 @@
 
 echo "{ \"fetched\": \"`date +%s`\","
 echo "  \"results\": {"
-jq '.[].sources' < subsystems.json | grep 'http' | \
+jq '.[]' < casestudy.json | \
 	sed -e 's!^[ ]*"!!' -e 's!"[ ]*$!!' -e 's!",[ ]*$!!' | \
 	sort -u | \
 	while read ln ; do \
 		echo "Fetching $ln..." 1>&2 ; \
-		lines=`links -dump "$ln" | wc -c` ; \
+		lines=`curl -s -o- "$ln" | wc -l` ; \
 		echo "    \"$ln\": $lines," ; \
 	done
 echo "  }"

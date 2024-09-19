@@ -1,0 +1,6 @@
+{
+	"capsicum": "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-capsicum.c",
+	"sandbox": "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-darwin.c",
+	"pledge": "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-pledge.c",
+	"seccomp": "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-seccomp-filter.c"
+}

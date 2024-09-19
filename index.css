@@ -14,7 +14,7 @@ h1				{ font-size: 11.5pt;
 body > header > div		{ display: flex;
 				  gap: 0.5rem; }
 body > header > div > h1	{ margin: 0; }
-body > header a			{ color: #fff; }
+body a				{ color: #fff; }
 label				{ cursor: pointer; }
 .byline				{ font-size: 180%;
 				  line-height: 1.2em;
@@ -28,6 +28,7 @@ label				{ cursor: pointer; }
 				  margin: 1.4em 0;
 				  box-shadow: 8px 8px 8px #000;
 			  	  grid-template-columns: 1fr 1fr 1fr auto auto; }
+#table a			{ color: #000; }
 #table .ok-lines		{ color: green; }
 #table .many-lines		{ color: darkorange; }
 #table .too-many-lines		{ color: red; }
@@ -86,7 +87,7 @@ label				{ cursor: pointer; }
 				  white-space: nowrap;
 				  overflow: hidden;
 				  text-overflow: ellipsis; }
-#code header > div a		{ color: inherit; }
+#code a				{ color: inherit; }
 #code > div, #code > nav	{ overflow: scroll; }
 #code nav 			{ display: flex;
 				  padding: 0 0.5rem;

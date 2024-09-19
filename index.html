@@ -56,7 +56,7 @@
 		</figure>
 		<p>
 			Below is a list of all sandbox source codes.  Click on an example to see its
-			source code and references.  Which method would you choose?  Sources
+			source code and resources.  Which method would you choose?  Sources
 			readable on a normal mobile phone (&lt;20 lines) have lines show in green,
 			barely readable (20&#8211;30 lines) in orange, and above in red.  Deprecated
 			subsystems are marked next to the subsytem name.
@@ -69,6 +69,24 @@
 			<div id="table-body">
 			</div>
 		</div>
+		<p>
+			These are all trivial examples.
+			How does they stack up in practice?
+			Let's use
+			<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>
+			as a canonical example.
+			OpenSSH is under tremendous pressure for its security.
+			It has a number of source code sandboxes, including most of those mentioned
+			in this survey.
+			In general, these sandboxes will do little more than our
+			examples&#8212;limit resources used to only communication over standard IO
+			and to perform in-process duties (memory management, etc.).
+			How do the lengths of source code (in lines) for each sandbox measure, with
+			the collected resources length for comparison?
+		</p>
+		<figure id="chart-casestudy-box">
+			<canvas id="chart-casestudy"></canvas>
+		</figure>
 		<input type="checkbox" name="code-shown" hidden="hidden" id="code-shown" />
 		<label for="code-shown" id="code-mask"></label>
 		<div role="dialog" id="code">
@@ -92,7 +110,7 @@
 				</div>
 				<nav>
 					<label id="code-box-label" for="view-code">Code</label>
-					<label id="code-references-label" for="view-references">References</label>
+					<label id="code-references-label" for="view-references">Resources</label>
 					<label id="code-notes-label" for="view-notes">Notes</label>
 				</nav>
 			</header>

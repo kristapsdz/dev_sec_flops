@@ -1,0 +1,8 @@
+{ "fetched": "1726767993",
+  "results": {
+    "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-capsicum.c":      128,
+    "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-darwin.c":       99,
+    "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-pledge.c":       77,
+    "https://raw.githubusercontent.com/openssh/openssh-portable/master/sandbox-seccomp-filter.c":      543,
+  }
+}

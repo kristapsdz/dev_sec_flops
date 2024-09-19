@@ -20,7 +20,10 @@ install: all
 data.json: $(HTMLS)
 	$(SBLG) -o$@ -j $(HTMLS)
 
-index.js: data.json data.js subsystems.json subsystems-sizes.json
+index.js: data.json data.js
+index.js: subsystems.json subsystems-sizes.json
+index.js: casestudy.json casestudy-sizes.json
+index.js:
 	( \
 		printf "const data = " ; \
 		cat data.json ; \
@@ -30,6 +33,12 @@ index.js: data.json data.js subsystems.json subsystems-sizes.json
 		echo ; \
 		printf "const subsystems = " ; \
 		cat subsystems.json ; \
+		echo ; \
+		printf "const casestudy = " ; \
+		cat casestudy.json ; \
+		echo ; \
+		printf "const casestudySizes = " ; \
+		cat casestudy-sizes.json ; \
 		echo ; \
 		cat data.js ; \
 	) >$@
@@ -60,5 +69,8 @@ index.js: data.json data.js subsystems.json subsystems-sizes.json
 clean:
 	rm -f $(HTMLS) data.json index.js
 
-querySizes:
-	sh ./querySizes.sh >subsystems-sizes.json
+subsystems-sizes.json: querySizes.sh subsystems.json
+	sh ./querySizes.sh >$@
+
+casestudy-sizes.json: queryCasestudy.sh casestudy.json
+	sh ./queryCasestudy.sh > $@
