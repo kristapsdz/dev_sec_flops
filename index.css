@@ -18,6 +18,7 @@ body > header a			{ color: #fff; }
 .byline				{ font-size: 180%;
 				  line-height: 1.2em;
 				  color: #fff; }
+.empty				{ opacity: 0.5; }
 .fa.fa-exclamation-circle	{ color: red; }
 #table				{ display: grid;
 				  width: 100%;
@@ -25,7 +26,7 @@ body > header a			{ color: #fff; }
 				  color: #2f2f2f;
 				  margin: 1.4em 0;
 				  box-shadow: 8px 8px 8px #000;
-			  	  grid-template-columns: auto 1fr 1fr 1fr auto auto; }
+			  	  grid-template-columns: 1fr 1fr 1fr auto auto; }
 #table-head,
 #table-body,
 .table-row			{ display: contents; }
@@ -54,7 +55,6 @@ dialog::backdrop		{ background-color: rgb(0 0 0 / 80%); }
 dialog > header			{ position: sticky;
 				  top: 0;
 				  background-color: #4a4a4a;
-				  font-size: smaller;
 				  display: flex;
 				  padding: 0.5rem;
 				  flex-direction: column;
@@ -62,9 +62,10 @@ dialog > header			{ position: sticky;
 				  color: #e8e8e8;
 				  width: calc(100% - 1rem); }
 dialog > header > div		{ display: flex;
+				  align-items: center;
 				  gap: 0.25rem; }
-dialog > header > div > div:first-child	
-				{ flex: 1; }
+dialog > header > div > div	{ font-size: smaller;
+				  flex: 1; }
 dialog > header button		{ appearance: none;
 				  border: 0;
 				  background-color: transparent;
@@ -79,13 +80,17 @@ dialog > header label		{ cursor: pointer;
 dialog > header label:hover	{ background-color: rgb(255 255 255 / 10%); }
 dialog pre			{ margin: 0;
 				  font-size: smaller; }
+dialog .code-views		{ display: none; }
 #view-code:not(:checked) ~ #code-box,
+#view-notes:not(:checked) ~ #code-notes,
 #view-references:not(:checked) ~ #code-references
 				{ display: none; }
 #view-code:checked ~ header #code-box-label,
+#view-notes:checked ~ header #code-notes-label,
 #view-references:checked ~ header #code-references-label
 				{ text-decoration: underline;
 				  background-color: rgb(255 255 255 / 10%); }
+#code-notes			{ padding: 1rem; }
 #chart-box			{ display: flex;
 				  gap: 0.5rem;
 				  margin-left: 0;
@@ -97,6 +102,7 @@ dialog pre			{ margin: 0;
 				  font-size: smaller;
 				  max-width: 15rem; }
 #chart-box > div		{ flex: 1; }
+footer				{ font-size: smaller; }
 
 @media (width < 1024px) {
   #chart-box			{ display: block; }
@@ -105,7 +111,10 @@ dialog pre			{ margin: 0;
 				  padding-left: 1rem;
 				  padding-right: 1rem;
 	  			  padding-top: 1rem; }
-  #table			{ grid-template-columns: auto 1fr 1fr auto auto; }
-  #table .table-row > :nth-child(2)
+  #table			{ grid-template-columns: 1fr 1fr 1fr auto; }
+  #table .table-row > *		{ overflow: hidden;
+	  			  white-space: nowrap;
+	  			  text-overflow: ellipsis; }
+  #table .table-row > :nth-child(4)
   				{ display: none; }
 }

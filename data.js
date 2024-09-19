@@ -4,7 +4,6 @@
  * be empty.
  */
 const columnOrder = [
-	'deprecated',
 	'system',
 	'subsystem',
 	'lang',
@@ -35,8 +34,9 @@ function resort(order, elem, index, numeric = false)
 	redraw();
 }
 
-
-
+/**
+ * Look up a subsystem (e.g., pledge, capsicum) , making sure that it exists.
+ */
 function getSubsystem(name)
 {
 	if (typeof(name) === 'undefined')
@@ -47,16 +47,23 @@ function getSubsystem(name)
 }
 
 /**
+ * The user has clicked on the button so that the dialog for seeing the source
+ * code example for "article" shows up.  Populate the dialog window with all
+ * necessary information.
  */
 function drawDialog(article)
 {
 	const subsystem = getSubsystem(article.keys['subsystem']);
+
+	/* Pretty-print its source code. */
 
 	const code = document.getElementById('code-box');
 	code.innerHTML = article.article.xml;
 	code.querySelectorAll('pre code').forEach((el) => {
 		hljs.highlightElement(el);
 	});
+
+	/* The system name (e.g., FreeBSD) or empty. */
 
 	const sys = document.getElementById('code-system');
 	if ('system' in article.keys) {
@@ -72,6 +79,8 @@ function drawDialog(article)
 	} else
 		sys.hidden = true;
 
+	/* The subsystem name (e.g., pledge), which is never empty. */
+
 	const subsys = document.getElementById('code-subsystem');
 	let elem;
 	if ('link' in subsystem) {
@@ -82,6 +91,8 @@ function drawDialog(article)
 	elem.textContent = article.keys['subsystem'];
 	subsys.replaceChildren(elem);
 
+	/* Code language (e.g., C/C++), also never empty. */
+
 	const lang = document.getElementById('code-lang');
 	if ('lang' in article.keys) {
 		if (!('system' in article.keys) &&
@@ -91,6 +102,8 @@ function drawDialog(article)
 			lang.textContent = '(' + article.keys['lang'] + ')';
 	} else
 		lang.replaceChildren();
+
+	/* All references linked to the subsystem, if any. */
 
 	const refs = [];
 	for (const uri of subsystem['sources']) {
@@ -108,11 +121,30 @@ function drawDialog(article)
 	}
 	document.getElementById('code-references').replaceChildren(...refs);
 
+	/* Notes attached to the example, if any. */
+
+	const notes = document.getElementById('code-notes');
+	if ('notes' in article.keys) {
+		notes.textContent = article.keys.notes;
+		notes.className = '';
+	} else {
+		notes.textContent = 'No notes.';
+		notes.className = 'empty';
+	}
+
+	/* GitHub reference to the example. */
+
 	document.getElementById('code-github').href = 
 		'https://github.com/kristapsdz/dev_sec_flops/blob/main/' +
 		article.base + '.md';
 
+	/* Reset the view and show the dialog. */
+
 	const diag = document.getElementById('code');
+	const views = diag.getElementsByClassName('code-views');
+	for (let i = 0; i < views.length; i++)
+		views.checked = false;
+	document.getElementById('view-code').checked = true;
 	diag.showModal();
 }
 
@@ -128,18 +160,19 @@ function redrawColumn(subsystem, key, keys)
 		keys[key + '-link'] : null;
 	const col = document.createElement('div');
 
-	if (key === 'deprecated' && text.length > 0) {
-		const span = document.createElement('span');
-		span.innerHTML = '<i class="fa fa-exclamation-circle"></i>';
-		span.title = 'Deprecated';
-		col.append(span);
-	} else if (link !== null) {
+	if (key === 'subsystem' && subsystem.deprecated !== null) {
+		const ico = document.createElement('i');
+		ico.className = 'fa fa-fw fa-exclamation-circle';
+		col.append(ico);
+	}
+
+	if (link !== null) {
 		const anch = document.createElement('a');
 		anch.textContent = text;
 		anch.href = link;
 		col.append(anch);
 	} else
-		col.textContent = text;
+		col.append(document.createTextNode(text));
 
 	if (text.length === 0)
 		col.className = 'empty';
@@ -169,12 +202,21 @@ function redraw()
 	document.getElementById('table-body').replaceChildren(...rows);
 }
 
+/**
+ * Draw the scatter chart plotting complexity.  On the x-axis, show line numbers
+ * for the example.  On the y-axis, accumulate the reference complexity.
+ */
 function drawChart()
 {
 	const datasets = [];
+
+	/* Accumulate subsystems as datasets (same colouring). */
+
 	const subsystemIndex = {};
 	let i = 0;
 	for (const subsystem in subsystems) {
+		if (subsystems[subsystem].deprecated !== null)
+			continue;
 		subsystemIndex[subsystem] = i++;
 		datasets.push({
 			label: subsystem,
@@ -182,13 +224,18 @@ function drawChart()
 		});
 	}
 
+	/* Put all examples into their subsystem dataset. */
+
 	for (const article of data.articles) {
 		const name = article.keys['subsystem'];
 		const subsystem = getSubsystem(name);
+		if (subsystem.deprecated !== null)
+			continue;
 		let bytes = 0;
 		for (const source of subsystem.sources) {
 			if (!(source in subsystemSizes))
-				throw new Error('Missing subsystem size: ' + source);
+				throw new Error('Missing subsystem size: ' +
+					source);
 			bytes += subsystemSizes[source];
 		}
 		datasets[subsystemIndex[name]].data.push({
@@ -196,7 +243,10 @@ function drawChart()
 			'y': parseInt(bytes),
 		});
 	}
-	const config = {
+
+	/* Chart.js configuration. */
+
+	new Chart(document.getElementById('chart'), {
 		type: 'scatter',
 		data: {
 			datasets: datasets,
@@ -242,8 +292,7 @@ function drawChart()
 				},
 			}
 		}
-	};
-	new Chart(document.getElementById('chart'), config);
+	});
 }
 
 window.addEventListener('load', () => {
@@ -251,7 +300,7 @@ window.addEventListener('load', () => {
 	const cols = [];
 	for (const key of columnOrder) {
 		const col = document.createElement('div');
-		col.textContent = key === 'deprecated' ? '' : key;
+		col.textContent = key;
 		const numeric = key === 'lines';
 		col.onclick = () => resort(true, col, key, numeric);
 		cols.push(col);

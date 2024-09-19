@@ -1,7 +1,6 @@
 lang: C/C++
 system: Mac OS X
 subsystem: sandbox
-deprecated: true
 
 ```c
 #include <sandbox.h> /* sandbox_init(3), etc. */

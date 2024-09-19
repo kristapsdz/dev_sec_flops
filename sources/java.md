@@ -1,5 +1,4 @@
 lang: Java
-deprecated: true
 subsystem: jsm
 
 ```java

@@ -51,7 +51,7 @@
 				(manual pages, etc.) to the number of lines in our sample
 				implementations.  Easy-to-understand systems are grouped in the
 				lower-left, while progressively more complicated systems are in the
-				upper-right.
+				upper-right.  <strong>Deprecated systems are omitted</strong>.
 			</figcaption>
 		</figure>
 		<p>
@@ -67,8 +67,9 @@
 			</div>
 		</div>
 		<dialog id="code">
-			<input type="radio" hidden="hidden" name="view" id="view-code" checked="checked" />
-			<input type="radio" hidden="hidden" name="view" id="view-references" />
+			<input type="radio" class="code-views" name="view" id="view-code" checked="checked" />
+			<input type="radio" class="code-views" name="view" id="view-notes" />
+			<input type="radio" class="code-views" name="view" id="view-references" />
 			<header>
 				<div>
 					<div>
@@ -87,12 +88,15 @@
 				<nav>
 					<label id="code-box-label" for="view-code">Code</label>
 					<label id="code-references-label" for="view-references">References</label>
+					<label id="code-notes-label" for="view-notes">Notes</label>
 				</nav>
 			</header>
-			<div id="code-box">
-			</div>
-			<ul id="code-references">
-			</ul>
+			<div id="code-box"></div>
+			<div id="code-notes"></div>
+			<ul id="code-references"></ul>
 		</dialog>
+		<footer>
+			Copyright &copy; Kristaps Dzonsons
+		</footer>
 	</body>
 </html>
