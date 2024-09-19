@@ -1,0 +1,4 @@
+*.swp
+sources/*.html
+data.json
+index.js
