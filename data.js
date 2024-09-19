@@ -47,13 +47,26 @@ function getSubsystem(name)
 }
 
 /**
+ * Like getSubsystem(), but for the size.
+ */
+function getSourceSize(name)
+{
+	if (typeof(name) === 'undefined')
+		throw new Error('No source name for size.');
+	if (!(name in subsystemSizes))
+		throw new Error('No source for ' + name + '.');
+	return subsystemSizes[name];
+}
+
+/**
  * The user has clicked on the button so that the dialog for seeing the source
  * code example for "article" shows up.  Populate the dialog window with all
  * necessary information.
  */
 function drawDialog(article)
 {
-	const subsystem = getSubsystem(article.keys['subsystem']);
+	const subsystemName = article.keys['subsystem'];
+	const subsystem = getSubsystem(subsystemName);
 
 	/* Pretty-print its source code. */
 
@@ -82,14 +95,19 @@ function drawDialog(article)
 	/* The subsystem name (e.g., pledge), which is never empty. */
 
 	const subsys = document.getElementById('code-subsystem');
-	let elem;
+	const subsysName = document.createElement('span');;
+	if (subsystem.deprecated !== null) {
+		const ico = document.createElement('i');
+		ico.className = 'fa fa-fw fa-exclamation-circle';
+		subsysName.append(ico);
+	}
 	if ('link' in subsystem) {
-		elem = document.createElement('a');
-		elem.href = subsystem['link'];
-	} else
-		elem = document.createElement('span');
-	elem.textContent = article.keys['subsystem'];
-	subsys.replaceChildren(elem);
+		const anch = document.createElement('a');
+		anch.href = subsystem['link'];
+		subsysName.append(anch);
+	}
+	subsysName.append(document.createTextNode(subsystemName));
+	subsys.replaceChildren(subsysName);
 
 	/* Code language (e.g., C/C++), also never empty. */
 
@@ -107,12 +125,17 @@ function drawDialog(article)
 
 	const refs = [];
 	for (const uri of subsystem['sources']) {
-		const elem = document.createElement('li');
+		const nuri = uri.trim();
+		const elem = document.createElement('div');
 		const anch = document.createElement('a');
 		elem.append(anch);
-		anch.href = uri.trim();
-		anch.textContent = uri.trim();
+		anch.href = nuri;
+		anch.textContent = nuri;
 		refs.push(elem);
+		const size = document.createElement('span');
+		elem.append(size);
+		const kb = Number(getSourceSize(nuri) / 1000).toFixed();
+		size.textContent = '...' + kb + ' KB';
 	}
 	if (refs.length === 0) {
 		const elem = document.createElement('li');
@@ -163,8 +186,16 @@ function redrawColumn(subsystem, key, keys)
 	if (key === 'subsystem' && subsystem.deprecated !== null) {
 		const ico = document.createElement('i');
 		ico.className = 'fa fa-fw fa-exclamation-circle';
+		ico.title = 'deprecated';
 		col.append(ico);
 	}
+
+	if (key === 'lines')
+		col.className = 'ok-lines';
+	if (key === 'lines' && Number(keys[key]) >= 20)
+		col.className = 'many-lines';
+	if (key === 'lines' && Number(keys[key]) >= 30)
+		col.className = 'too-many-lines';
 
 	if (link !== null) {
 		const anch = document.createElement('a');
@@ -193,7 +224,8 @@ function redraw()
 		for (const key of columnOrder)
 			row.append(redrawColumn(subsys, key, article.keys));
 		const col = document.createElement('div');
-		col.innerHTML = '<i class="fa fa-fw fa-folder-open-o"></i>';
+		col.innerHTML = '<i class="fa fa-fw fa-folder-open"></i>';
+		col.title = 'view code';
 		col.className = 'opener';
 		col.onclick = () => drawDialog(article);
 		row.append(col);
@@ -228,12 +260,8 @@ function drawChart()
 		const name = article.keys['subsystem'];
 		const subsystem = getSubsystem(name);
 		let bytes = 0;
-		for (const source of subsystem.sources) {
-			if (!(source in subsystemSizes))
-				throw new Error('Missing subsystem size: ' +
-					source);
-			bytes += subsystemSizes[source];
-		}
+		for (const source of subsystem.sources)
+			bytes += getSourceSize(source);
 		datasets[subsystemIndex[name]].data.push({
 			'x': article.keys.lines,
 			'y': parseInt(bytes),
