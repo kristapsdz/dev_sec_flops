@@ -1,18 +1,9 @@
 .SUFFIXES: .md .html
 
-PREFIX	= /var/www/vhosts/kristaps.bsd.lv/htdocs/devsecflops
+PREFIX	 = /var/www/vhosts/kristaps.bsd.lv/htdocs/devsecflops
 sinclude Makefile.local
-SBLG 	= ../sblg/sblg
-HTMLS	= sources/capsicum-c.html \
-	  sources/capsicum-python.html \
-	  sources/sandbox-c.html \
-	  sources/landlock-c.html \
-	  sources/java.html \
-	  sources/seccomp-c.html \
-	  sources/pledge-c.html \
-	  sources/pledge-perl.html \
-	  sources/pledge-python.html \
-	  sources/pledge-rust.html
+SBLG 	 = ../sblg/sblg
+HTMLS	!= ls sources/*.md | sed 's!\.md$$!.html!'
 
 all: index.js index.html
 

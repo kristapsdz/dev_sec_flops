@@ -97,8 +97,8 @@ knowledge: Illumos and Solaris privileges.
 ## Adding new source code examples
 
 Do you have new examples you'd like to list?  It's easy to add them.
-Add your example to the [sources](sources) directory to do so, then add
-that to the [Makefile](Makefile) and open a pull request.
+Add your example to the [sources](sources) directory to do so, then open
+a pull request.
 
 In this example, I've included example text that the `system` (operating
 system) is `FreeBSD`, although you should omit it if there's no specific
