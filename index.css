@@ -9,46 +9,55 @@ html, body			{ width: calc(100% - 1rem);
 				  font-weight: 400;
 				  font-size: 11.5pt;
 				  font-style: normal; }
-h1				{ font-size: 11.5pt;
-				  color: #fff; }
-body > header > div		{ display: flex;
+body > header 			{ display: flex;
+				  align-items: center;
 				  gap: 0.5rem; }
-body > header > div > h1	{ margin: 0; }
+body > header h1		{ margin: 0;
+				  font-size: 14pt;
+				  color: #fff;
+				  flex: 1; }
+body > header nav		{ display: flex;
+				  align-items: center;
+				  font-size: smaller;
+				  gap: 0.5rem; }
 body a				{ color: #fff; }
 label				{ cursor: pointer; }
+figure				{ margin-left: 0;
+				  margin-right: 0;
+				  width: 100%; }
 .byline				{ font-size: 180%;
 				  line-height: 1.2em;
 				  color: #fff; }
 .empty				{ opacity: 0.5; }
 .fa.fa-exclamation-circle	{ color: red; }
-#table				{ display: grid;
+.table				{ display: grid;
 				  width: 100%;
 				  background-color: #eee;
 				  color: #2f2f2f;
 				  margin: 1.4em 0;
 				  box-shadow: 8px 8px 8px #000;
 			  	  grid-template-columns: 1fr 1fr 1fr auto auto; }
-#table a			{ color: #000; }
-#table .ok-lines		{ color: green; }
-#table .many-lines		{ color: darkorange; }
-#table .too-many-lines		{ color: red; }
-#table-head,
-#table-body,
+.table a			{ color: #000; }
+.table .ok-lines		{ color: green; }
+.table .many-lines		{ color: darkorange; }
+.table .too-many-lines		{ color: red; }
+.table-head,
+.table-body,
 .table-row			{ display: contents; }
-#table-head .table-row > *	{ background-color: #fff;
+.table-head .table-row > *	{ background-color: #fff;
 				  cursor: pointer; }
 .table-row > *			{ display: block;
 				  padding: 0.5rem 1rem; }
 .table-row > :first-child	{ padding-right: 0; }
-#table-head			{ font-size: smaller;
+.table-head			{ font-size: smaller;
 				  color: #666;
 				  font-weight: bolder; }
-#table-head > .table-row > *	{ padding: 0.5rem 1rem;
+.table-head > .table-row > *	{ padding: 0.5rem 1rem;
 				  text-decoration: underline; }
-#table-body > .table-row:last-child > *
+.table-body > .table-row:last-child > *
 				{ padding-bottom: 1rem; }
-#table-body .table-row:hover > *{ background-color: #fff; }
-#table-body .opener .fa		{ color: orange;
+.table-body .table-row:hover > *{ background-color: #fff; }
+.table-body .opener .fa		{ color: orange;
 				  cursor: pointer; }
 #code-mask			{ background-color: rgb(0 0 0 / 80%);
 				  position: fixed;
@@ -112,30 +121,40 @@ label				{ cursor: pointer; }
 				  text-overflow: ellipsis; }
 #code-references,
 #code-notes			{ padding: 1rem; }
+#chart-multi-box		{ display: flex;
+				  gap: 0.5rem; }
+#chart-multi-box > *		{ flex: 1; }
+#chart-multi-box,
 #chart-box			{ display: flex;
-				  gap: 0.5rem;
-				  margin-left: 0;
-				  margin-right: 0;
-				  width: 100%; }
-#chart-box > figcaption		{ width: 33%;
-				  padding-top: 1.5rem;
-				  line-height: 1.35em;
-				  font-size: smaller;
-				  max-width: 15rem; }
+				  gap: 0.5rem; }
+figcaption			{ margin-top: 0.75rem;
+				  width: 100%;
+				  max-width: 17.5rem; }
+figcaption > div		{ background-color: rgb(255 255 255 / 10%);
+				  padding: 0.1rem 1rem;
+				  border-radius: 1rem; }
+#chart-multi-box > div,
 #chart-box > div		{ flex: 1; }
 footer				{ font-size: smaller; }
 
 @media (width < 1024px) {
-  #chart-box			{ display: block; }
-  #chart-box > figcaption	{ width: calc(100% - 2rem);
-	  			  max-width: unset;
-				  padding-left: 1rem;
-				  padding-right: 1rem;
-	  			  padding-top: 1rem; }
-  #table			{ grid-template-columns: 1fr 1fr 1fr auto; }
-  #table .table-row > *		{ overflow: hidden;
+  #chart-multi-box,	
+  #chart-box			{ flex-direction: column; }
+  figcaption			{ max-width: unset;
+				  margin-top: 0; }
+  #examples .table		{ grid-template-columns: 1fr 1fr 1fr auto; }
+  #examples .table-row > *	{ overflow: hidden;
 	  			  white-space: nowrap;
 	  			  text-overflow: ellipsis; }
-  #table .table-row > :nth-child(4)
+  #examples .table-row > :nth-child(4)
   				{ display: none; }
+}
+
+@media (width < 768px) {
+  body > header,
+  body > header nav		{ display: block;
+	  			  text-align: center; }
+  body > header .github,
+  body > header h1		{ display: inline-block; }
+  body > header h1		{ font-size: inherit; }
 }

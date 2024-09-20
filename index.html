@@ -18,16 +18,21 @@
 	</head>
 	<body>
 		<header>
-			<div>
-				<div>
-					<a href="https://github.com/kristapsdz/dev_sec_flops">
-						<i class="fa fa-github"></i>
-						DevSecFlops</a>:
-				</div>
-				<h1>
-					Source code sandboxing
-				</h1>
+			<div class="github">
+				<a href="https://github.com/kristapsdz/dev_sec_flops">
+					<i class="fa fa-github"></i>
+					DevSecFlops</a>:
 			</div>
+			<h1>
+				Source code sandboxing
+			</h1>
+			<nav>
+				<a href="#intro">#intro</a>
+				<a href="#examples">#examples</a>
+				<a href="#casestudy">#casestudy</a>
+			</nav>
+		</header>
+		<section id="intro">
 			<p class="byline">
 				In 2024, how easy is it for a developer to <q>sandbox</q> a program
 				by its source code?
@@ -40,53 +45,129 @@
 				acquire the requested resources (opening files, network sockets,
 				shared memory, etc.).
 			</p>
-		</header>
-		<figure id="chart-box">
-			<div>
-				<canvas id="chart"></canvas>
-			</div>
-			<figcaption>
-				<strong>How complex is your system?</strong> This graphs the text
-				length of all resources that must be read to understand the system
-				(manual pages, etc.) to the number of lines in our sample
-				implementations.  Easy-to-understand systems are grouped in the
-				lower-left, while progressively more complicated systems are in the
-				upper-right.
-			</figcaption>
-		</figure>
-		<p>
-			Below is a list of all sandbox source codes.  Click on an example to see its
-			source code and resources.  Which method would you choose?  Sources
-			readable on a normal mobile phone (&lt;20 lines) have lines show in green,
-			barely readable (20&#8211;30 lines) in orange, and above in red.  Deprecated
-			subsystems are marked next to the subsytem name.
-		</p>
-		<div id="table">
-			<div id="table-head">
-				<div class="table-row" id="table-head-box">
+			<p>
+				In this article, I examine the many different open source subsystems
+				used to enact these sandboxes, such as
+				<a href="https://openbsd.org">OpenBSD</a>'s
+				<a href="https://man.openbsd.org/pledge">pledge</a> or
+				<a href="https://linux.org">Linux</a>'s
+				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>.
+				Jump to the <a href="#examples">examples</a> for a full list.
+			</p>
+			<figure id="chart-box">
+				<figcaption>
+					<div>
+						<p>
+							How complex is it to sandbox your source code?
+						</p>
+						<p>
+							This graphs the
+							<strong>text length of all references</strong> that
+							must be read to understand the system (manual pages,
+							etc.) to the
+							<strong>number of lines in an example system</strong>.
+						</p>
+						<p>
+							Systems easy to understand and implement are
+							grouped in the lower-left, while
+							progressively more complicated systems are
+							in the upper-right.
+						</p>
+					</div>
+				</figcaption>
+				<div>
+					<canvas id="chart-scatter"></canvas>
+				</div>
+			</figure>
+		</section>
+		<section id="examples">
+			<p>
+				Below is a list of all example source code.  Click the folder icon
+				on an example to see its source code and references.  Which method
+				would you choose?  Sources readable on a normal mobile phone (&lt;20
+				lines) have lines show in green, barely readable (20&#8211;30 lines)
+				in orange, and above in red.  Deprecated subsystems are marked next
+				to the subsytem name.
+			</p>
+			<div class="table">
+				<div class="table-head">
+					<div class="table-row" id="examples-columns-box">
+					</div>
+				</div>
+				<div id="examples-box" class="table-body">
 				</div>
 			</div>
-			<div id="table-body">
+			<p>
+				What happens when we group by operating systems and subsystems to
+				see how hard it is to implement a sandbox in your environment?
+			</p>
+			<div id="chart-multi-box">
+				<figure>
+					<canvas id="chart-systems"></canvas>
+					<canvas id="chart-subsystems"></canvas>
+				</figure>
+				<figcaption>
+					<div>
+						<p>
+							Systems clustered to the <strong>right</strong> of
+							these graphs are more complicated to understand and
+							implement.  As for those on the
+							<strong>left</strong>, I'm reminded of Jerry
+							Saltzer's reflections on Multics'
+							capabilities infrastructure
+							[<a href="https://dl.acm.org/doi/pdf/10.1145/361011.361067">1</a>],
+							which was a predecessor to call-based
+							capabilities systems like.
+							<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">
+								seccomp</a>.  In 1975!
+						</p>
+						<p>
+							<q>
+								...the user...  must figure out for
+								himself how to accomplish his
+								intentions amid a myriad of
+								possibilities, not all of which he
+								understands [...] 
+								<strong>
+									The solution to this problem
+									lies in better understanding
+									the nature of the typical
+									user's mental description of
+									protection intent, and then
+									devising interfaces which
+									permit more direct
+									specification of that
+									protection intent.
+								</strong>
+							</q>
+						</p>
+					</div>
+				</figcaption>
 			</div>
-		</div>
-		<p>
-			These are all trivial examples.
-			How does they stack up in practice?
-			Let's use
-			<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>
-			as a canonical example.
-			OpenSSH is under tremendous pressure for its security.
-			It has a number of source code sandboxes, including most of those mentioned
-			in this survey.
-			In general, these sandboxes will do little more than our
-			examples&#8212;limit resources used to only communication over standard IO
-			and to perform in-process duties (memory management, etc.).
-			How do the lengths of source code (in lines) for each sandbox measure, with
-			the collected resources length for comparison?
-		</p>
-		<figure id="chart-casestudy-box">
-			<canvas id="chart-casestudy"></canvas>
-		</figure>
+		</section>
+		<section id="casestudy">
+			<p>
+				These are all trivial examples.
+				How does they stack up in practice?
+				Let's use
+				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>
+				as a canonical example.
+				OpenSSH is under tremendous pressure for its security.
+				It has a number of source code sandboxes, including most of those mentioned
+				in this survey.
+				In general, these sandboxes will do little more than our
+				examples&#8212;limit resources used to only communication over standard IO
+				and to perform in-process duties (memory management, etc.).
+				How do the lengths of source code (in lines) for each sandbox measure, with
+				the collected references length for comparison?
+			</p>
+			<figure id="chart-casestudy-box">
+				<canvas id="chart-casestudy"></canvas>
+			</figure>
+		</section>
+		<footer>
+			Copyright &copy; Kristaps Dzonsons
+		</footer>
 		<input type="checkbox" name="code-shown" hidden="hidden" id="code-shown" />
 		<label for="code-shown" id="code-mask"></label>
 		<div role="dialog" id="code">
@@ -110,7 +191,7 @@
 				</div>
 				<nav>
 					<label id="code-box-label" for="view-code">Code</label>
-					<label id="code-references-label" for="view-references">Resources</label>
+					<label id="code-references-label" for="view-references">References</label>
 					<label id="code-notes-label" for="view-notes">Notes</label>
 				</nav>
 			</header>
@@ -118,9 +199,5 @@
 			<div id="code-notes"></div>
 			<div id="code-references"></div>
 		</div>
-		</label>
-		<footer>
-			Copyright &copy; Kristaps Dzonsons
-		</footer>
 	</body>
 </html>

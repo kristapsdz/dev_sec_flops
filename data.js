@@ -145,7 +145,7 @@ function drawDialog(article)
 	}
 	if (refs.length === 0) {
 		const elem = document.createElement('li');
-		elem.textContent = 'No resources given.';
+		elem.textContent = 'No references given.';
 		refs.push(elem);
 	}
 	document.getElementById('code-references').replaceChildren(...refs);
@@ -237,7 +237,7 @@ function redraw()
 		row.append(col);
 		rows.push(row);
 	}
-	document.getElementById('table-body').replaceChildren(...rows);
+	document.getElementById('examples-box').replaceChildren(...rows);
 }
 
 /**
@@ -250,10 +250,12 @@ function drawCasestudy()
 		labels: Object.keys(casestudy),
 		datasets: [{
 			label: 'Source code',
-			data: Object.keys(casestudy).map(key => casestudySizes.results[casestudy[key]]),
+			data: Object.keys(casestudy).map(key =>
+				casestudySizes.results[casestudy[key]]),
 		}, {
-			label: 'Resources',
-			data: Object.keys(casestudy).map(key => getSourceSizes(key)),
+			label: 'References',
+			data: Object.keys(casestudy).map(key =>
+				getSourceSizes(key)),
 			yAxisID: 'y2',
 		}]
 	};
@@ -298,7 +300,7 @@ function drawCasestudy()
 					position: 'right',
 					title: {
 						display: true,
-						text: 'resources',
+						text: 'references',
 						color: '#fff',
 					},
 					ticks: {
@@ -328,28 +330,53 @@ function drawChart()
 
 	const subsystemIndex = {};
 	let i = 0;
-	for (const subsystem in subsystems) {
-		subsystemIndex[subsystem] = i++;
+	for (const subsystemName in subsystems) {
+		subsystemIndex[subsystemName] = i++;
 		datasets.push({
-			label: subsystem,
+			label: subsystemName,
 			data: [],
 		});
 	}
 
-	/* Put all examples into their subsystem dataset. */
+	/*
+	 * Put all examples into their subsystem dataset, then system averages,
+	 * then subsystem averages.
+	 */
+
+	const subsysTallies = {};
+	const sysTallies = {};
 
 	for (const article of data.articles) {
-		const name = article.keys['subsystem'];
-		const bytes = getSourceSizes(name);
-		datasets[subsystemIndex[name]].data.push({
+		const subsysName = article.keys['subsystem'];
+		const sysName = article.keys['system'];
+		const bytes = getSourceSizes(subsysName);
+		datasets[subsystemIndex[subsysName]].data.push({
 			'x': article.keys.lines,
 			'y': parseInt(bytes),
 		});
+		if (!(subsysName in subsysTallies))
+			subsysTallies[subsysName] = {
+				tally: 0,
+				samples: 0,
+			};
+		subsysTallies[subsysName].tally +=
+			Number(article.keys.lines);
+		subsysTallies[subsysName].samples++;
+		if (typeof(sysName) === 'undefined')
+			continue;
+		if (!(sysName in sysTallies))
+			sysTallies[sysName] = {
+				tally: 0,
+				samples: 0,
+			};
+		sysTallies[sysName].tally +=
+			Number(article.keys.lines);
+		sysTallies[sysName].samples++;
 	}
 
-	/* Chart.js configuration. */
+	/* Chart.js configurations. */
 
-	new Chart(document.getElementById('chart'), {
+	new Chart(document.getElementById('chart-scatter'), {
 		type: 'scatter',
 		data: {
 			datasets: datasets,
@@ -358,10 +385,11 @@ function drawChart()
 			plugins: {
 				legend: {
 					display: true,
+					align: 'start',
 					labels: {
 						color: '#fff',
 					}
-				}
+				},
 			},
 			scales: {
 				x: {
@@ -378,15 +406,117 @@ function drawChart()
 					},
 				},
 				y: {
+					display: true,
+					position: 'right',
 					title: {
 						display: true,
-						text: 'resources',
+						text: 'references',
 						color: '#fff',
 					},
 					ticks: {
 						callback: (label, index, labels) => (
 							Number(label / 1000) + ' KB'
 						),
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+			}
+		}
+	});
+
+	const sysTalliesArray = Object.keys(sysTallies).map(key => ({
+		key: key,
+		value: sysTallies[key].tally / sysTallies[key].samples,
+	})).sort((a, b) => a['value'] - b['value']);
+	const sysData = {
+		labels: sysTalliesArray.map(ent => ent.key),
+		datasets: [{
+			label: 'Per-system average lines',
+			data: sysTalliesArray.map(ent => ent.value),
+		}]
+	};
+
+	new Chart(document.getElementById('chart-systems'), {
+		type: 'bar',
+		data: sysData,
+		options: {
+			plugins: {
+				legend: {
+					display: true,
+					labels: {
+						color: '#fff',
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					title: {
+						display: true,
+						text: 'source code',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+			}
+		}
+	});
+
+	const subsysTalliesArray = Object.keys(subsysTallies).map(key => ({
+		key: key,
+		value: subsysTallies[key].tally / subsysTallies[key].samples,
+	})).sort((a, b) => a['value'] - b['value']);
+	const subsysData = {
+		labels: subsysTalliesArray.map(ent => ent.key),
+		datasets: [{
+			label: 'Per-subsystem average lines',
+			data: subsysTalliesArray.map(ent => ent.value),
+		}]
+	};
+
+	new Chart(document.getElementById('chart-subsystems'), {
+		type: 'bar',
+		data: subsysData,
+		options: {
+			plugins: {
+				legend: {
+					display: true,
+					labels: {
+						color: '#fff',
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					title: {
+						display: true,
+						text: 'source code',
+						color: '#fff',
+					},
+					ticks: {
 						color: '#ddd',
 					},
 					grid: {
@@ -410,7 +540,7 @@ window.addEventListener('load', () => {
 		cols.push(col);
 	}
 	cols.push(document.createElement('div'));
-	document.getElementById('table-head-box').replaceChildren(...cols);
+	document.getElementById('examples-columns-box').replaceChildren(...cols);
 	redraw();
 });
 
