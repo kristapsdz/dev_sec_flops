@@ -18,10 +18,14 @@ A **subsystem** is a software sandbox system like
 this repository, but there are more.
 [illumos](https://www.illumos.org/) folks, I'm looking at you: I know
 about [privileges(7)](https://illumos.org/man/7/privileges).  Have you
-implemented a system with this?  Please let me know.
+implemented a system with this?  Please let me know.  All the ones
+mentioned are in [subsystems.json](subsystems.json).
 
-There's way to much hand-waving about software sandboxing.  Let's put
-some numbers down.
+Lastly, a **system** is an operating system like OpenBSD or Linux.  All
+the ones mentioned are in [systems.json](systems.json).
+
+Anywaym, there's way to much hand-waving about software sandboxing.
+Let's put some numbers down.
 
 ## Adding a new attestation to a given system/subsystem
 
@@ -53,7 +57,7 @@ merging the PR easier.
 
 I will be double-checking that you actually contributed... don't fib.
 
-## Adding new subsystems
+## Adding new systems and subsystems
 
 To add an entirely new subsystem, edit
 [subsystems.json](subsystems.json) as follows:
@@ -74,10 +78,21 @@ To add an entirely new subsystem, edit
 
 ```
 
+Same goes with [systems.json](systems.json), except easier:
+
+```typescript
+{
+    "NAME_OF_SYSTEM": {
+        "link": "https://canonical/link/to/system/overview"
+    }
+}
+
+```
+
 That's all.
 
 Subsystems I know about but haven't been mentioned for lack of
-knowledge: illumos and Solaris privileges.
+knowledge: Illumos and Solaris privileges.
 
 ## Adding new source code examples
 
@@ -88,8 +103,7 @@ that to the [Makefile](Makefile) and open a pull request.
 In this example, I've included example text that the `system` (operating
 system) is `FreeBSD`, although you should omit it if there's no specific
 operating system such as with Java; `lang` is `C/C++` and must be set;
-the `system-link` may be excluded if your operating system has no
-canonical URL explaining it (weird); and `notes` may be empty as well.
+and `notes` may be empty as well.
 
 The `githubAttestations` let us demonstrate actual systems using the
 example.  See the above section on adding attestations.  I'll use myself
@@ -97,8 +111,7 @@ as an example in this.
 
 ```markdown
 lang: C/C++
-system: FreeBSD
-system-link: https://LINK/TO/OPERATING/SYSTEM/OR/EMPTY
+system: freebsd
 subsystem: NAME_OF_SUBSYSTEM
 notes: Any possible notes or just leave this out entirely.
 githubAttestations: 
@@ -109,6 +122,9 @@ githubAttestations:
 int
 main(void)
 {
+    do_the_security();
+    /* SECURE. */
+    puts("Hello, world!");
 }
 ` ` `
 ```
