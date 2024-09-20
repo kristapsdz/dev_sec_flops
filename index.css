@@ -16,9 +16,7 @@ body > div.development		{ font-size: xx-large;
 				  background-color: inherit;
 				  padding: 1rem 0;
 				  line-height: 1.2em;
-				  color: pink;
-				  top: 0;
-				  position: sticky; }
+				  color: pink; }
 body > header h1		{ margin: 0;
 				  font-size: 14pt;
 				  color: #fff;
@@ -125,6 +123,7 @@ figure				{ margin-left: 0;
 #code-references > div		{ display: flex; }
 #code-references > div > a	{ flex: 1;
 				  overflow: hidden;
+				  white-space: nowrap;
 				  text-overflow: ellipsis; }
 #code-references,
 #code-notes			{ padding: 1rem; }

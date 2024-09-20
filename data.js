@@ -170,7 +170,7 @@ function drawDialog(article)
 		size.textContent = '...' + kb + ' KB';
 	}
 	if (refs.length === 0) {
-		const elem = document.createElement('li');
+		const elem = document.createElement('div');
 		elem.textContent = 'No references given.';
 		refs.push(elem);
 	}
