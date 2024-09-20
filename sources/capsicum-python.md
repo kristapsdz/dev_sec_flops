@@ -9,5 +9,6 @@ notes: The sandbox itself doesn't handle forking, which I consider a resource
 ```python
 import pycapsicum as cap
 cap.enter()
+# SECURE.
 print("Hello, world!")
 ```

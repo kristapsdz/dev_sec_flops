@@ -18,6 +18,7 @@ main(void)
     char    *er;
     if (sandbox_init(kSBXProfilePureComputation, SANDBOX_NAMED, &er) != 0)
         return 1;
+    /* SECURE. */
     puts("Hello, world!");
     return 0;
 }

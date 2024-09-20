@@ -112,6 +112,7 @@ main(void)
 		return 1;
 	if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &filter) == -1)
 		return 1;
+    /* SECURE. */
 	puts("Hello, world!");
 	return 0;
 }

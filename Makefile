@@ -10,7 +10,9 @@ HTMLS	= sources/capsicum-c.html \
 	  sources/java.html \
 	  sources/seccomp-c.html \
 	  sources/pledge-c.html \
-	  sources/pledge-perl.html
+	  sources/pledge-perl.html \
+	  sources/pledge-python.html \
+	  sources/pledge-rust.html
 
 all: index.js index.html
 
