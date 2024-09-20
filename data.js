@@ -46,7 +46,7 @@ function getSubsystem(name)
 	return subsystems[name];
 }
 
-function getSourceSize(source)
+function getSourceSubsystemSize(source)
 {
 	if (typeof(source) === 'undefined')
 		throw new Error('No source name for size.');
@@ -55,13 +55,29 @@ function getSourceSize(source)
 	return subsystemSizes.results[source];
 }
 
-function getSourceSizes(name)
+function getSourceSubsystemSizes(name)
 {
 	const subsystem = getSubsystem(name);
 	let bytes = 0;
 	for (const source of subsystem.sources)
-		bytes += getSourceSize(source);
+		bytes += getSourceSubsystemSize(source);
 	return bytes;
+}
+
+function getSourceSystemSizes(name)
+{
+	const set = new Set();
+	for (const article of data.articles)
+		if ('system' in article.keys &&
+		    article.keys['system'] == name)
+			set.add(article.keys['subsystem']);
+	let bytes = 0;
+	for (const nname of set) {
+		const subsystem = getSubsystem(nname);
+		for (const source of subsystem.sources)
+			bytes += getSourceSubsystemSize(source);
+	}
+	return bytes / set.size;
 }
 
 /**
@@ -140,7 +156,7 @@ function drawDialog(article)
 		refs.push(elem);
 		const size = document.createElement('span');
 		elem.append(size);
-		const kb = Number(getSourceSize(nuri) / 1000).toFixed();
+		const kb = Number(getSourceSubsystemSize(nuri) / 1000).toFixed();
 		size.textContent = '...' + kb + ' KB';
 	}
 	if (refs.length === 0) {
@@ -246,25 +262,44 @@ function redraw()
  */
 function drawCasestudy()
 {
-	const data = {
-		labels: Object.keys(casestudy),
-		datasets: [{
-			label: 'Source code',
-			data: Object.keys(casestudy).map(key =>
-				casestudySizes.results[casestudy[key]]),
-		}, {
-			label: 'References',
-			data: Object.keys(casestudy).map(key =>
-				getSourceSizes(key)),
-			yAxisID: 'y2',
-		}]
-	};
+	const links = Object.keys(casestudy).map(key => {
+		const elem = document.createElement('div');
+		const anch = document.createElement('a');
+		elem.append(anch);
+		anch.href = casestudy[key];
+		anch.textContent = casestudy[key].substring
+			(casestudy[key].lastIndexOf('sandbox-') + 8);
+		return elem;
+	});
+	document.getElementById('casestudy-links').replaceChildren(...links);
 
 	/* Chart.js configuration. */
 
+	const array = Object.keys(casestudy).map(key => ({
+		key: key,
+		sources: casestudySizes.results[casestudy[key]],
+		refs: getSourceSubsystemSizes(key),
+	})).sort((a, b) => {
+		const srcs = a['sources'] / b['sources'];
+		const refs = a['refs'] / b['refs'];
+		return ((srcs + refs) / 2) - 1;
+	});
+
 	new Chart(document.getElementById('chart-casestudy'), {
 		type: 'bar',
-		data: data,
+		data: {
+			labels: Object.keys(casestudy),
+			datasets: [
+				{
+					label: 'Source code',
+					data: array.map(key => key.sources),
+				}, {
+					label: 'References',
+					data: array.map(key => key.refs),
+					yAxisID: 'y2',
+				},
+			],
+		},
 		options: {
 			plugins: {
 				legend: {
@@ -287,7 +322,7 @@ function drawCasestudy()
 					title: {
 						display: true,
 						text: 'source code',
-						color: '#fff',
+						color: '#80b6db',
 					},
 					ticks: {
 						color: '#ddd',
@@ -301,7 +336,7 @@ function drawCasestudy()
 					title: {
 						display: true,
 						text: 'references',
-						color: '#fff',
+						color: '#e57687',
 					},
 					ticks: {
 						color: '#ddd',
@@ -349,7 +384,7 @@ function drawChart()
 	for (const article of data.articles) {
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
-		const bytes = getSourceSizes(subsysName);
+		const bytes = getSourceSubsystemSizes(subsysName);
 		datasets[subsystemIndex[subsysName]].data.push({
 			'x': article.keys.lines,
 			'y': parseInt(bytes),
@@ -374,7 +409,10 @@ function drawChart()
 		sysTallies[sysName].samples++;
 	}
 
-	/* Chart.js configurations. */
+	/*
+	 * Begin with the scatter chart, which plots source complexity (x-axis)
+	 * to reference complexity (y-axis).
+	 */
 
 	new Chart(document.getElementById('chart-scatter'), {
 		type: 'scatter',
@@ -427,21 +465,37 @@ function drawChart()
 		}
 	});
 
+	/*
+	 * Bar graph for average by operating system: for each operating system,
+	 * show datasets for the average source and average reference
+	 * complexity.
+	 */
+
 	const sysTalliesArray = Object.keys(sysTallies).map(key => ({
 		key: key,
-		value: sysTallies[key].tally / sysTallies[key].samples,
-	})).sort((a, b) => a['value'] - b['value']);
-	const sysData = {
-		labels: sysTalliesArray.map(ent => ent.key),
-		datasets: [{
-			label: 'Per-system average lines',
-			data: sysTalliesArray.map(ent => ent.value),
-		}]
-	};
+		sources: sysTallies[key].tally / sysTallies[key].samples,
+		refs: getSourceSystemSizes(key),
+	})).sort((a, b) => {
+		const srcs = a['sources'] / b['sources'];
+		const refs = a['refs'] / b['refs'];
+		return ((srcs + refs) / 2) - 1;
+	});
 
 	new Chart(document.getElementById('chart-systems'), {
 		type: 'bar',
-		data: sysData,
+		data: {
+			labels: sysTalliesArray.map(ent => ent.key),
+			datasets: [
+				{
+					label: 'Average source code',
+					data: sysTalliesArray.map(ent => ent.sources),
+				}, {
+					label: 'Average references',
+					data: sysTalliesArray.map(ent => ent.refs),
+					yAxisID: 'y2',
+				},
+			],
+		},
 		options: {
 			plugins: {
 				legend: {
@@ -464,7 +518,7 @@ function drawChart()
 					title: {
 						display: true,
 						text: 'source code',
-						color: '#fff',
+						color: '#80b6db',
 					},
 					ticks: {
 						color: '#ddd',
@@ -473,25 +527,57 @@ function drawChart()
 						color: '#666',
 					},
 				},
+				y2: {
+					position: 'right',
+					title: {
+						display: true,
+						text: 'references',
+						color: '#e57687',
+					},
+					ticks: {
+						color: '#ddd',
+						callback: (label, index, labels) => (
+							Number(label / 1000) + ' KB'
+						),
+					},
+					grid: {
+						color: '#666',
+					},
+				}
 			}
 		}
 	});
 
+	/*
+	 * Bar graph for average by subsystem: for each subsystem, show datasets
+	 * for the average source and reference complexity.
+	 */
+
 	const subsysTalliesArray = Object.keys(subsysTallies).map(key => ({
 		key: key,
-		value: subsysTallies[key].tally / subsysTallies[key].samples,
-	})).sort((a, b) => a['value'] - b['value']);
-	const subsysData = {
-		labels: subsysTalliesArray.map(ent => ent.key),
-		datasets: [{
-			label: 'Per-subsystem average lines',
-			data: subsysTalliesArray.map(ent => ent.value),
-		}]
-	};
+		sources: subsysTallies[key].tally / subsysTallies[key].samples,
+		refs: getSourceSubsystemSizes(key),
+	})).sort((a, b) => {
+		const srcs = a['sources'] / b['sources'];
+		const refs = a['refs'] / b['refs'];
+		return ((srcs + refs) / 2) - 1;
+	});
 
 	new Chart(document.getElementById('chart-subsystems'), {
 		type: 'bar',
-		data: subsysData,
+		data: {
+			labels: subsysTalliesArray.map(ent => ent.key),
+			datasets: [
+				{
+					label: 'Average source code',
+					data: subsysTalliesArray.map(ent => ent.sources),
+				}, {
+					label: 'References',
+					data: subsysTalliesArray.map(ent => ent.refs),
+					yAxisID: 'y2',
+				},
+			],
+		},
 		options: {
 			plugins: {
 				legend: {
@@ -513,8 +599,8 @@ function drawChart()
 				y: {
 					title: {
 						display: true,
-						text: 'source code',
-						color: '#fff',
+						text: 'average source code',
+						color: '#80b6db',
 					},
 					ticks: {
 						color: '#ddd',
@@ -523,11 +609,32 @@ function drawChart()
 						color: '#666',
 					},
 				},
+				y2: {
+					position: 'right',
+					title: {
+						display: true,
+						text: 'references',
+						color: '#e57687',
+					},
+					ticks: {
+						color: '#ddd',
+						callback: (label, index, labels) => (
+							Number(label / 1000) + ' KB'
+						),
+					},
+					grid: {
+						color: '#666',
+					},
+				}
 			}
 		}
 	});
 }
 
+/**
+ * Main drawing routine.  Creates all graphs and tables from our example sources
+ * and specifications.
+ */
 window.addEventListener('load', () => {
 	drawChart();
 	drawCasestudy();

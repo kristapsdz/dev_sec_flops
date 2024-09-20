@@ -121,23 +121,25 @@ figure				{ margin-left: 0;
 				  text-overflow: ellipsis; }
 #code-references,
 #code-notes			{ padding: 1rem; }
-#chart-multi-box		{ display: flex;
-				  gap: 0.5rem; }
 #chart-multi-box > *		{ flex: 1; }
+#chart-casestudy-box,
 #chart-multi-box,
 #chart-box			{ display: flex;
-				  gap: 0.5rem; }
+				  gap: 1rem; }
+#chart-casestudy-box > div,
+#chart-multi-box > div,
+#chart-box > div		{ flex: 1; }
 figcaption			{ margin-top: 0.75rem;
 				  width: 100%;
 				  max-width: 17.5rem; }
 figcaption > div		{ background-color: rgb(255 255 255 / 10%);
 				  padding: 0.1rem 1rem;
 				  border-radius: 1rem; }
-#chart-multi-box > div,
-#chart-box > div		{ flex: 1; }
 footer				{ font-size: smaller; }
-
 @media (width < 1024px) {
+  #casestudy-links		{ display: flex;
+	  			  gap: 0.5rem; }
+  #chart-casestudy-box,	
   #chart-multi-box,	
   #chart-box			{ flex-direction: column; }
   figcaption			{ max-width: unset;

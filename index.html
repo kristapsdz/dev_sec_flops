@@ -114,10 +114,9 @@
 							implement.  As for those on the
 							<strong>left</strong>, I'm reminded of Jerry
 							Saltzer's reflections on Multics'
-							capabilities infrastructure
-							[<a href="https://dl.acm.org/doi/pdf/10.1145/361011.361067">1</a>],
+							security infrastructure,
 							which was a predecessor to call-based
-							capabilities systems like.
+							capabilities systems like
 							<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">
 								seccomp</a>.  In 1975!
 						</p>
@@ -140,29 +139,49 @@
 									protection intent.
 								</strong>
 							</q>
+							[<a href="https://dl.acm.org/doi/pdf/10.1145/361011.361067">ref</a>]
 						</p>
 					</div>
 				</figcaption>
 			</div>
+			<p class="byline">
+				The answer so far?  In 2024, it depends on the system you're using.
+			</p>
+			<p>
+				<a href="https://linux.org">Linux</a> has a whopping seven-fold
+				increase in reference complexity, and even more for source
+				complexity, over OpenBSD and FreeBSD.
+				<a href="https://openbsd.org">OpenBSD</a> and FreeBSD rank roughly
+				equivalently.
+			</p>
 		</section>
 		<section id="casestudy">
 			<p>
-				These are all trivial examples.
-				How does they stack up in practice?
-				Let's use
+				But these are all trivial examples.  How does they stack up in
+				practice?  Let's use
 				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>
-				as a canonical example.
-				OpenSSH is under tremendous pressure for its security.
-				It has a number of source code sandboxes, including most of those mentioned
-				in this survey.
-				In general, these sandboxes will do little more than our
-				examples&#8212;limit resources used to only communication over standard IO
-				and to perform in-process duties (memory management, etc.).
-				How do the lengths of source code (in lines) for each sandbox measure, with
-				the collected references length for comparison?
+				as a canonical example.  OpenSSH is under tremendous pressure for
+				its security.  It has a number of source code sandboxes, including
+				most of those mentioned in this survey.  In general, these sandboxes
+				will do little more than our examples&#8212;limit resources used to
+				only communication over standard IO and to perform in-process duties
+				(memory management, etc.).  How do the lengths of source code (in
+				lines) for each sandbox measure, with the collected references
+				length for comparison?
 			</p>
 			<figure id="chart-casestudy-box">
-				<canvas id="chart-casestudy"></canvas>
+				<div>
+					<canvas id="chart-casestudy"></canvas>
+				</div>
+				<figcaption>
+					<div>
+						<p>
+							Sources...
+						</p>
+						<div id="casestudy-links">
+						</div>
+					</div>
+				</figcaption>
 			</figure>
 		</section>
 		<footer>

@@ -1,7 +1,6 @@
-{ "fetched": "1726766478",
+{ "fetched": "1726859896",
   "results": {
     "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SecurityManager.html":    63285,
-    "https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html":    57886,
     "https://man.freebsd.org/cgi/man.cgi?cap_enter(2)":     5834,
     "https://man.freebsd.org/cgi/man.cgi?capsicum(4)":     5406,
     "https://man.openbsd.org/pledge":    12123,
