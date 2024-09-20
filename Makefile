@@ -24,7 +24,7 @@ data.json: $(HTMLS)
 	$(SBLG) -o$@ -j $(HTMLS)
 
 index.js: data.json data.js
-index.js: subsystems.json subsystems-sizes.json
+index.js: subsystems.json subsystems-sizes.json systems.json
 index.js: casestudy.json casestudy-sizes.json
 index.js:
 	( \
@@ -36,6 +36,9 @@ index.js:
 		echo ; \
 		printf "const subsystems = " ; \
 		cat subsystems.json ; \
+		echo ; \
+		printf "const systems = " ; \
+		cat systems.json ; \
 		echo ; \
 		printf "const casestudy = " ; \
 		cat casestudy.json ; \

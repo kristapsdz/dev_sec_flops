@@ -1,5 +1,5 @@
 lang: Rust
-system: OpenBSD
+system: openbsd
 system-link: https://openbsd.org
 subsystem: pledge
 notes: There are lots of rust bindings for pledge and OpenBSD, all of

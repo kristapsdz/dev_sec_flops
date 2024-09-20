@@ -35,6 +35,18 @@ function resort(order, elem, index, numeric = false)
 }
 
 /**
+ * Look up a system (e.g., openbsd) , making sure that it exists.
+ */
+function getSystem(name)
+{
+	if (typeof(name) === 'undefined')
+		return null;
+	if (!(name in systems))
+		throw new Error('No system for ' + name + '.');
+	return systems[name];
+}
+
+/**
  * Look up a subsystem (e.g., pledge, capsicum) , making sure that it exists.
  */
 function getSubsystem(name)
@@ -89,6 +101,7 @@ function drawDialog(article)
 {
 	const subsystemName = article.keys['subsystem'];
 	const subsystem = getSubsystem(subsystemName);
+	const system = getSystem(article.keys['system']);
 
 	/* Pretty-print its source code. */
 
@@ -101,13 +114,10 @@ function drawDialog(article)
 	/* The system name (e.g., FreeBSD) or empty. */
 
 	const sys = document.getElementById('code-system');
-	if ('system' in article.keys) {
+	if (system !== null) {
 		let elem;
-		if ('system-link' in article.keys) {
-			elem = document.createElement('a');
-			elem.href = article.keys['system-link'];
-		} else
-			elem = document.createElement('span');
+		elem = document.createElement('a');
+		elem.href = article.keys['system-link'];
 		elem.textContent = article.keys['system'];
 		sys.replaceChildren(elem);
 		sys.hidden = false;
@@ -197,12 +207,15 @@ function drawDialog(article)
  * Draw a table column for the "key" of given article "keys" and within the
  * "subsystem" object.  Return the HTML element.
  */
-function redrawColumn(subsystem, key, keys)
+function redrawCol(subsystem, system, key, keys)
 {
+	let link = null;
+	if (key === 'system' && system !== null && 'link' in system)
+		link = system['link'];
+	else if (key === 'subsystem' && 'link' in subsystem)
+		link = subsystem['link'];
+
 	const text = (key in keys) ? keys[key] : '';
-	const link = (key === 'subsystem' && 'link' in subsystem) ?
-		subsystem['link'] : (key + '-link' in keys) ?
-		keys[key + '-link'] : null;
 	const col = document.createElement('div');
 
 	if (key === 'subsystem' && subsystem.deprecated !== null) {
@@ -241,10 +254,11 @@ function redraw()
 	const rows = [];
 	for (const article of data.articles) {
 		const subsys = getSubsystem(article.keys['subsystem']);
+		const sys = getSystem(article.keys['system']);
 		const row = document.createElement('div');
 		row.className = 'table-row';
 		for (const key of columnOrder)
-			row.append(redrawColumn(subsys, key, article.keys));
+			row.append(redrawCol(subsys, sys, key, article.keys));
 		const col = document.createElement('div');
 		col.innerHTML = '<i class="fa fa-fw fa-folder-open"></i>';
 		col.title = 'view code';
@@ -267,8 +281,7 @@ function drawCasestudy()
 		const anch = document.createElement('a');
 		elem.append(anch);
 		anch.href = casestudy[key];
-		anch.textContent = casestudy[key].substring
-			(casestudy[key].lastIndexOf('sandbox-') + 8);
+		anch.textContent = key;
 		return elem;
 	});
 	document.getElementById('casestudy-links').replaceChildren(...links);

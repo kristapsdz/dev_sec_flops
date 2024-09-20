@@ -1,6 +1,5 @@
 lang: C/C++
-system: OpenBSD
-system-link: https://openbsd.org
+system: openbsd
 subsystem: pledge
 githubAttestations: 
     kristapsdz kristapsdz/kcaldav,

@@ -1,5 +1,5 @@
 lang: C/C++
-system: Mac OS X
+system: mac os x
 subsystem: sandbox
 githubAttestations: 
     kristapsdz kristapsdz/kcaldav,

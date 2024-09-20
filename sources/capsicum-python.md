@@ -1,6 +1,5 @@
 lang: Python
-system: FreeBSD
-system-link: https://freebsd.org
+system: freebsd
 subsystem: capsicum
 notes: The sandbox itself doesn't handle forking, which I consider a resource
     we want to protect against.  I don't know how to disable this in Python,

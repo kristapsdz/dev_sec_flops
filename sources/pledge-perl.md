@@ -1,6 +1,5 @@
 lang: Perl
-system: OpenBSD
-system-link: https://openbsd.org
+system: openbsd
 subsystem: pledge
 
 ```perl

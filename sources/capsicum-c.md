@@ -1,6 +1,5 @@
 lang: C/C++
-system: FreeBSD
-system-link: https://freebsd.org
+system: freebsd
 subsystem: capsicum
 notes: The sandbox itself doesn't handle forking, which I consider a resource
     we want to protect against; however, we can use resource limits to do that.

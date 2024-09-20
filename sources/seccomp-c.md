@@ -1,6 +1,5 @@
 lang: C/C++
-system: Linux
-system-link: https://linux.org
+system: linux
 subsystem: seccomp
 githubAttestations: 
     kristapsdz kristapsdz/kcgi,
