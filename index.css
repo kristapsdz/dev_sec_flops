@@ -12,6 +12,13 @@ html, body			{ width: calc(100% - 1rem);
 body > header 			{ display: flex;
 				  align-items: center;
 				  gap: 0.5rem; }
+body > div.development		{ font-size: xx-large;
+				  background-color: inherit;
+				  padding: 1rem 0;
+				  line-height: 1.2em;
+				  color: pink;
+				  top: 0;
+				  position: sticky; }
 body > header h1		{ margin: 0;
 				  font-size: 14pt;
 				  color: #fff;
@@ -159,4 +166,5 @@ footer				{ font-size: smaller; }
   body > header .github,
   body > header h1		{ display: inline-block; }
   body > header h1		{ font-size: inherit; }
+  body > div.development	{ font-size: x-large; }
 }
