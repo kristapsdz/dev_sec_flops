@@ -3,6 +3,7 @@ system: linux
 subsystem: seccomp
 githubAttestations: 
     kristapsdz kristapsdz/kcgi,
+    djmdjm openssh/openssh-portable,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */

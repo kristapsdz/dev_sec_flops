@@ -7,6 +7,7 @@ notes: The sandbox itself doesn't handle forking, which I consider a resource
 githubAttestations: 
     kristapsdz kristapsdz/kcgi,
     kristapsdz kristapsdz/lowdown,
+    djmdjm openssh/openssh-portable,
 
 ```c
 #include <sys/capsicum.h> /* cap_enter(2) */

@@ -7,6 +7,7 @@ githubAttestations:
     kristapsdz kristapsdz/lowdown,
     kristapsdz kristapsdz/sblg,
     kristapsdz kristapsdz/sqlite2mdoc,
+    djmdjm openssh/openssh-portable,
 
 ```c
 #include <sandbox.h> /* sandbox_init(3), etc. */

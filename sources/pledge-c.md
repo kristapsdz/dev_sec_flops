@@ -11,6 +11,7 @@ githubAttestations:
     kristapsdz kristapsdz/sqlite2mdoc,
     kristapsdz openbsd/src/tree/master/usr.bin/rsync,
     ischwarze https://cvsweb.bsd.lv/mandoc,
+    djmdjm openssh/openssh-portable,
 
 ```c
 #include <unistd.h> /* pledge(2) */
