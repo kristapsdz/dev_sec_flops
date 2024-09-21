@@ -12,31 +12,25 @@ install: all
 	install -m 0444 index.js index.html index.css $(PREFIX)
 
 data.json: $(HTMLS)
-	$(SBLG) -o$@ -j $(HTMLS)
+	$(SBLG) -o- -j $(HTMLS) | jq '.' >$@
 
 index.js: data.json data.js
 index.js: subsystems.json subsystems-sizes.json systems.json
 index.js: casestudy.json casestudy-sizes.json
 index.js:
 	( \
-		printf "const data = " ; \
+		printf "const data =" ; \
 		cat data.json ; \
-		echo ; \
-		printf "const subsystemSizes = " ; \
+		printf "const subsystemSizes =" ; \
 		cat subsystems-sizes.json ; \
-		echo ; \
-		printf "const subsystems = " ; \
+		printf "const subsystems =" ; \
 		cat subsystems.json ; \
-		echo ; \
 		printf "const systems = " ; \
 		cat systems.json ; \
-		echo ; \
-		printf "const casestudy = " ; \
+		printf "const casestudy =" ; \
 		cat casestudy.json ; \
-		echo ; \
-		printf "const casestudySizes = " ; \
+		printf "const casestudySizes =" ; \
 		cat casestudy-sizes.json ; \
-		echo ; \
 		cat data.js ; \
 	) >$@
 

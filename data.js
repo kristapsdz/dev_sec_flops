@@ -290,7 +290,7 @@ function drawCasestudy()
 
 	const array = Object.keys(casestudy).map(key => ({
 		key: key,
-		sources: casestudySizes.results[casestudy[key]],
+		sources: casestudySizes.results[casestudy[key]].lines,
 		refs: getSourceSubsystemSizes(key),
 	})).sort((a, b) => {
 		const srcs = a['sources'] / b['sources'];
@@ -363,6 +363,67 @@ function drawCasestudy()
 				}
 			}
 		}
+	});
+
+	new Chart(document.getElementById('chart-casestudy-history'), {
+		type: 'line',
+		options: {
+			plugins: {
+				legend: {
+					display: true,
+					labels: {
+						color: '#fff',
+					}
+				},
+			},
+			scales: {
+				x: {
+					type: 'time',
+					time: {
+						unit: 'year',
+					},
+					title: {
+						display: true,
+						text: 'year',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					title: {
+						display: true,
+						text: 'cumulative commits',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+			}
+		},
+		data: {
+			datasets: Object.keys(casestudy).map(key => {
+				const url = casestudy[key];
+				let i = 0;
+				return {
+					label: key,
+					data: casestudySizes.results[url].history.map(date => {
+						return {
+							x: new Date(date).getTime(),
+							y: i++,
+						};
+					}),
+				};
+			}),
+		},
 	});
 }
 

@@ -52,7 +52,10 @@ figure				{ margin-left: 0;
 .table-head .table-row > *	{ background-color: #fff;
 				  cursor: pointer; }
 .table-row > *			{ display: block;
-				  padding: 0.5rem 1rem; }
+				  padding: 0.5rem 1rem;
+				  overflow: hidden;
+	  			  white-space: nowrap;
+	  			  text-overflow: ellipsis; }
 .table-row > :first-child	{ padding-right: 0; }
 .table-head			{ font-size: smaller;
 				  color: #666;
@@ -129,9 +132,11 @@ figure				{ margin-left: 0;
 #code-notes			{ padding: 1rem; }
 #chart-multi-box > *		{ flex: 1; }
 #chart-casestudy-box,
+#chart-casestudy-history-box,
 #chart-multi-box,
 #chart-box			{ display: flex;
 				  gap: 1rem; }
+#chart-casestudy-history-box > div,
 #chart-casestudy-box > div,
 #chart-multi-box > div,
 #chart-box > div		{ flex: 1; }
@@ -141,21 +146,21 @@ figcaption			{ margin-top: 0.75rem;
 figcaption > div		{ background-color: rgb(255 255 255 / 10%);
 				  padding: 0.1rem 1rem;
 				  border-radius: 1rem; }
+#chart-casestudy-box figcaption > div
+				{ padding: 0.5rem 1rem;
+				  overflow: hidden;
+				  white-space: nowrap;
+				  text-overflow: ellipsis; }
 footer				{ font-size: smaller; }
 @media (width < 1024px) {
   #casestudy-links		{ display: flex;
 	  			  gap: 0.5rem; }
+  #chart-casestudy-history-box,	
   #chart-casestudy-box,	
   #chart-multi-box,	
   #chart-box			{ flex-direction: column; }
   figcaption			{ max-width: unset;
 				  margin-top: 0; }
-  #examples .table		{ grid-template-columns: 1fr 1fr 1fr auto; }
-  #examples .table-row > *	{ overflow: hidden;
-	  			  white-space: nowrap;
-	  			  text-overflow: ellipsis; }
-  #examples .table-row > :nth-child(4)
-  				{ display: none; }
 }
 
 @media (width < 768px) {
@@ -166,4 +171,10 @@ footer				{ font-size: smaller; }
   body > header h1		{ display: inline-block; }
   body > header h1		{ font-size: inherit; }
   body > div.development	{ font-size: x-large; }
+}
+
+@media (width < 512px) {
+  #examples .table		{ grid-template-columns: 1fr 1fr auto auto; }
+  #examples .table-row > :nth-child(1)
+  				{ display: none; }
 }

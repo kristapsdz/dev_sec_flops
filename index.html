@@ -4,8 +4,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta charset="utf-8" /> 
 		<title>Source code sandboxing</title>
-		<script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/highlight.min.js"></script>
 		<script defer src="index.js"></script>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,6 +35,7 @@
 				<a href="#intro">#intro</a>
 				<a href="#examples">#examples</a>
 				<a href="#casestudy">#casestudy</a>
+				<a href="#findings">#findings</a>
 				<a href="#betterment">#betterment</a>
 			</nav>
 		</header>
@@ -147,21 +149,17 @@
 					</div>
 				</figcaption>
 			</div>
-			<p class="byline">
-				The answer so far?  In 2024, it depends on the system you're using.
-			</p>
-			<p>
-				<a href="https://linux.org">Linux</a> has a whopping seven-fold
-				increase in reference complexity, and even more for source
-				complexity, over OpenBSD and FreeBSD.
-				<a href="https://openbsd.org">OpenBSD</a> and FreeBSD rank roughly
-				equivalently.
-			</p>
 		</section>
 		<section id="casestudy">
 			<p>
-				But these are all trivial examples.  How does they stack up in
-				practice?  Let's use
+				These are all trivial examples, and only demonstrate as much as
+				<q>Hello, world</q> programs demonstrate a programming language.
+			</p>
+			<p class="byline">
+				How does they stack up in practice?
+			</p>
+			<p>
+				Let's use
 				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>
 				as a canonical example.  OpenSSH is under tremendous pressure for
 				its security.  It has a number of source code sandboxes, including
@@ -178,14 +176,72 @@
 				</div>
 				<figcaption>
 					<div>
-						<p>
+						<div>
 							Sources...
-						</p>
+						</div>
 						<div id="casestudy-links">
 						</div>
 					</div>
 				</figcaption>
 			</figure>
+			<p>
+				This only shows an instantaneous view of the system: part of the
+				security of a system is its maintenance over time.  How difficult is
+				it to maintain the security implementations over time?
+				In the following chart, I continue looking at 
+				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>,
+				but extracting its commit history (via GitHub) over time for the
+				specific files used for sandboxing.
+			</p>
+			<figure id="chart-casestudy-history-box">
+				<figcaption>
+					<div>
+						<p>
+							This plots cumulative commit counts in the
+							<a href="https://github.com/openssh/openssh-portable">GitHub repository</a>
+							over time.  Size of commits is not
+							regarded&#8212;only the frequency.
+							Subsystems that require significant
+							maintenance will grow much more quickly than
+							those with lighter maintenance burdens.
+						</p>
+					</div>
+				</figcaption>
+				<div>
+					<canvas id="chart-casestudy-history"></canvas>
+				</div>
+			</figure>
+		</section>
+		<section id="findings">
+			<p class="byline">
+				Findings so far?  In 2024, security depends on the system you're using.
+			</p>
+			<p>
+				<a href="https://linux.org">Linux</a> has a whopping seven-fold
+				increase in reference complexity, and even more for source
+				complexity, over OpenBSD and FreeBSD.
+				<a href="https://docs.kernel.org/userspace-api/landlock.html">Landlock</a>
+				showed promise as a simpler alternative, but has since grown in
+				complexity.
+				<a href="https://openbsd.org">OpenBSD</a> and
+				<a href="https://freebsd.org">FreeBSD</a> rank roughly
+				equivalently, with the former having increased mildly in complexity.
+			</p>
+			<p>
+				The maintenance burden for 
+				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
+				as illustrated by 
+				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>,
+				is considerable.  The burden for the other systems is considerably
+				less&#8212;almost nothing since original implementation.
+			</p>
+			<p>
+				Ominously, 
+				<a href="https://www.apple.com/macos">Mac OS X</a>
+				has deprecated its source sandbox, as has
+				<a href="https://www.java.com/">Java</a> by discontinuing the 
+				<a href="https://docs.oracle.com/javase/tutorial/essential/environment/security.html">JSM</a>.
+			</p>
 		</section>
 		<section id="betterment">
 			<p class="byline">

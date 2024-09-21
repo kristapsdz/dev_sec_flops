@@ -1,14 +1,20 @@
 #! /bin/sh
 
-echo "{ \"fetched\": \"`date +%s`\","
+echo "{"
+echo "  \"fetched\": \"`date +%s`\","
 echo "  \"results\": {"
-jq '.[].sources' < subsystems.json | grep 'http' | \
+FIRST=TRUE
+cat subsystems.json | \
+	jq '.[].sources' | grep 'http' | \
 	sed -e 's!^[ ]*"!!' -e 's!"[ ]*$!!' -e 's!",[ ]*$!!' | \
 	sort -u | \
 	while read ln ; do \
 		echo "Fetching $ln..." 1>&2 ; \
 		lines=`links -dump "$ln" | wc -c` ; \
-		echo "    \"$ln\": $lines," ; \
-	done
+		[ -z "$FIRST" ] && echo "," ; \
+		printf "    \"$ln\": $lines" ; \
+		FIRST="" ; \
+	done ; \
+	echo ""
 echo "  }"
 echo "}"
