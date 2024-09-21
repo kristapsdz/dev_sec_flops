@@ -3,7 +3,7 @@ html, body			{ width: calc(100% - 1rem);
 				  background-color: #4a4a4a;
 				  position: relative;
 				  color: #e8e8e8;
-				  max-width: 1024px;
+				  max-width: 55em;
 				  font-family: "Roboto", sans-serif;
 				  line-height: 1.3em;
 				  font-weight: 400;
@@ -34,18 +34,16 @@ figure				{ margin-left: 0;
 				  line-height: 1.2em;
 				  color: #fff; }
 .empty				{ opacity: 0.5; }
-.fa.fa-exclamation-circle	{ color: red; }
+.fa.fa-exclamation-circle	{ color: #ff6384; }
 .table				{ display: grid;
 				  width: 100%;
-				  background-color: #eee;
-				  color: #2f2f2f;
-				  margin: 1.4em 0;
-				  box-shadow: 8px 8px 8px #000;
+				  background-color: rgb(255 255 255 / 20%);
+				  color: #fff;
+				  margin: 1em 0;
 			  	  grid-template-columns: 1fr 1fr 1fr auto auto; }
-.table a			{ color: #000; }
-.table .ok-lines		{ color: green; }
+.table .ok-lines		{ color: #36a2eb; }
 .table .many-lines		{ color: darkorange; }
-.table .too-many-lines		{ color: red; }
+.table .too-many-lines		{ color: #ff6384; }
 .table-head,
 .table-body,
 .table-row			{ display: contents; }
@@ -64,10 +62,10 @@ figure				{ margin-left: 0;
 				  text-decoration: underline; }
 .table-body > .table-row:last-child > *
 				{ padding-bottom: 1rem; }
-.table-body .table-row:hover > *{ background-color: #fff; }
+.table-body .table-row:hover > *{ background-color: rgba(0 0 0 / 10%); }
 .table-body .opener .fa		{ color: orange;
 				  cursor: pointer; }
-#code-mask			{ background-color: rgb(0 0 0 / 80%);
+#code-mask			{ background-color: rgb(0 0 0 / 50%);
 				  position: fixed;
 				  top: 0;
 				  z-index: 0;
@@ -81,6 +79,7 @@ figure				{ margin-left: 0;
 				  display: flex;
 				  flex-direction: column;
 				  max-height: calc(100vh - 2rem);
+				  box-shadow: 8px 8px 8px rgb(255 255 255 / 25%);
 				  top: 1rem;
 				  left: 50%;
 				  transform: translateX(-50%);
@@ -108,7 +107,7 @@ figure				{ margin-left: 0;
 #code > div, #code > nav	{ overflow: scroll; }
 #code nav 			{ display: flex;
 				  padding: 0 0.5rem;
-				  gap: 1rem; }
+				  gap: 1em; }
 #code nav label			{ transition: border-bottom 0.25s linear;
 			  	  border-bottom: thin solid rgb(0 0 0 / 10%); }
 #code nav label:hover		{ border-bottom: thin solid rgb(0 0 0 / 70%); }
@@ -135,7 +134,10 @@ figure				{ margin-left: 0;
 #chart-casestudy-history-box,
 #chart-multi-box,
 #chart-box			{ display: flex;
-				  gap: 1rem; }
+				  gap: 1em; }
+#chart-multi-box > figure	{ display: flex;
+				  gap: 1em;
+				  flex-direction: column; }
 #chart-casestudy-history-box > div,
 #chart-casestudy-box > div,
 #chart-multi-box > div,
@@ -152,7 +154,7 @@ figcaption > div		{ background-color: rgb(255 255 255 / 10%);
 				  white-space: nowrap;
 				  text-overflow: ellipsis; }
 footer				{ font-size: smaller; }
-@media (width < 1024px) {
+@media (width < 55em) {
   #casestudy-links		{ display: flex;
 	  			  gap: 0.5rem; }
   #chart-casestudy-history-box,	
@@ -163,7 +165,7 @@ footer				{ font-size: smaller; }
 				  margin-top: 0; }
 }
 
-@media (width < 768px) {
+@media (width < 45em) {
   body > header,
   body > header nav		{ display: block;
 	  			  text-align: center; }
@@ -173,7 +175,7 @@ footer				{ font-size: smaller; }
   body > div.development	{ font-size: x-large; }
 }
 
-@media (width < 512px) {
+@media (width < 35em) {
   #examples .table		{ grid-template-columns: 1fr 1fr auto auto; }
   #examples .table-row > :nth-child(1)
   				{ display: none; }

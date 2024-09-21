@@ -335,7 +335,7 @@ function drawCasestudy()
 					title: {
 						display: true,
 						text: 'source code',
-						color: '#80b6db',
+						color: '#36a2eb',
 					},
 					ticks: {
 						color: '#ddd',
@@ -349,7 +349,7 @@ function drawCasestudy()
 					title: {
 						display: true,
 						text: 'references',
-						color: '#e57687',
+						color: '#ff6384',
 					},
 					ticks: {
 						color: '#ddd',
@@ -573,6 +573,11 @@ function drawChart()
 		options: {
 			plugins: {
 				legend: {
+					title: {
+						text: 'complexity by operating system',
+						display: true,
+						color: '#fff',
+					},
 					display: true,
 					labels: {
 						color: '#fff',
@@ -592,7 +597,7 @@ function drawChart()
 					title: {
 						display: true,
 						text: 'source code',
-						color: '#80b6db',
+						color: '#36a2eb',
 					},
 					ticks: {
 						color: '#ddd',
@@ -606,7 +611,7 @@ function drawChart()
 					title: {
 						display: true,
 						text: 'references',
-						color: '#e57687',
+						color: '#ff6384',
 					},
 					ticks: {
 						color: '#ddd',
@@ -655,6 +660,11 @@ function drawChart()
 		options: {
 			plugins: {
 				legend: {
+					title: {
+						text: 'complexity by sandbox subsystem',
+						display: true,
+						color: '#fff',
+					},
 					display: true,
 					labels: {
 						color: '#fff',
@@ -674,7 +684,7 @@ function drawChart()
 					title: {
 						display: true,
 						text: 'average source code',
-						color: '#80b6db',
+						color: '#36a2eb',
 					},
 					ticks: {
 						color: '#ddd',
@@ -688,7 +698,7 @@ function drawChart()
 					title: {
 						display: true,
 						text: 'references',
-						color: '#e57687',
+						color: '#ff6384',
 					},
 					ticks: {
 						color: '#ddd',

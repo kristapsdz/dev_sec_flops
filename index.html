@@ -53,32 +53,28 @@
 				shared memory, etc.).
 			</p>
 			<p>
-				In this article, I examine the many different open source subsystems
-				used to enact these sandboxes, such as
+				In this article, I examine different open source subsystems used to
+				enact these sandboxes, such as
 				<a href="https://openbsd.org">OpenBSD</a>'s
-				<a href="https://man.openbsd.org/pledge">pledge</a> or
+				<a href="https://man.openbsd.org/pledge">pledge</a> and
 				<a href="https://linux.org">Linux</a>'s
-				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>.
+				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
+				by example.
 				Jump to the <a href="#examples">examples</a> for a full list.
 			</p>
 			<figure id="chart-box">
 				<figcaption>
 					<div>
 						<p>
-							How complex is it to sandbox your source code?
+							How complex is it to sandbox your source
+							code?
 						</p>
 						<p>
 							This graphs the
-							<strong>text length of all references</strong> that
-							must be read to understand the system (manual pages,
-							etc.) to the
-							<strong>number of lines in an example system</strong>.
-						</p>
-						<p>
-							Systems easy to understand and implement are
-							grouped in the lower-left, while
-							progressively more complicated systems are
-							in the upper-right.
+							<strong>text length of all references</strong>
+							that must be read to understand the system
+							(manual pages, etc.) to the
+							<strong>number of lines in an example</strong>.
 						</p>
 					</div>
 				</figcaption>
@@ -86,13 +82,18 @@
 					<canvas id="chart-scatter"></canvas>
 				</div>
 			</figure>
+			<p>
+				Systems easy to understand (<q>references</q>) and implement
+				(<q>source code</q>) are grouped in the lower-left, while
+				progressively more complicated systems are in the upper-right.
+			</p>
 		</section>
 		<section id="examples">
 			<p>
-				Below is a list of all example source code.  Click the folder icon
-				on an example to see its source code and references.  Which method
+				Below is a list of all examples.  Click the folder icon on an
+				example to see its source code, references, and notes.  Which method
 				would you choose?  Sources readable on a normal mobile phone (&lt;20
-				lines) have lines show in green, barely readable (20&#8211;30 lines)
+				lines) have lines show in blue, barely readable (20&#8211;30 lines)
 				in orange, and above in red.  Deprecated subsystems are marked next
 				to the subsytem name.
 			</p>
@@ -105,8 +106,9 @@
 				</div>
 			</div>
 			<p>
-				What happens when we group by operating systems and subsystems to
-				see how hard it is to implement a sandbox in your environment?
+				We can further clarify this data by grouping by operating systems
+				and subsystems&#8212;environment.  How hard it is to implement a
+				sandbox in your environment of choice?
 			</p>
 			<div id="chart-multi-box">
 				<figure>
@@ -116,33 +118,29 @@
 				<figcaption>
 					<div>
 						<p>
-							Systems clustered to the <strong>right</strong> of
-							these graphs are more complicated to understand and
-							implement.  As for those on the
-							<strong>left</strong>, I'm reminded of Jerry
-							Saltzer's reflections on Multics'
-							security infrastructure,
-							which was a predecessor to call-based
-							capabilities systems like
+							Moving from right to left in these
+							graphs&#8212;reducing complexity&#8212;puts
+							to practice Jerry Saltzer's reflections
+							on Multics, which featured a predecessor to
+							call-based capabilities systems like
+							modern-day
 							<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">
-								seccomp</a>:
+								seccomp</a> (emphasis mine):
 						</p>
 						<p>
-							<q>
-								...the user...  must figure out for
+							<q>The user&#8230; must figure out for
 								himself how to accomplish his
 								intentions amid a myriad of
 								possibilities, not all of which he
-								understands [...] 
-								<strong>
-									The solution to this problem
-									lies in better understanding
-									the nature of the typical
-									user's mental description of
-									protection intent, and then
-									devising interfaces which
-									permit more direct
-									specification of that
+								understands&#8230;
+								<strong> The solution to this
+									problem lies in better
+									understanding the nature of
+									the typical user's mental
+									description of protection
+									intent, and then devising
+									interfaces which permit more
+									direct specification of that
 									protection intent.</strong></q>
 							[<a href="https://dl.acm.org/doi/pdf/10.1145/361011.361067">ref</a>]
 						</p>
@@ -154,9 +152,11 @@
 			<p>
 				These are all trivial examples, and only demonstrate as much as
 				<q>Hello, world</q> programs demonstrate a programming language.
+				Let's refocus on a real world example taken both as a snapshot and
+				as developed over time.
 			</p>
 			<p class="byline">
-				How does they stack up in practice?
+				Real-world sandboxing in 2024.
 			</p>
 			<p>
 				Let's use
@@ -214,7 +214,7 @@
 		</section>
 		<section id="findings">
 			<p class="byline">
-				Findings so far?  In 2024, security depends on the system you're using.
+				Findings so far?  It depends on your environment.
 			</p>
 			<p>
 				<a href="https://linux.org">Linux</a> has a whopping seven-fold
