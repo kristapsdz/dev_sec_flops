@@ -58,24 +58,33 @@ function getSubsystem(name)
 	return subsystems[name];
 }
 
-function getSourceSubsystemSize(source)
+/**
+ * Get the size of a specific reference for a subsystem.
+ */
+function getReferenceSize(reference)
 {
-	if (typeof(source) === 'undefined')
-		throw new Error('No source name for size.');
-	if (!(source in subsystemSizes.results))
-		throw new Error('No source for ' + name + '.');
-	return subsystemSizes.results[source];
+	if (typeof(reference) === 'undefined')
+		throw new Error('No reference given for size request.');
+	if (!(reference in subsystemSizes.results))
+		throw new Error('No reference for ' + name + '.');
+	return subsystemSizes.results[reference];
 }
 
-function getSourceSubsystemSizes(name)
+/**
+ * Get the cumulative size of all references for a subsystem.
+ */
+function getSubsystemReferenceSize(name)
 {
 	const subsystem = getSubsystem(name);
 	let bytes = 0;
 	for (const source of subsystem.sources)
-		bytes += getSourceSubsystemSize(source);
+		bytes += getReferenceSize(source);
 	return bytes;
 }
 
+/**
+ * Get the cumulative size of all references for an operating system.
+ */
 function getSourceSystemSizes(name)
 {
 	const set = new Set();
@@ -87,7 +96,7 @@ function getSourceSystemSizes(name)
 	for (const nname of set) {
 		const subsystem = getSubsystem(nname);
 		for (const source of subsystem.sources)
-			bytes += getSourceSubsystemSize(source);
+			bytes += getReferenceSize(source);
 	}
 	return bytes / set.size;
 }
@@ -166,7 +175,7 @@ function drawDialog(article)
 		refs.push(elem);
 		const size = document.createElement('span');
 		elem.append(size);
-		const kb = Number(getSourceSubsystemSize(nuri) / 1000).toFixed();
+		const kb = Number(getReferenceSize(nuri) / 1000).toFixed();
 		size.textContent = '...' + kb + ' KB';
 	}
 	if (refs.length === 0) {
@@ -291,7 +300,7 @@ function drawCasestudy()
 	const array = Object.keys(casestudy).map(key => ({
 		key: key,
 		sources: casestudySizes.results[casestudy[key]].lines,
-		refs: getSourceSubsystemSizes(key),
+		refs: getSubsystemReferenceSize(key),
 	})).sort((a, b) => {
 		const srcs = a['sources'] / b['sources'];
 		const refs = a['refs'] / b['refs'];
@@ -458,7 +467,7 @@ function drawChart()
 	for (const article of data.articles) {
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
-		const bytes = getSourceSubsystemSizes(subsysName);
+		const bytes = getSubsystemReferenceSize(subsysName);
 		datasets[subsystemIndex[subsysName]].data.push({
 			'x': article.keys.lines,
 			'y': parseInt(bytes),
@@ -635,7 +644,7 @@ function drawChart()
 	const subsysTalliesArray = Object.keys(subsysTallies).map(key => ({
 		key: key,
 		sources: subsysTallies[key].tally / subsysTallies[key].samples,
-		refs: getSourceSubsystemSizes(key),
+		refs: getSubsystemReferenceSize(key),
 	})).sort((a, b) => {
 		const srcs = a['sources'] / b['sources'];
 		const refs = a['refs'] / b['refs'];
