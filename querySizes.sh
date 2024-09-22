@@ -4,7 +4,7 @@ echo "{"
 echo "  \"fetched\": \"`date +%s`\","
 echo "  \"results\": {"
 FIRST=TRUE
-cat subsystems.json | \
+cat json/subsystems.json | \
 	jq '.[].sources' | grep 'http' | \
 	sed -e 's!^[ ]*"!!' -e 's!"[ ]*$!!' -e 's!",[ ]*$!!' | \
 	sort -u | \

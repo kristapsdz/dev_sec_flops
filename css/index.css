@@ -145,6 +145,11 @@ figcaption > div		{ background-color: rgb(255 255 255 / 10%);
 				  overflow: hidden;
 				  white-space: nowrap;
 				  text-overflow: ellipsis; }
+.help				{ background-color: #ccc;
+				  border-radius: 1rem;
+				  padding: 1rem;
+				  color: #666; }
+.help a				{ color: #000; }
 footer				{ font-size: smaller; }
 @media (width < 55em) {
   #casestudy-links		{ display: flex;

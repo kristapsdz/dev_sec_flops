@@ -11,31 +11,34 @@ install: all
 	mkdir -p $(PREFIX)
 	install -m 0444 index.js index.html index.css $(PREFIX)
 
-data.json: $(HTMLS)
+build/data.json: $(HTMLS)
+	mkdir -p build
 	$(SBLG) -o- -j $(HTMLS) | jq '.' >$@
 
-index.js: data.json
-index.js: subsystems.json subsystems-sizes.json systems.json
-index.js: casestudy.json casestudy-sizes.json
-index.js: javascript/index.js
+index.js: build/data.json
+index.js: json/subsystems.json json/subsystems-sizes.json json/systems.json
+index.js: json/casestudy.json json/casestudy-sizes.json
+index.js: build/index.js
+	@echo "build/index.js -> $@"
 	@( \
 		printf "const data =" ; \
-		cat data.json ; \
+		cat build/data.json ; \
 		printf "const subsystemSizes =" ; \
-		cat subsystems-sizes.json ; \
+		cat json/subsystems-sizes.json ; \
 		printf "const subsystems =" ; \
-		cat subsystems.json ; \
+		cat json/subsystems.json ; \
 		printf "const systems = " ; \
-		cat systems.json ; \
+		cat json/systems.json ; \
 		printf "const casestudy =" ; \
-		cat casestudy.json ; \
+		cat json/casestudy.json ; \
 		printf "const casestudySizes =" ; \
-		cat casestudy-sizes.json ; \
-		sed -n '3,$$p' javascript/index.js ; \
+		cat json/casestudy-sizes.json ; \
+		sed -n '3,$$p' build/index.js ; \
 	) >$@
 
 .md.html:
-	( \
+	@echo "$< -> $@"
+	@( \
 	  set +e ; \
 	  github=`lowdown -X githubAttestations $< 2>/dev/null` ; \
 	  subsys=`lowdown -X subsystem $< 2>/dev/null` ; \
@@ -58,22 +61,25 @@ index.js: javascript/index.js
 	) >$@
 
 clean:
-	rm -f $(HTMLS) data.json index.js index.html index.css
-	rm -rf javascript
+	rm -f $(HTMLS) index.js index.html index.css
+	rm -rf build
 
-subsystems-sizes.json: querySizes.sh subsystems.json
+json/subsystems-sizes.json: querySizes.sh json/subsystems.json
 	sh ./querySizes.sh >$@
 
-casestudy-sizes.json: queryCasestudy.sh casestudy.json
+json/casestudy-sizes.json: queryCasestudy.sh json/casestudy.json
 	sh ./queryCasestudy.sh > $@
 
 index.html: html/index.xml
-	xmllint --pedantic --quiet --noout html/index.xml
-	cp -f html/index.xml $@
+	@echo "html/index.xml -> $@"
+	@xmllint --pedantic --quiet --noout html/index.xml
+	@cp -f html/index.xml $@
 
-javascript/index.js: typescript/index.ts
-	npx tsc
+build/index.js: typescript/index.ts
+	@echo "typescript/index.ts -> $@"
+	@npx tsc
 
 index.css: css/index.css
-	npx stylelint css/index.css
-	cp -f css/index.css $@
+	@echo "css/index.css -> $@"
+	@npx stylelint css/index.css
+	@cp -f css/index.css $@

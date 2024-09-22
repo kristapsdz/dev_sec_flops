@@ -247,6 +247,12 @@
 				to an open source system would add weight to the <q>pledge</q> box
 				and <q>OpenBSD</q>.
 			</p>
+			<p class="help">
+				Help make these charts more meaningful: if you've significantly
+				contributed to a sandbox effort, please submit an attestation by a
+				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
+				pull request.  Thank you!
+			</p>
 			<div id="chart-contrib-box">
 				<figure>
 					<div>

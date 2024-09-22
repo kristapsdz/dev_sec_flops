@@ -1,10 +1,16 @@
 #! /bin/sh
 
+if [ -z $GITHUB_TOKEN ]
+then
+	echo "GITHUB_TOKEN needs to be defined" 1>&2
+	exit 1
+fi
+
 echo "{"
 echo "  \"fetched\": \"`date +%s`\","
 echo "  \"results\": {"
 FIRST_OUTER=TRUE
-cat casestudy.json | \
+cat json/casestudy.json | \
 	jq '.[]' | \
 	sed -e 's!^[ ]*"!!' -e 's!"[ ]*$!!' -e 's!",[ ]*$!!' | \
 	sort -u | \
