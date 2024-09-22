@@ -35,6 +35,7 @@ index.js: build/index.js
 		cat json/casestudy-sizes.json ; \
 		sed -n '3,$$p' build/index.js ; \
 	) >$@
+	@chmod 444 $@
 
 .md.html:
 	@echo "$< -> $@"
@@ -74,12 +75,15 @@ index.html: html/index.xml
 	@echo "html/index.xml -> $@"
 	@xmllint --pedantic --quiet --noout html/index.xml
 	@cp -f html/index.xml $@
+	@chmod 444 $@
 
 build/index.js: typescript/index.ts tsconfig.json
 	@echo "typescript/index.ts -> $@"
 	@npx tsc
+	@chmod 444 $@
 
 index.css: css/index.css
 	@echo "css/index.css -> $@"
 	@npx stylelint css/index.css
 	@cp -f css/index.css $@
+	@chmod 444 $@
