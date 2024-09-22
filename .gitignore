@@ -3,3 +3,6 @@ sources/*.html
 data.json
 index.js
 Makefile.local
+/index.html
+/index.css
+/node_modules

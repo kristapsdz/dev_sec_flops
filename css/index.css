@@ -4,7 +4,7 @@ html, body			{ width: calc(100% - 1rem);
 				  position: relative;
 				  color: #e8e8e8;
 				  max-width: 55em;
-				  font-family: "Roboto", sans-serif;
+				  font-family: Roboto, sans-serif;
 				  line-height: 1.3em;
 				  font-weight: 400;
 				  font-size: 11.5pt;
@@ -12,11 +12,6 @@ html, body			{ width: calc(100% - 1rem);
 body > header 			{ display: flex;
 				  align-items: center;
 				  gap: 0.5rem; }
-body > div.development		{ font-size: xx-large;
-				  background-color: inherit;
-				  padding: 1rem 0;
-				  line-height: 1.2em;
-				  color: pink; }
 body > header h1		{ margin: 0;
 				  font-size: 14pt;
 				  color: #fff;
@@ -47,13 +42,13 @@ figure				{ margin-left: 0;
 .table-head,
 .table-body,
 .table-row			{ display: contents; }
-.table-head .table-row > *	{ background-color: #fff;
-				  cursor: pointer; }
 .table-row > *			{ display: block;
 				  padding: 0.5rem 1rem;
 				  overflow: hidden;
 	  			  white-space: nowrap;
 	  			  text-overflow: ellipsis; }
+.table-head .table-row > *	{ background-color: #fff;
+				  cursor: pointer; }
 .table-row > :first-child	{ padding-right: 0; }
 .table-head			{ font-size: smaller;
 				  color: #666;
@@ -67,14 +62,8 @@ figure				{ margin-left: 0;
 				  cursor: pointer; }
 #code-mask			{ background-color: rgb(0 0 0 / 50%);
 				  position: fixed;
-				  top: 0;
 				  z-index: 0;
-				  bottom: 0;
-				  left: 0;
-				  right: 0; }
-#code-shown:not(:checked) ~ #code-mask,
-#code-shown:not(:checked) ~ #code
-				{ display: none; }
+				  inset: 0; }
 #code 				{ position: fixed;
 				  display: flex;
 				  flex-direction: column;
@@ -89,7 +78,10 @@ figure				{ margin-left: 0;
 				  overflow: hidden;
 				  background-color: #f3f3f3;
 				  color: #2f2f2f; }
-#code > div, #code > ul		{ overflow: auto; }
+#code-shown:not(:checked) ~ #code-mask,
+#code-shown:not(:checked) ~ #code
+				{ display: none; }
+#code > div, #code > nav	{ overflow: auto; }
 #code header			{ display: flex;
 				  flex-direction: column;
 				  gap: 1rem; }
@@ -104,7 +96,6 @@ figure				{ margin-left: 0;
 				  overflow: hidden;
 				  text-overflow: ellipsis; }
 #code a				{ color: inherit; }
-#code > div, #code > nav	{ overflow: scroll; }
 #code nav 			{ display: flex;
 				  padding: 0 0.5rem;
 				  gap: 1em; }
@@ -174,7 +165,6 @@ footer				{ font-size: smaller; }
   body > header .github,
   body > header h1		{ display: inline-block; }
   body > header h1		{ font-size: inherit; }
-  body > div.development	{ font-size: x-large; }
 }
 
 @media (width < 35em) {

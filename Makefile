@@ -1,11 +1,11 @@
-.SUFFIXES: .md .html .xml .html
+.SUFFIXES: .md .html
 
 PREFIX	 = /var/www/vhosts/kristaps.bsd.lv/htdocs/devsecflops
 sinclude Makefile.local
 SBLG 	 = ../sblg/sblg
 HTMLS	!= ls sources/*.md | sed 's!\.md$$!.html!'
 
-all: index.js index.html
+all: index.js index.html index.css
 
 install: all
 	mkdir -p $(PREFIX)
@@ -58,7 +58,7 @@ index.js:
 	) >$@
 
 clean:
-	rm -f $(HTMLS) data.json index.js
+	rm -f $(HTMLS) data.json index.js index.html index.css
 
 subsystems-sizes.json: querySizes.sh subsystems.json
 	sh ./querySizes.sh >$@
@@ -66,6 +66,10 @@ subsystems-sizes.json: querySizes.sh subsystems.json
 casestudy-sizes.json: queryCasestudy.sh casestudy.json
 	sh ./queryCasestudy.sh > $@
 
-.xml.html:
-	xmllint --pedantic --quiet --noout $<
-	cp -f $< $@
+index.html: html/index.xml
+	xmllint --pedantic --quiet --noout html/index.xml
+	cp -f html/index.xml $@
+
+index.css: css/index.css
+	npx stylelint css/index.css
+	cp -f css/index.css $@
