@@ -58,13 +58,14 @@ interface Tally
 	key: string,
 	sources: number,
 	refs: number,
+	users: number,
 }
 
 interface TallyInput
 {
 	tally: number,
 	samples: number,
-	refs: number,
+	users: number,
 }
 
 /**
@@ -100,7 +101,8 @@ function requireHTMLElement(id: string): HTMLElement
  * Generalised function to create a complexity chart over systems or subsystems,
  * but in both cases plotting sources and references.
  */
-function chartSourcesRefs(id: string, tallies: Tally[], title: string, d1title: string, d2title: string): void
+function chartSourcesRefs(id: string, tallies: Tally[], title: string,
+    d1title: string, d2title: string): void
 {
 	const options: any = {
 		plugins: {
@@ -316,7 +318,7 @@ function chartContribs(id: string, tallies: Tally[], title: string): void
 			labels: tallies.map(ent => ent.key),
 			datasets: [{
 				label: title,
-				data: tallies.map(ent => ent.refs),
+				data: tallies.map(ent => ent.users),
 			}],
 		},
 		options: options,
@@ -386,21 +388,9 @@ function getReferenceSize(reference: string): number
 }
 
 /**
- * Get the cumulative size of all references for a subsystem.
- */
-function getSubsystemReferenceSize(name: string): number
-{
-	const subsystem = getSubsystem(name);
-	let bytes = 0;
-	for (const source of subsystem.sources)
-		bytes += getReferenceSize(source);
-	return bytes;
-}
-
-/**
  * Get the cumulative size of all references for an operating system.
  */
-function getSourceSystemSizes(name: string): number
+function getSystemReferenceSize(name: string): number
 {
 	const set = new Set<string>();
 	for (const article of data.articles)
@@ -414,6 +404,18 @@ function getSourceSystemSizes(name: string): number
 			bytes += getReferenceSize(source);
 	}
 	return bytes / set.size;
+}
+
+/**
+ * Get the cumulative size of all references for a subsystem.
+ */
+function getSubsystemReferenceSize(name: string): number
+{
+	const subsystem = getSubsystem(name);
+	let bytes = 0;
+	for (const source of subsystem.sources)
+		bytes += getReferenceSize(source);
+	return bytes;
 }
 
 /**
@@ -775,32 +777,32 @@ function drawChart()
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
 		const bytes = getSubsystemReferenceSize(subsysName);
-		const attests = 
+		const users = 
 			typeof(article.keys.githubAttestations) !== 'undefined' ?
-			article.keys.githubAttestations.split(',').length :
+			article.keys.githubAttestations.split(',').length - 1 :
 			0;
 		if (!(subsysName in subsysTallies))
 			subsysTallies[subsysName] = {
 				tally: 0,
 				samples: 0,
-				refs: 0,
+				users: 0,
 			};
 		subsysTallies[subsysName].tally +=
 			Number(article.keys.lines);
 		subsysTallies[subsysName].samples++;
-		subsysTallies[subsysName].refs += attests;
+		subsysTallies[subsysName].users += users;
 		if (typeof(sysName) === 'undefined')
 			continue;
 		if (!(sysName in sysTallies))
 			sysTallies[sysName] = {
 				tally: 0,
 				samples: 0,
-				refs: 0,
+				users: 0,
 			};
 		sysTallies[sysName].tally +=
 			Number(article.keys.lines);
 		sysTallies[sysName].samples++;
-		sysTallies[sysName].refs += attests;
+		sysTallies[sysName].users += users;
 	}
 
 	/*
@@ -812,7 +814,8 @@ function drawChart()
 	const sysTalliesArray = Object.keys(sysTallies).map(key => ({
 		key: key,
 		sources: sysTallies[key].tally / sysTallies[key].samples,
-		refs: getSourceSystemSizes(key),
+		refs: getSystemReferenceSize(key),
+		users: sysTallies[key].users,
 	})).sort((a, b) => {
 		const srcs = a['sources'] / b['sources'];
 		const refs = a['refs'] / b['refs'];
@@ -828,6 +831,7 @@ function drawChart()
 		key: key,
 		sources: subsysTallies[key].tally / subsysTallies[key].samples,
 		refs: getSubsystemReferenceSize(key),
+		users: subsysTallies[key].users,
 	})).sort((a, b) => {
 		const srcs = a['sources'] / b['sources'];
 		const refs = a['refs'] / b['refs'];
