@@ -19,10 +19,10 @@ this repository, but there are more.
 [illumos](https://www.illumos.org/) folks, I'm looking at you: I know
 about [privileges(7)](https://illumos.org/man/7/privileges).  Have you
 implemented a system with this?  Please let me know.  All the ones
-mentioned are in [subsystems.json](subsystems.json).
+mentioned are in [subsystems.json](json/subsystems.json).
 
 Lastly, a **system** is an operating system like OpenBSD or Linux.  All
-the ones mentioned are in [systems.json](systems.json).
+the ones mentioned are in [systems.json](json/systems.json).
 
 Anywaym, there's way to much hand-waving about software sandboxing.
 Let's put some numbers down.
@@ -60,7 +60,7 @@ I will be double-checking that you actually contributed... don't fib.
 ## Adding new systems and subsystems
 
 To add an entirely new subsystem, edit
-[subsystems.json](subsystems.json) as follows:
+[subsystems.json](json/subsystems.json) as follows:
 
 ```typescript
 {
@@ -78,7 +78,7 @@ To add an entirely new subsystem, edit
 
 ```
 
-Same goes with [systems.json](systems.json), except easier:
+Same goes with [systems.json](json/systems.json), except easier:
 
 ```typescript
 {
