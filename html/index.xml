@@ -118,10 +118,8 @@
 							graphs&#8212;reducing complexity&#8212;puts
 							to practice Jerry Saltzer's reflections
 							on Multics, which featured a predecessor to
-							call-based capabilities systems like
-							modern-day
-							<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">
-								seccomp</a> (emphasis mine):
+							modern call-based capabilities systems
+							(emphasis mine):
 						</p>
 						<p>
 							<q>The user&#8230; must figure out for
