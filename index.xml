@@ -4,24 +4,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta charset="utf-8" /> 
 		<title>Source code sandboxing</title>
-		<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-		<script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-		<script defer src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/highlight.min.js"></script>
-		<script defer src="index.js"></script>
+		<script defer="defer" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+		<script defer="defer" src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+		<script defer="defer" src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/highlight.min.js"></script>
+		<script defer="defer" src="index.js"></script>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin" />
 		<link rel="stylesheet"
-	         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" />
+	         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&amp;display=swap" />
 		<link rel="stylesheet"
 		 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="index.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/default.min.css" />
 	</head>
 	<body>
-		<div class="development">
-			This article is still under development.  Please don't share it any
-			further until this message doesn't appear here, thank you!
-		</div>
 		<header>
 			<div class="github">
 				<a href="https://github.com/kristapsdz/dev_sec_flops">
@@ -294,7 +290,7 @@
 			</p>
 		</section>
 		<footer>
-			Copyright &copy; Kristaps Dzonsons
+			Copyright &#x00a9; Kristaps Dzonsons
 		</footer>
 		<input type="checkbox" name="code-shown" hidden="hidden" id="code-shown" />
 		<label for="code-shown" id="code-mask"></label>

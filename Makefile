@@ -1,4 +1,4 @@
-.SUFFIXES: .md .html
+.SUFFIXES: .md .html .xml .html
 
 PREFIX	 = /var/www/vhosts/kristaps.bsd.lv/htdocs/devsecflops
 sinclude Makefile.local
@@ -65,3 +65,7 @@ subsystems-sizes.json: querySizes.sh subsystems.json
 
 casestudy-sizes.json: queryCasestudy.sh casestudy.json
 	sh ./queryCasestudy.sh > $@
+
+.xml.html:
+	xmllint --pedantic --quiet --noout $<
+	cp -f $< $@
