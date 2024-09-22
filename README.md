@@ -5,15 +5,15 @@ It's still in progress.
 
 *Please don't post this repository for broader consumption until it's
 ready, thank you!*  However, if you want to contribute attestations or
-subsystems, please do.
+sandbox systems, please do.
 
 An **attestation** means that **you** have used a software sandbox
 (e.g., [pledge](https://man.openbsd.org/pledge)) in your software.  This
-means that you personally interfaced with the sandbox subsystem or made
-a significant contribution.  Please let me know using the documentation
-below!  Make your work known.
+means that you personally interfaced with the sandbox or made a significant
+contribution.  Please let me know using the documentation below!  Make your work
+known.
 
-A **subsystem** is a software sandbox system like
+A **sandbox** is a software sandbox system like
 [pledge](https://man.openbsd.org/pledge).  I've documented a handful in
 this repository, but there are more.
 [illumos](https://www.illumos.org/) folks, I'm looking at you: I know
@@ -27,7 +27,7 @@ the ones mentioned are in [systems.json](json/systems.json).
 Anywaym, there's way to much hand-waving about software sandboxing.
 Let's put some numbers down.
 
-## Adding a new attestation to a given system/subsystem
+## Adding a new attestation to a given system/sandbox
 
 Have you implemented a software sandbox matching an operating system,
 language, and sandbox system?  Or you have made a considerable
@@ -57,16 +57,16 @@ merging the PR easier.
 
 I will be double-checking that you actually contributed... don't fib.
 
-## Adding new systems and subsystems
+## Adding new systems and sandboxes
 
-To add an entirely new subsystem, edit
+To add an entirely new sandbox, edit
 [subsystems.json](json/subsystems.json) as follows:
 
 ```typescript
 {
     "NAME_OF_SUBSYSTEM": {
         "deprecated": null, /* Or a string containing deprecation information. */
-        "link": "https://canonical/link/to/subsystem/overview",
+        "link": "https://canonical/link/to/sandbox/overview",
         "sources": [
             "https://ALL/sources/we...",
             "https://need/to/understand...",
@@ -112,7 +112,7 @@ as an example in this.
 ```markdown
 lang: C/C++
 system: freebsd
-subsystem: NAME_OF_SUBSYSTEM
+subsystem: NAME_OF_SANDBOX
 notes: Any possible notes or just leave this out entirely.
 githubAttestations: 
     kristapsdz kristapsdz/sblg,
