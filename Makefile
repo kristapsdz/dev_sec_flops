@@ -14,11 +14,11 @@ install: all
 data.json: $(HTMLS)
 	$(SBLG) -o- -j $(HTMLS) | jq '.' >$@
 
-index.js: data.json data.js
+index.js: data.json
 index.js: subsystems.json subsystems-sizes.json systems.json
 index.js: casestudy.json casestudy-sizes.json
-index.js:
-	( \
+index.js: javascript/index.js
+	@( \
 		printf "const data =" ; \
 		cat data.json ; \
 		printf "const subsystemSizes =" ; \
@@ -31,7 +31,7 @@ index.js:
 		cat casestudy.json ; \
 		printf "const casestudySizes =" ; \
 		cat casestudy-sizes.json ; \
-		cat data.js ; \
+		sed -n '3,$$p' javascript/index.js ; \
 	) >$@
 
 .md.html:
@@ -59,6 +59,7 @@ index.js:
 
 clean:
 	rm -f $(HTMLS) data.json index.js index.html index.css
+	rm -rf javascript
 
 subsystems-sizes.json: querySizes.sh subsystems.json
 	sh ./querySizes.sh >$@
@@ -69,6 +70,9 @@ casestudy-sizes.json: queryCasestudy.sh casestudy.json
 index.html: html/index.xml
 	xmllint --pedantic --quiet --noout html/index.xml
 	cp -f html/index.xml $@
+
+javascript/index.js: typescript/index.ts
+	npx tsc
 
 index.css: css/index.css
 	npx stylelint css/index.css

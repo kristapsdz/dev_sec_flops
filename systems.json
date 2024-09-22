@@ -1,14 +1,18 @@
 {
 	"openbsd": {
+		"name": "OpenBSD",
 		"link": "https://openbsd.org"
 	},
 	"freebsd": {
+		"name": "FreeBSD",
 		"link": "https://freebsd.org"
 	},
 	"linux": {
+		"name": "Linux",
 		"link": "https://linux.org"
 	},
 	"mac os x": {
+		"name": "Mac OS X",
 		"link": "https://www.apple.com/macos"
 	}
 }

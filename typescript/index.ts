@@ -1,3 +1,72 @@
+import { Chart, ChartDataSets } from 'chart.js';
+import * as hljs from 'highlightjs';
+
+
+type subsystem = {
+	deprecated: null|string,
+	link: string,
+	sources: string[],
+}
+
+type system = {
+	name: string,
+	link: string,
+}
+
+type subsystems = Record<string, subsystem>;
+type systems = Record<string, system>
+type subsystemSizes = {
+	fetched: string,
+	results: Record<string, number>,
+}
+type article = {
+	base: string,
+	article: {
+		xml: string,
+	},
+	keys: {
+		lang: string,
+		system?: string,
+		subsystem: string,
+		githubAttestations?: string,
+		notes?: string,
+		lines: string,
+		bytes: string,
+	}
+}
+type data = {
+	articles: article[],
+}
+type casestudy = Record<string, string>;
+type casestudySizes = {
+	fetched: string,
+	results: Record<string, {
+		lines: number,
+		history: string[],
+	}>,
+}
+
+declare const subsystemSizes: subsystemSizes;
+declare const subsystems: subsystems;
+declare const systems: systems;
+declare const data: data;
+declare const casestudy: casestudy;
+declare const casestudySizes: casestudySizes;
+
+interface Tally
+{
+	key: string,
+	sources: number,
+	refs: number,
+}
+
+interface TallyInput
+{
+	tally: number,
+	samples: number,
+	refs: number,
+}
+
 /**
  * All columns in order that we show in the table.  These should reference keys
  * in the article, but they may be undefined in which case the value will just
@@ -10,13 +79,85 @@ const columnOrder = [
 	'lines',
 ]
 
+function requireElement<K extends keyof HTMLElementTagNameMap>(id: string, tag: K):
+	HTMLElementTagNameMap[K]
+{
+	const elem = document.getElementById(id);
+	if (elem === null)
+		throw new Error('Missing: ' + id);
+	return elem as HTMLElementTagNameMap[K];
+}
+
+function requireHTMLElement(id: string): HTMLElement
+{
+	const elem = document.getElementById(id);
+	if (elem === null)
+		throw new Error('Missing: ' + id);
+	return elem;
+}
+
 /**
  * Generalised function to create a complexity chart over systems or subsystems,
  * but in both cases plotting sources and references.
  */
-function chartSourcesRefs(id, tallies, title, d1title, d2title)
+function chartSourcesRefs(id: string, tallies: Tally[], title: string, d1title: string, d2title: string): void
 {
-	new Chart(document.getElementById(id), {
+	const options: any = {
+		plugins: {
+			legend: {
+				title: {
+					text: title,
+					display: true,
+					color: '#fff',
+				},
+				display: true,
+				labels: {
+					color: '#fff',
+				}
+			}
+		},
+		scales: {
+			x: {
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+			y: {
+				title: {
+					display: true,
+					text: 'source code',
+					color: '#36a2eb',
+				},
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+			y2: {
+				position: 'right',
+				title: {
+					display: true,
+					text: 'references',
+					color: '#ff6384',
+				},
+				ticks: {
+					color: '#ddd',
+					callback: (label: any) => (
+						Number(label / 1000) + ' KB'
+					),
+				},
+				grid: {
+					color: '#666',
+				},
+			}
+		}
+	};
+	new Chart(requireElement(id, 'canvas'), {
 		type: 'bar',
 		data: {
 			labels: tallies.map(ent => ent.key),
@@ -31,71 +172,17 @@ function chartSourcesRefs(id, tallies, title, d1title, d2title)
 				},
 			],
 		},
-		options: {
-			plugins: {
-				legend: {
-					title: {
-						text: title,
-						display: true,
-						color: '#fff',
-					},
-					display: true,
-					labels: {
-						color: '#fff',
-					}
-				}
-			},
-			scales: {
-				x: {
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					title: {
-						display: true,
-						text: 'source code',
-						color: '#36a2eb',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y2: {
-					position: 'right',
-					title: {
-						display: true,
-						text: 'references',
-						color: '#ff6384',
-					},
-					ticks: {
-						color: '#ddd',
-						callback: (label, index, labels) => (
-							Number(label / 1000) + ' KB'
-						),
-					},
-					grid: {
-						color: '#666',
-					},
-				}
-			}
-		}
+		options: options,
 	});
 }
 
-function chartScatter(id)
+function chartScatter(id: string)
 {
-	const datasets = [];
+	const datasets: ChartDataSets[] = [];
 
 	/* Accumulate subsystems as datasets (same colouring). */
 
-	const subsystemIndex = {};
+	const subsystemIndex: Record<string, number> = {};
 	let i = 0;
 	for (const subsystemName in subsystems) {
 		subsystemIndex[subsystemName] = i++;
@@ -106,144 +193,150 @@ function chartScatter(id)
 	}
 
 	for (const article of data.articles) {
-		const subsysName = article.keys['subsystem'];
+		const subsysName = article.keys.subsystem;
+		const index = subsystemIndex[subsysName];
 		const bytes = getSubsystemReferenceSize(subsysName);
-		datasets[subsystemIndex[subsysName]].data.push({
-			'x': article.keys.lines,
-			'y': parseInt(bytes),
-			'custom': article.keys['lang'],
-		});
+		const set = datasets[index!]!;
+		set.data!.push({
+			'x': Number(article.keys.lines),
+			'y': Number(bytes),
+			'lang': article.keys['lang'],
+		} as any);
 	}
+
+	const options: any = {
+		plugins: {
+			legend: {
+				display: true,
+				align: 'start',
+				labels: {
+					color: '#fff',
+				}
+			},
+			tooltip: {
+				callbacks: {
+					label: (context: any) => {
+						let label = context.dataset.label;
+						let refs = Number(context.parsed.y / 1000);
+						label += ' (' + context.raw.lang + '): ';
+						label += context.parsed.x + ' lines source, ';
+						label += refs.toFixed() + ' KB references';
+						return label;
+					}
+				}
+			},
+		},
+		scales: {
+			x: {
+				title: {
+					display: true,
+					text: 'source code',
+					color: '#fff',
+				},
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+			y: {
+				display: true,
+				position: 'right',
+				title: {
+					display: true,
+					text: 'references',
+					color: '#fff',
+				},
+				ticks: {
+					callback: (label: any) => (
+						Number(label / 1000) + ' KB'
+					),
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+		}
+	};
 
 	/*
 	 * Begin with the scatter chart, which plots source complexity (x-axis)
 	 * to reference complexity (y-axis).
 	 */
 
-	new Chart(document.getElementById('chart-scatter'), {
+	new Chart(document.getElementById('chart-scatter') as HTMLCanvasElement, {
 		type: 'scatter',
 		data: {
 			datasets: datasets,
 		},
-		options: {
-			plugins: {
-				legend: {
-					display: true,
-					align: 'start',
-					labels: {
-						color: '#fff',
-					}
-				},
-				tooltip: {
-					callbacks: {
-						label: (context) => {
-							let label = context.dataset.label;
-							let refs = Number(context.parsed.y / 1000);
-							label += ' (' + context.raw.custom + '): ';
-							label += context.parsed.x + ' lines source, ';
-							label += refs.toFixed() + ' KB references';
-							return label;
-						}
-					}
-				},
-			},
-			scales: {
-				x: {
-					title: {
-						display: true,
-						text: 'source code',
-						color: '#fff',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					display: true,
-					position: 'right',
-					title: {
-						display: true,
-						text: 'references',
-						color: '#fff',
-					},
-					ticks: {
-						callback: (label, index, labels) => (
-							Number(label / 1000) + ' KB'
-						),
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-			}
-		}
+		options: options,
 	});
 }
 
-function chartContribs(id, tallies, title)
+function chartContribs(id: string, tallies: Tally[], title: string): void
 {
-	new Chart(document.getElementById(id), {
+	const options: any = {
+		plugins: {
+			legend: {
+				display: true,
+				labels: {
+					color: '#fff',
+				}
+			}
+		},
+		scales: {
+			x: {
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+			y: {
+				title: {
+					display: true,
+					text: 'users',
+					color: '#36a2eb',
+				},
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+		}
+	};
+	new Chart(document.getElementById(id) as HTMLCanvasElement, {
 		type: 'bar',
 		data: {
-			labels: Object.keys(tallies),
+			labels: tallies.map(ent => ent.key),
 			datasets: [{
 				label: title,
-				data: Object.keys(tallies).map
-					(key => tallies[key].attests),
+				data: tallies.map(ent => ent.refs),
 			}],
 		},
-		options: {
-			plugins: {
-				legend: {
-					display: true,
-					labels: {
-						color: '#fff',
-					}
-				}
-			},
-			scales: {
-				x: {
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					title: {
-						display: true,
-						text: 'users',
-						color: '#36a2eb',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-			}
-		}
+		options: options,
 	});
 }
 
 /**
- * Sort the articles by the value of a key property given in "index".  If
- * "numeric" is true, use numeric sorting; otherwise, lexicographic.  If "order"
+ * Sort the articles by the value of a key property given in "index".  If "order"
  * is true, use ascending order; otherwise, descending.  Finally, "elem" is the
  * element which triggered the resort.
  */
-function resort(order, elem, index, numeric = false)
+function resort(order: boolean, elem: HTMLElement, index: string)
 {
 	data.articles.sort((a, b) => {
+		const numeric =
+			typeof((<any>a.keys)[index]) === 'number' &&
+			typeof((<any>b.keys)[index] === 'number');
 		const def = numeric ? 0 : '';
-		const vala = index in a.keys ? a.keys[index] : def;
-		const valb = index in b.keys ? b.keys[index] : def;
+		const vala = index in a.keys ? (<any>a.keys)[index] : def;
+		const valb = index in b.keys ? (<any>b.keys)[index] : def;
 		return (numeric && order) ?
 			(Number(vala) - Number(valb)) :
 			numeric ?
@@ -252,14 +345,14 @@ function resort(order, elem, index, numeric = false)
 			vala.localeCompare(valb) :
 			valb.localeCompare(vala);
 	});
-	elem.onclick = () => resort(!order, elem, index, numeric);
+	elem.onclick = () => resort(!order, elem, index);
 	redraw();
 }
 
 /**
  * Look up a system (e.g., openbsd) , making sure that it exists.
  */
-function getSystem(name)
+function getSystem(name: string|undefined): system|null
 {
 	if (typeof(name) === 'undefined')
 		return null;
@@ -271,7 +364,7 @@ function getSystem(name)
 /**
  * Look up a subsystem (e.g., pledge, capsicum) , making sure that it exists.
  */
-function getSubsystem(name)
+function getSubsystem(name: string): subsystem
 {
 	if (typeof(name) === 'undefined')
 		throw new Error('No subsystem name for source entry.');
@@ -283,7 +376,7 @@ function getSubsystem(name)
 /**
  * Get the size of a specific reference for a subsystem.
  */
-function getReferenceSize(reference)
+function getReferenceSize(reference: string): number
 {
 	if (typeof(reference) === 'undefined')
 		throw new Error('No reference given for size request.');
@@ -295,7 +388,7 @@ function getReferenceSize(reference)
 /**
  * Get the cumulative size of all references for a subsystem.
  */
-function getSubsystemReferenceSize(name)
+function getSubsystemReferenceSize(name: string): number
 {
 	const subsystem = getSubsystem(name);
 	let bytes = 0;
@@ -307,9 +400,9 @@ function getSubsystemReferenceSize(name)
 /**
  * Get the cumulative size of all references for an operating system.
  */
-function getSourceSystemSizes(name)
+function getSourceSystemSizes(name: string): number
 {
-	const set = new Set();
+	const set = new Set<string>();
 	for (const article of data.articles)
 		if ('system' in article.keys &&
 		    article.keys['system'] == name)
@@ -328,7 +421,7 @@ function getSourceSystemSizes(name)
  * code example for "article" shows up.  Populate the dialog window with all
  * necessary information.
  */
-function drawDialog(article)
+function drawDialog(article: article): void
 {
 	const subsystemName = article.keys['subsystem'];
 	const subsystem = getSubsystem(subsystemName);
@@ -336,20 +429,20 @@ function drawDialog(article)
 
 	/* Pretty-print its source code. */
 
-	const code = document.getElementById('code-box');
+	const code = document.getElementById('code-box')!;
 	code.innerHTML = article.article.xml;
-	code.querySelectorAll('pre code').forEach((el) => {
-		hljs.highlightElement(el);
+	code.querySelectorAll('pre code').forEach(el => {
+		hljs.highlightAuto(<string>el.textContent);
 	});
 
 	/* The system name (e.g., FreeBSD) or empty. */
 
-	const sys = document.getElementById('code-system');
+	const sys = requireHTMLElement('code-system');
 	if (system !== null) {
 		let elem;
 		elem = document.createElement('a');
-		elem.href = article.keys['system-link'];
-		elem.textContent = article.keys['system'];
+		elem.href = system.link;
+		elem.textContent = system.name;
 		sys.replaceChildren(elem);
 		sys.hidden = false;
 	} else
@@ -357,7 +450,7 @@ function drawDialog(article)
 
 	/* The subsystem name (e.g., pledge), which is never empty. */
 
-	const subsys = document.getElementById('code-subsystem');
+	const subsys = requireHTMLElement('code-subsystem');
 	const subsysName = document.createElement('span');;
 	if (subsystem.deprecated !== null) {
 		const ico = document.createElement('i');
@@ -374,7 +467,7 @@ function drawDialog(article)
 
 	/* Code language (e.g., C/C++), also never empty. */
 
-	const lang = document.getElementById('code-lang');
+	const lang = requireHTMLElement('code-lang');
 	if ('lang' in article.keys) {
 		if (!('system' in article.keys) &&
 		    !('subsystem' in article.keys))
@@ -405,12 +498,12 @@ function drawDialog(article)
 		elem.textContent = 'No references given.';
 		refs.push(elem);
 	}
-	document.getElementById('code-references').replaceChildren(...refs);
+	requireHTMLElement('code-references').replaceChildren(...refs);
 
 	/* Notes attached to the example, if any. */
 
-	const notes = document.getElementById('code-notes');
-	if ('notes' in article.keys) {
+	const notes = requireHTMLElement('code-notes');
+	if (typeof(article.keys.notes) !== 'undefined') {
 		notes.textContent = article.keys.notes;
 		notes.className = '';
 	} else {
@@ -420,25 +513,27 @@ function drawDialog(article)
 
 	/* GitHub reference to the example. */
 
-	document.getElementById('code-github').href = 
+	requireElement('code-github', 'a').href = 
 		'https://github.com/kristapsdz/dev_sec_flops/blob/main/' +
 		article.base + '.md';
 
 	/* Reset the view and show the dialog. */
 
-	const diag = document.getElementById('code');
+	const diag = requireHTMLElement('code');
 	const views = diag.getElementsByClassName('code-views');
-	for (let i = 0; i < views.length; i++)
-		views.checked = false;
-	document.getElementById('view-code').checked = true;
-	document.getElementById('code-shown').checked = true;
+	for (let i = 0; i < views.length; i++) {
+		const inp = views[i] as HTMLInputElement;
+		inp.checked = false;
+	}
+	requireElement('view-code', 'input').checked = true;
+	requireElement('code-shown', 'input').checked = true;
 }
 
 /**
  * Draw a table column for the "key" of given article "keys" and within the
  * "subsystem" object.  Return the HTML element.
  */
-function redrawCol(subsystem, system, key, keys)
+function redrawCol(subsystem: subsystem, system: system|null, key: string, keys: Record<string, string>)
 {
 	let link = null;
 	if (key === 'system' && system !== null && 'link' in system)
@@ -498,7 +593,7 @@ function redraw()
 		row.append(col);
 		rows.push(row);
 	}
-	document.getElementById('examples-box').replaceChildren(...rows);
+	requireHTMLElement('examples-box').replaceChildren(...rows);
 }
 
 /**
@@ -515,7 +610,7 @@ function drawCasestudy()
 		anch.textContent = key;
 		return elem;
 	});
-	document.getElementById('casestudy-links').replaceChildren(...links);
+	requireHTMLElement('casestudy-links').replaceChildren(...links);
 
 	/* Chart.js configuration. */
 
@@ -529,7 +624,58 @@ function drawCasestudy()
 		return ((srcs + refs) / 2) - 1;
 	});
 
-	new Chart(document.getElementById('chart-casestudy'), {
+	const studyOptions: any = {
+		plugins: {
+			legend: {
+				display: true,
+				labels: {
+					color: '#fff',
+				}
+			}
+		},
+		scales: {
+			x: {
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+			y: {
+				title: {
+					display: true,
+					text: 'source code',
+					color: '#36a2eb',
+				},
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
+				},
+			},
+			y2: {
+				position: 'right',
+				title: {
+					display: true,
+					text: 'references',
+					color: '#ff6384',
+				},
+				ticks: {
+					color: '#ddd',
+					callback: (label: any) => (
+						Number(label / 1000) + ' KB'
+					),
+				},
+				grid: {
+					color: '#666',
+				},
+			}
+		}
+	};
+
+	new Chart(requireElement('chart-casestudy', 'canvas'), {
 		type: 'bar',
 		data: {
 			labels: Object.keys(casestudy),
@@ -544,102 +690,55 @@ function drawCasestudy()
 				},
 			],
 		},
-		options: {
-			plugins: {
-				legend: {
-					display: true,
-					labels: {
-						color: '#fff',
-					}
-				}
-			},
-			scales: {
-				x: {
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					title: {
-						display: true,
-						text: 'source code',
-						color: '#36a2eb',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y2: {
-					position: 'right',
-					title: {
-						display: true,
-						text: 'references',
-						color: '#ff6384',
-					},
-					ticks: {
-						color: '#ddd',
-						callback: (label, index, labels) => (
-							Number(label / 1000) + ' KB'
-						),
-					},
-					grid: {
-						color: '#666',
-					},
-				}
-			}
-		}
+		options: studyOptions,
 	});
 
-	new Chart(document.getElementById('chart-casestudy-history'), {
-		type: 'line',
-		options: {
-			plugins: {
-				legend: {
+	const historyOptions: any = {
+		plugins: {
+			legend: {
+				display: true,
+				labels: {
+					color: '#fff',
+				}
+			},
+		},
+		scales: {
+			x: {
+				type: 'time',
+				time: {
+					unit: 'year',
+				},
+				title: {
 					display: true,
-					labels: {
-						color: '#fff',
-					}
+					text: 'year',
+					color: '#fff',
+				},
+				ticks: {
+					color: '#ddd',
+				},
+				grid: {
+					color: '#666',
 				},
 			},
-			scales: {
-				x: {
-					type: 'time',
-					time: {
-						unit: 'year',
-					},
-					title: {
-						display: true,
-						text: 'year',
-						color: '#fff',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
+			y: {
+				title: {
+					display: true,
+					text: 'cumulative commits',
+					color: '#fff',
 				},
-				y: {
-					title: {
-						display: true,
-						text: 'cumulative commits',
-						color: '#fff',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
+				ticks: {
+					color: '#ddd',
 				},
-			}
-		},
+				grid: {
+					color: '#666',
+				},
+			},
+		}
+	}
+
+	new Chart(requireElement('chart-casestudy-history', 'canvas'), {
+		type: 'line',
+		options: historyOptions,
 		data: {
 			datasets: Object.keys(casestudy).map(key => {
 				const url = casestudy[key];
@@ -664,8 +763,8 @@ function drawCasestudy()
  */
 function drawChart()
 {
-	const subsysTallies = {};
-	const sysTallies = {};
+	const subsysTallies: Record<string, TallyInput> = {};
+	const sysTallies: Record<string, TallyInput> = {};
 
 	/*
 	 * Put all examples into their subsystem dataset, then system averages,
@@ -676,31 +775,32 @@ function drawChart()
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
 		const bytes = getSubsystemReferenceSize(subsysName);
-		const attests = ('githubAttestations' in article.keys) ?
-			article.keys['githubAttestations'].split(',').length :
+		const attests = 
+			typeof(article.keys.githubAttestations) !== 'undefined' ?
+			article.keys.githubAttestations.split(',').length :
 			0;
 		if (!(subsysName in subsysTallies))
 			subsysTallies[subsysName] = {
 				tally: 0,
 				samples: 0,
-				attests: 0,
+				refs: 0,
 			};
 		subsysTallies[subsysName].tally +=
 			Number(article.keys.lines);
 		subsysTallies[subsysName].samples++;
-		subsysTallies[subsysName].attests += attests;
+		subsysTallies[subsysName].refs += attests;
 		if (typeof(sysName) === 'undefined')
 			continue;
 		if (!(sysName in sysTallies))
 			sysTallies[sysName] = {
 				tally: 0,
 				samples: 0,
-				attests: 0,
+				refs: 0,
 			};
 		sysTallies[sysName].tally +=
 			Number(article.keys.lines);
 		sysTallies[sysName].samples++;
-		sysTallies[sysName].attests += attests;
+		sysTallies[sysName].refs += attests;
 	}
 
 	/*
@@ -743,8 +843,8 @@ function drawChart()
 	chartSourcesRefs('chart-subsystems', subsysTalliesArray,
 		'complexity by sandbox',
 		'Average source code', 'References');
-	chartContribs('chart-systems-contribs', sysTallies, 'systems');
-	chartContribs('chart-subsystems-contribs', subsysTallies, 'sandboxes');
+	chartContribs('chart-systems-contribs', sysTalliesArray, 'systems');
+	chartContribs('chart-subsystems-contribs', subsysTalliesArray, 'sandboxes');
 }
 
 /**
@@ -758,12 +858,11 @@ window.addEventListener('load', () => {
 	for (const key of columnOrder) {
 		const col = document.createElement('div');
 		col.textContent = key;
-		const numeric = key === 'lines';
-		col.onclick = () => resort(true, col, key, numeric);
+		col.onclick = () => resort(true, col, key);
 		cols.push(col);
 	}
 	cols.push(document.createElement('div'));
-	document.getElementById('examples-columns-box').replaceChildren(...cols);
+	requireHTMLElement('examples-columns-box').replaceChildren(...cols);
 	redraw();
 });
 
