@@ -132,14 +132,15 @@ figure				{ margin-left: 0;
 #chart-multi-box > *		{ flex: 1; }
 #chart-casestudy-box,
 #chart-casestudy-history-box,
+#chart-contrib-box > figure,
+#chart-multi-box > figure,
 #chart-multi-box,
 #chart-box			{ display: flex;
 				  gap: 1em; }
-#chart-multi-box > figure	{ display: flex;
-				  gap: 1em;
-				  flex-direction: column; }
+#chart-multi-box > figure	{ flex-direction: column; }
 #chart-casestudy-history-box > div,
 #chart-casestudy-box > div,
+#chart-contrib-box > figure > div,
 #chart-multi-box > div,
 #chart-box > div		{ flex: 1; }
 figcaption			{ margin-top: 0.75rem;

@@ -11,6 +11,133 @@ const columnOrder = [
 ]
 
 /**
+ * Generalised function to create a complexity chart over systems or subsystems,
+ * but in both cases plotting sources and references.
+ */
+function chartSourcesRefs(id, tallies, title, d1title, d2title)
+{
+	new Chart(document.getElementById(id), {
+		type: 'bar',
+		data: {
+			labels: tallies.map(ent => ent.key),
+			datasets: [
+				{
+					label: d1title,
+					data: tallies.map(ent => ent.sources),
+				}, {
+					label: d2title,
+					data: tallies.map(ent => ent.refs),
+					yAxisID: 'y2',
+				},
+			],
+		},
+		options: {
+			plugins: {
+				legend: {
+					title: {
+						text: title,
+						display: true,
+						color: '#fff',
+					},
+					display: true,
+					labels: {
+						color: '#fff',
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					title: {
+						display: true,
+						text: 'source code',
+						color: '#36a2eb',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y2: {
+					position: 'right',
+					title: {
+						display: true,
+						text: 'references',
+						color: '#ff6384',
+					},
+					ticks: {
+						color: '#ddd',
+						callback: (label, index, labels) => (
+							Number(label / 1000) + ' KB'
+						),
+					},
+					grid: {
+						color: '#666',
+					},
+				}
+			}
+		}
+	});
+}
+
+function chartContribs(id, tallies, title)
+{
+	new Chart(document.getElementById(id), {
+		type: 'bar',
+		data: {
+			labels: Object.keys(tallies),
+			datasets: [{
+				label: title,
+				data: Object.keys(tallies).map
+					(key => tallies[key].attests),
+			}],
+		},
+		options: {
+			plugins: {
+				legend: {
+					display: true,
+					labels: {
+						color: '#fff',
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					title: {
+						display: true,
+						text: 'users',
+						color: '#36a2eb',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+			}
+		}
+	});
+}
+
+/**
  * Sort the articles by the value of a key property given in "index".  If
  * "numeric" is true, use numeric sorting; otherwise, lexicographic.  If "order"
  * is true, use ascending order; otherwise, descending.  Finally, "elem" is the
@@ -468,6 +595,9 @@ function drawChart()
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
 		const bytes = getSubsystemReferenceSize(subsysName);
+		const attests = ('githubAttestations' in article.keys) ?
+			article.keys['githubAttestations'].split(',').length :
+			0;
 		datasets[subsystemIndex[subsysName]].data.push({
 			'x': article.keys.lines,
 			'y': parseInt(bytes),
@@ -476,20 +606,24 @@ function drawChart()
 			subsysTallies[subsysName] = {
 				tally: 0,
 				samples: 0,
+				attests: 0,
 			};
 		subsysTallies[subsysName].tally +=
 			Number(article.keys.lines);
 		subsysTallies[subsysName].samples++;
+		subsysTallies[subsysName].attests += attests;
 		if (typeof(sysName) === 'undefined')
 			continue;
 		if (!(sysName in sysTallies))
 			sysTallies[sysName] = {
 				tally: 0,
 				samples: 0,
+				attests: 0,
 			};
 		sysTallies[sysName].tally +=
 			Number(article.keys.lines);
 		sysTallies[sysName].samples++;
+		sysTallies[sysName].attests += attests;
 	}
 
 	/*
@@ -563,78 +697,10 @@ function drawChart()
 		const refs = a['refs'] / b['refs'];
 		return ((srcs + refs) / 2) - 1;
 	});
-
-	new Chart(document.getElementById('chart-systems'), {
-		type: 'bar',
-		data: {
-			labels: sysTalliesArray.map(ent => ent.key),
-			datasets: [
-				{
-					label: 'Average source code',
-					data: sysTalliesArray.map(ent => ent.sources),
-				}, {
-					label: 'Average references',
-					data: sysTalliesArray.map(ent => ent.refs),
-					yAxisID: 'y2',
-				},
-			],
-		},
-		options: {
-			plugins: {
-				legend: {
-					title: {
-						text: 'complexity by operating system',
-						display: true,
-						color: '#fff',
-					},
-					display: true,
-					labels: {
-						color: '#fff',
-					}
-				}
-			},
-			scales: {
-				x: {
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					title: {
-						display: true,
-						text: 'source code',
-						color: '#36a2eb',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y2: {
-					position: 'right',
-					title: {
-						display: true,
-						text: 'references',
-						color: '#ff6384',
-					},
-					ticks: {
-						color: '#ddd',
-						callback: (label, index, labels) => (
-							Number(label / 1000) + ' KB'
-						),
-					},
-					grid: {
-						color: '#666',
-					},
-				}
-			}
-		}
-	});
+	
+	chartSourcesRefs('chart-systems', sysTalliesArray,
+		'complexity by operating system',
+		'Average source code', 'Average references');
 
 	/*
 	 * Bar graph for average by subsystem: for each subsystem, show datasets
@@ -651,77 +717,12 @@ function drawChart()
 		return ((srcs + refs) / 2) - 1;
 	});
 
-	new Chart(document.getElementById('chart-subsystems'), {
-		type: 'bar',
-		data: {
-			labels: subsysTalliesArray.map(ent => ent.key),
-			datasets: [
-				{
-					label: 'Average source code',
-					data: subsysTalliesArray.map(ent => ent.sources),
-				}, {
-					label: 'References',
-					data: subsysTalliesArray.map(ent => ent.refs),
-					yAxisID: 'y2',
-				},
-			],
-		},
-		options: {
-			plugins: {
-				legend: {
-					title: {
-						text: 'complexity by sandbox subsystem',
-						display: true,
-						color: '#fff',
-					},
-					display: true,
-					labels: {
-						color: '#fff',
-					}
-				}
-			},
-			scales: {
-				x: {
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					title: {
-						display: true,
-						text: 'average source code',
-						color: '#36a2eb',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y2: {
-					position: 'right',
-					title: {
-						display: true,
-						text: 'references',
-						color: '#ff6384',
-					},
-					ticks: {
-						color: '#ddd',
-						callback: (label, index, labels) => (
-							Number(label / 1000) + ' KB'
-						),
-					},
-					grid: {
-						color: '#666',
-					},
-				}
-			}
-		}
-	});
+	chartSourcesRefs('chart-subsystems', subsysTalliesArray,
+		'complexity by sandbox subsystem',
+		'Average source code', 'References');
+
+	chartContribs('chart-systems-contribs', sysTallies, 'systems');
+	chartContribs('chart-subsystems-contribs', subsysTallies, 'subsystems');
 }
 
 /**
