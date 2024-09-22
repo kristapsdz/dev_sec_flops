@@ -89,6 +89,101 @@ function chartSourcesRefs(id, tallies, title, d1title, d2title)
 	});
 }
 
+function chartScatter(id)
+{
+	const datasets = [];
+
+	/* Accumulate subsystems as datasets (same colouring). */
+
+	const subsystemIndex = {};
+	let i = 0;
+	for (const subsystemName in subsystems) {
+		subsystemIndex[subsystemName] = i++;
+		datasets.push({
+			label: subsystemName,
+			data: [],
+		});
+	}
+
+	for (const article of data.articles) {
+		const subsysName = article.keys['subsystem'];
+		const bytes = getSubsystemReferenceSize(subsysName);
+		datasets[subsystemIndex[subsysName]].data.push({
+			'x': article.keys.lines,
+			'y': parseInt(bytes),
+			'custom': article.keys['lang'],
+		});
+	}
+
+	/*
+	 * Begin with the scatter chart, which plots source complexity (x-axis)
+	 * to reference complexity (y-axis).
+	 */
+
+	new Chart(document.getElementById('chart-scatter'), {
+		type: 'scatter',
+		data: {
+			datasets: datasets,
+		},
+		options: {
+			plugins: {
+				legend: {
+					display: true,
+					align: 'start',
+					labels: {
+						color: '#fff',
+					}
+				},
+				tooltip: {
+					callbacks: {
+						label: (context) => {
+							let label = context.dataset.label;
+							let refs = Number(context.parsed.y / 1000);
+							label += ' (' + context.raw.custom + '): ';
+							label += context.parsed.x + ' lines source, ';
+							label += refs.toFixed() + ' KB references';
+							return label;
+						}
+					}
+				},
+			},
+			scales: {
+				x: {
+					title: {
+						display: true,
+						text: 'source code',
+						color: '#fff',
+					},
+					ticks: {
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+				y: {
+					display: true,
+					position: 'right',
+					title: {
+						display: true,
+						text: 'references',
+						color: '#fff',
+					},
+					ticks: {
+						callback: (label, index, labels) => (
+							Number(label / 1000) + ' KB'
+						),
+						color: '#ddd',
+					},
+					grid: {
+						color: '#666',
+					},
+				},
+			}
+		}
+	});
+}
+
 function chartContribs(id, tallies, title)
 {
 	new Chart(document.getElementById(id), {
@@ -569,27 +664,13 @@ function drawCasestudy()
  */
 function drawChart()
 {
-	const datasets = [];
-
-	/* Accumulate subsystems as datasets (same colouring). */
-
-	const subsystemIndex = {};
-	let i = 0;
-	for (const subsystemName in subsystems) {
-		subsystemIndex[subsystemName] = i++;
-		datasets.push({
-			label: subsystemName,
-			data: [],
-		});
-	}
+	const subsysTallies = {};
+	const sysTallies = {};
 
 	/*
 	 * Put all examples into their subsystem dataset, then system averages,
 	 * then subsystem averages.
 	 */
-
-	const subsysTallies = {};
-	const sysTallies = {};
 
 	for (const article of data.articles) {
 		const subsysName = article.keys['subsystem'];
@@ -598,10 +679,6 @@ function drawChart()
 		const attests = ('githubAttestations' in article.keys) ?
 			article.keys['githubAttestations'].split(',').length :
 			0;
-		datasets[subsystemIndex[subsysName]].data.push({
-			'x': article.keys.lines,
-			'y': parseInt(bytes),
-		});
 		if (!(subsysName in subsysTallies))
 			subsysTallies[subsysName] = {
 				tally: 0,
@@ -627,62 +704,6 @@ function drawChart()
 	}
 
 	/*
-	 * Begin with the scatter chart, which plots source complexity (x-axis)
-	 * to reference complexity (y-axis).
-	 */
-
-	new Chart(document.getElementById('chart-scatter'), {
-		type: 'scatter',
-		data: {
-			datasets: datasets,
-		},
-		options: {
-			plugins: {
-				legend: {
-					display: true,
-					align: 'start',
-					labels: {
-						color: '#fff',
-					}
-				},
-			},
-			scales: {
-				x: {
-					title: {
-						display: true,
-						text: 'source code',
-						color: '#fff',
-					},
-					ticks: {
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-				y: {
-					display: true,
-					position: 'right',
-					title: {
-						display: true,
-						text: 'references',
-						color: '#fff',
-					},
-					ticks: {
-						callback: (label, index, labels) => (
-							Number(label / 1000) + ' KB'
-						),
-						color: '#ddd',
-					},
-					grid: {
-						color: '#666',
-					},
-				},
-			}
-		}
-	});
-
-	/*
 	 * Bar graph for average by operating system: for each operating system,
 	 * show datasets for the average source and average reference
 	 * complexity.
@@ -698,10 +719,6 @@ function drawChart()
 		return ((srcs + refs) / 2) - 1;
 	});
 	
-	chartSourcesRefs('chart-systems', sysTalliesArray,
-		'complexity by operating system',
-		'Average source code', 'Average references');
-
 	/*
 	 * Bar graph for average by subsystem: for each subsystem, show datasets
 	 * for the average source and reference complexity.
@@ -717,12 +734,17 @@ function drawChart()
 		return ((srcs + refs) / 2) - 1;
 	});
 
-	chartSourcesRefs('chart-subsystems', subsysTalliesArray,
-		'complexity by sandbox subsystem',
-		'Average source code', 'References');
+	/* Create the charts themselves. */
 
+	chartScatter('chart-scatter');
+	chartSourcesRefs('chart-systems', sysTalliesArray,
+		'complexity by operating system',
+		'Average source code', 'Average references');
+	chartSourcesRefs('chart-subsystems', subsysTalliesArray,
+		'complexity by sandbox',
+		'Average source code', 'References');
 	chartContribs('chart-systems-contribs', sysTallies, 'systems');
-	chartContribs('chart-subsystems-contribs', subsysTallies, 'subsystems');
+	chartContribs('chart-subsystems-contribs', subsysTallies, 'sandboxes');
 }
 
 /**

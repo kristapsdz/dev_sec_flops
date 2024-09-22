@@ -167,6 +167,7 @@ footer				{ font-size: smaller; }
 }
 
 @media (width < 45em) {
+  #chart-contrib-box > figure	{ flex-direction: column; }
   body > header,
   body > header nav		{ display: block;
 	  			  text-align: center; }

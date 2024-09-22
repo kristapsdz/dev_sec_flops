@@ -53,7 +53,7 @@
 				shared memory, etc.).
 			</p>
 			<p>
-				In this article, I examine different open source subsystems used to
+				In this article, I examine different open source sandboxes used to
 				enact these sandboxes, such as
 				<a href="https://openbsd.org">OpenBSD</a>'s
 				<a href="https://man.openbsd.org/pledge">pledge</a> and
@@ -94,7 +94,7 @@
 				example to see its source code, references, and notes.  Which method
 				would you choose?  Sources readable on a normal mobile phone (&lt;20
 				lines) have lines show in blue, barely readable (20&#8211;30 lines)
-				in orange, and above in red.  Deprecated subsystems are marked next
+				in orange, and above in red.  Deprecated sandboxes are marked next
 				to the subsytem name.
 			</p>
 			<div class="table">
@@ -107,7 +107,7 @@
 			</div>
 			<p>
 				We can further clarify this data by grouping by operating systems
-				and subsystems&#8212;environment.  How hard it is to implement a
+				and sandboxes&#8212;environment.  How hard it is to implement a
 				sandbox in your environment of choice?
 			</p>
 			<div id="chart-multi-box">
@@ -242,6 +242,15 @@
 				<a href="https://www.java.com/">Java</a> by discontinuing the 
 				<a href="https://docs.oracle.com/javase/tutorial/essential/environment/security.html">JSM</a>.
 			</p>
+			<p>
+				How are these findings reflected in a survey of real-world sandboxed
+				systems?  In the charts below, I collect all contributions to
+				sandbox environments per-system and per-sandbox.  So one contributor
+				adding 
+				<a href="https://man.openbsd.org/pledge">pledge</a>
+				to an open source system would add weight to the <q>pledge</q> box
+				and <q>OpenBSD</q>.
+			</p>
 			<div id="chart-contrib-box">
 				<figure>
 					<div>
@@ -279,7 +288,7 @@
 				to which you've contributed security sandboxing.
 			</p>
 			<p>
-				Full instructions on how to add examples, subsystems, and
+				Full instructions on how to add examples, sandbox, and
 				attestations are all on the GitHub page, and all possible through
 				pull requests.  I'll merge this into these on an as-needed basis.
 			</p>
