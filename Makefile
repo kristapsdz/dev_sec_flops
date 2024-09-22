@@ -75,7 +75,7 @@ index.html: html/index.xml
 	@xmllint --pedantic --quiet --noout html/index.xml
 	@cp -f html/index.xml $@
 
-build/index.js: typescript/index.ts
+build/index.js: typescript/index.ts tsconfig.json
 	@echo "typescript/index.ts -> $@"
 	@npx tsc
 
