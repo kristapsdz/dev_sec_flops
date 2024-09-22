@@ -8,6 +8,7 @@ githubAttestations:
     kristapsdz kristapsdz/kcgi,
     kristapsdz kristapsdz/lowdown,
     djmdjm openssh/openssh-portable,
+    rwatson chromium/chromium,
 
 ```c
 #include <sys/capsicum.h> /* cap_enter(2) */

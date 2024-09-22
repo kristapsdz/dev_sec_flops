@@ -9,9 +9,12 @@ githubAttestations:
     kristapsdz kristapsdz/sblg,
     kristapsdz kristapsdz/sintl,
     kristapsdz kristapsdz/sqlite2mdoc,
+    kristapsdz openbsd/src/tree/master/usr.sbin/acme-client,
+    kristapsdz openbsd/src/tree/master/usr.sbin/rpki-client,
     kristapsdz openbsd/src/tree/master/usr.bin/rsync,
     ischwarze https://cvsweb.bsd.lv/mandoc,
     djmdjm openssh/openssh-portable,
+    rnagy chromium/chromium,
 
 ```c
 #include <unistd.h> /* pledge(2) */
