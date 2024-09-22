@@ -194,9 +194,9 @@
 					<div>
 						<p>
 							This plots cumulative commit counts in the
-							<a href="https://github.com/openssh/openssh-portable">GitHub repository</a>
-							over time.  Size of commits is not
-							regarded&#8212;only the frequency.
+							<a href="https://github.com/openssh/openssh-portable">GitHub</a>
+							repository over time.  Size of commits is
+							not regarded&#8212;only the frequency.
 							Subsystems that require significant
 							maintenance will grow much more quickly than
 							those with lighter maintenance burdens.
@@ -273,8 +273,8 @@
 				landscape in open systems.  Having a list of possible combinations
 				of languages, operating systems, and sandbox tools is a good start.
 				And for that, if you have additions, please visit the
-				<a href="https://github.com/kristapsdz/dev_sec_flops">DevSecFlops</a>
-				GitHub page to add more examples.
+				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
+				page to add more examples.
 			</p>
 			<p>
 				More importantly, I want to know
@@ -284,15 +284,17 @@
 				more popular, and what we can do to raise the state of security on
 				less-popular systems.
 				To wit, I've added <q>attestations</q> to each example in the
-				<a href="https://github.com/kristapsdz/dev_sec_flops">DevSecFlops</a>
+				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
 				repository.  Just open a pull request with your GitHub name (for
 				now, just GitHub&#8212;I'll add more later) and add the repository
 				to which you've contributed security sandboxing.
 			</p>
 			<p>
-				Full instructions on how to add examples, sandbox, and
-				attestations are all on the GitHub page, and all possible through
-				pull requests.  I'll merge this into these on an as-needed basis.
+				Full instructions on how to add examples, sandbox, and attestations
+				are all on the 
+				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
+				page, and all possible through pull requests.  I'll merge this into
+				these on an as-needed basis.
 			</p>
 		</section>
 		<footer>
