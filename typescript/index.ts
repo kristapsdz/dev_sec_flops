@@ -1,44 +1,38 @@
 import { Chart, ChartDataSets } from 'chart.js';
 import * as hljs from 'highlightjs';
+import { sblg, sblgArticle } from 'sblg';
 
-
-type subsystem = {
+interface subsystem
+{
 	deprecated: null|string,
 	link: string,
 	sources: string[],
 }
 
-type system = {
+interface system
+{
 	name: string,
 	link: string,
 }
 
-type subsystems = Record<string, subsystem>;
-type systems = Record<string, system>
-type subsystemSizes = {
+interface subsystemSizes
+{
 	fetched: string,
 	results: Record<string, number>,
 }
-type article = {
-	base: string,
-	article: {
-		xml: string,
-	},
-	keys: {
-		lang: string,
-		system?: string,
-		subsystem: string,
-		githubAttestations?: string,
-		notes?: string,
-		lines: string,
-		bytes: string,
-	}
+
+interface sblgKeys {
+	lang: string,
+	system?: string,
+	subsystem: string,
+	githubAttestations?: string,
+	notes?: string,
+	lines: string,
+	bytes: string,
 }
-type data = {
-	articles: article[],
-}
-type casestudy = Record<string, string>;
-type casestudySizes = {
+
+interface casestudySizes
+{
 	fetched: string,
 	results: Record<string, {
 		lines: number,
@@ -46,11 +40,13 @@ type casestudySizes = {
 	}>,
 }
 
+type article = sblgArticle<sblgKeys>;
+
 declare const subsystemSizes: subsystemSizes;
-declare const subsystems: subsystems;
-declare const systems: systems;
-declare const data: data;
-declare const casestudy: casestudy;
+declare const subsystems: Record<string, subsystem>;
+declare const systems: Record<string, system>;
+declare const data: sblg<sblgKeys>;
+declare const casestudy: Record<string, string>;
 declare const casestudySizes: casestudySizes;
 
 interface Tally
@@ -535,7 +531,7 @@ function drawDialog(article: article): void
  * Draw a table column for the "key" of given article "keys" and within the
  * "subsystem" object.  Return the HTML element.
  */
-function redrawCol(subsystem: subsystem, system: system|null, key: string, keys: Record<string, string>)
+function redrawCol(subsystem: subsystem, system: system|null, key: string, keys: sblgKeys)
 {
 	let link = null;
 	if (key === 'system' && system !== null && 'link' in system)
@@ -543,7 +539,7 @@ function redrawCol(subsystem: subsystem, system: system|null, key: string, keys:
 	else if (key === 'subsystem' && 'link' in subsystem)
 		link = subsystem['link'];
 
-	const text = (key in keys) ? keys[key] : '';
+	const text = (key in <any>keys) ? (<any>keys)[key] : '';
 	const col = document.createElement('div');
 
 	if (key === 'subsystem' && subsystem.deprecated !== null) {
