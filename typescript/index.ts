@@ -26,6 +26,7 @@ interface sblgKeys {
 	system?: string,
 	subsystem: string,
 	githubAttestations?: string,
+	openbsdAttestations?: string,
 	notes?: string,
 	lines: string,
 	bytes: string,
@@ -756,6 +757,26 @@ function drawCasestudy()
 }
 
 /**
+ * Extract attested systems into the set "systems".  Prepend the default url if
+ * there is none on the given system.
+ */
+function getAttestations(url: string, systems: Set<string>, keys?: string): void
+{
+	if (typeof(keys) === 'undefined')
+		return;
+	const pairs = keys.split(',');
+	for (const pair of pairs) {
+		const npair = pair.trim().split(' ');
+		if (npair.length !== 2)
+			continue;
+		systems.add(
+			(npair[1].startsWith('https://') ||
+			 npair[1].startsWith('http://')) ?
+			 npair[1] : (url + npair[1]));
+	}
+}
+
+/**
  * Draw the scatter chart plotting complexity.  On the x-axis, show line numbers
  * for the example.  On the y-axis, accumulate the reference complexity.
  */
@@ -770,13 +791,15 @@ function drawChart()
 	 */
 
 	for (const article of data.articles) {
+		console.log('article: ' + article.base);
+		const systems = new Set<string>();
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
 		const bytes = getSubsystemReferenceSize(subsysName);
-		const users = 
-			typeof(article.keys.githubAttestations) !== 'undefined' ?
-			article.keys.githubAttestations.split(',').length - 1 :
-			0;
+		getAttestations('https://github.com/', systems,
+			article.keys.githubAttestations);
+		getAttestations('https://github.com/openbsd/src/tree/master/',
+			systems, article.keys.openbsdAttestations);
 		if (!(subsysName in subsysTallies))
 			subsysTallies[subsysName] = {
 				tally: 0,
@@ -786,7 +809,7 @@ function drawChart()
 		subsysTallies[subsysName].tally +=
 			Number(article.keys.lines);
 		subsysTallies[subsysName].samples++;
-		subsysTallies[subsysName].users += users;
+		subsysTallies[subsysName].users += systems.size;
 		if (typeof(sysName) === 'undefined')
 			continue;
 		if (!(sysName in sysTallies))
@@ -798,7 +821,7 @@ function drawChart()
 		sysTallies[sysName].tally +=
 			Number(article.keys.lines);
 		sysTallies[sysName].samples++;
-		sysTallies[sysName].users += users;
+		sysTallies[sysName].users += systems.size;
 	}
 
 	/*
