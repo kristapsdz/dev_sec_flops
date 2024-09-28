@@ -46,6 +46,7 @@ index.js: build/index.js
 	  set +e ; \
 	  github=`lowdown -X githubAttestations $< 2>/dev/null` ; \
 	  obsd=`lowdown -X openbsdAttestations $< 2>/dev/null` ; \
+	  fbsd=`lowdown -X freebsdAttestations $< 2>/dev/null` ; \
 	  subsys=`lowdown -X subsystem $< 2>/dev/null` ; \
 	  sys=`lowdown -X system $< 2>/dev/null` ; \
 	  syslink=`lowdown -X system-link $< 2>/dev/null` ; \
@@ -58,6 +59,7 @@ index.js: build/index.js
 	  [ -n "$$subsys" ] && echo " data-sblg-set-subsystem=\"$$subsys\"" ; \
 	  [ -n "$$github" ] && echo " data-sblg-set-githubAttestations=\"$$github\"" ; \
 	  [ -n "$$obsd" ] && echo " data-sblg-set-openbsdAttestations=\"$$obsd\"" ; \
+	  [ -n "$$fbsd" ] && echo " data-sblg-set-freebsdAttestations=\"$$fbsd\"" ; \
 	  [ -n "$$notes" ] && echo " data-sblg-set-notes=\"$$notes\"" ; \
 	  [ -n "$$syslink" ] && echo " data-sblg-set-system-link=\"$$syslink\"" ; \
 	  echo " data-sblg-set-lines=\"`sed -n '/\`\`\`/,$$p' $< | wc -l | awk '{print $$1}'`\"" ; \

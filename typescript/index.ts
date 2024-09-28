@@ -26,6 +26,7 @@ interface sblgKeys {
 	system?: string,
 	subsystem: string,
 	githubAttestations?: string,
+	freebsdAttestations?: string,
 	openbsdAttestations?: string,
 	notes?: string,
 	lines: string,
@@ -800,6 +801,8 @@ function drawChart()
 			article.keys.githubAttestations);
 		getAttestations('https://github.com/openbsd/src/tree/master/',
 			systems, article.keys.openbsdAttestations);
+		getAttestations('https://github.com/freebsd/freebsd-src/tree/main/',
+			systems, article.keys.freebsdAttestations);
 		if (!(subsysName in subsysTallies))
 			subsysTallies[subsysName] = {
 				tally: 0,
