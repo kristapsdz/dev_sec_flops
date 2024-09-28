@@ -7,6 +7,10 @@ HTMLS	!= ls sources/*.md | sed 's!\.md$$!.html!'
 
 all: index.js index.html index.css
 
+node_modules: package.json
+	npm install
+	touch node_modules
+
 install: all
 	mkdir -p $(PREFIX)
 	install -m 0444 index.js index.html index.css $(PREFIX)
@@ -41,6 +45,7 @@ index.js: build/index.js
 	@( \
 	  set +e ; \
 	  github=`lowdown -X githubAttestations $< 2>/dev/null` ; \
+	  obsd=`lowdown -X openbsdAttestations $< 2>/dev/null` ; \
 	  subsys=`lowdown -X subsystem $< 2>/dev/null` ; \
 	  sys=`lowdown -X system $< 2>/dev/null` ; \
 	  syslink=`lowdown -X system-link $< 2>/dev/null` ; \
@@ -52,6 +57,7 @@ index.js: build/index.js
 	  [ -n "$$sys" ] && echo " data-sblg-set-system=\"$$sys\"" ; \
 	  [ -n "$$subsys" ] && echo " data-sblg-set-subsystem=\"$$subsys\"" ; \
 	  [ -n "$$github" ] && echo " data-sblg-set-githubAttestations=\"$$github\"" ; \
+	  [ -n "$$obsd" ] && echo " data-sblg-set-openbsdAttestations=\"$$obsd\"" ; \
 	  [ -n "$$notes" ] && echo " data-sblg-set-notes=\"$$notes\"" ; \
 	  [ -n "$$syslink" ] && echo " data-sblg-set-system-link=\"$$syslink\"" ; \
 	  echo " data-sblg-set-lines=\"`sed -n '/\`\`\`/,$$p' $< | wc -l | awk '{print $$1}'`\"" ; \
@@ -63,6 +69,9 @@ index.js: build/index.js
 clean:
 	rm -f $(HTMLS) index.js index.html index.css
 	rm -rf build
+
+distclean: clean
+	rm -rf node_modules
 
 json/subsystems-sizes.json: querySizes.sh json/subsystems.json
 	sh ./querySizes.sh >$@
