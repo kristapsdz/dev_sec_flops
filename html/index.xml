@@ -258,14 +258,23 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</p>
 			<p>
 				How are these findings reflected in a survey of real-world sandboxed
-				systems?  In the charts below, I collect all contributions to
-				sandbox environments per-system and per-sandbox.  So one contributor
-				adding 
-				<a href="https://man.openbsd.org/pledge">pledge</a>
-				to an open source system would add weight to the <q>pledge</q> box
-				and <q>OpenBSD</q>.
+				systems?  The chart below counts open source systems using a
+				sandbox.
+			</p>
+			<p>
+				My methodology was to mine the
+				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
+				<a href="https://github.com/openbsd/src">OpenBSD</a> git
+				repositories (specifically <code>usr.bin</code> and
+				<code>usr.sbin</code> for sandbox invocations, then look up the
+				earliest entry for a contributor.  I've added non-BSD systems as I
+				know of them (e.g., Chromium).  I'm not aware of central
+				repositories for Linux sandboxing, so it's hard to gather
+				information.
 			</p>
 			<p class="help">
+				<i class="fa fa-exclamation-circle"></i>
+				<strong>This is very incomplete!</strong>
 				Help make these charts more meaningful: if you've significantly
 				contributed to a sandbox effort, please submit an attestation by a
 				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
