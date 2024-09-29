@@ -252,7 +252,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			<p>
 				Ominously, 
 				<a href="https://www.apple.com/macos">Mac OS X</a>
-				has deprecated its source sandbox, as has
+				has deprecated its source sandbox (<q>seatbelt</q>), as has
 				<a href="https://www.java.com/">Java</a> by discontinuing the 
 				<a href="https://docs.oracle.com/javase/tutorial/essential/environment/security.html">JSM</a>.
 			</p>
@@ -266,7 +266,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
 				<a href="https://github.com/openbsd/src">OpenBSD</a> git
 				repositories (specifically <code>usr.bin</code> and
-				<code>usr.sbin</code> for sandbox invocations, then look up the
+				<code>usr.sbin</code> for sandbox invocations), then look up the
 				earliest entry for a contributor.  I've added non-BSD systems as I
 				know of them (e.g., Chromium).  I'm not aware of central
 				repositories for Linux sandboxing, so it's hard to gather

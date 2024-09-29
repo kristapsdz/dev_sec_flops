@@ -31,7 +31,7 @@
 			"https://man.openbsd.org/pledge"
 		]
 	},
-	"sandbox": {
+	"seatbelt": {
 		"deprecated": "deprecated",
 		"sources": [
 			"https://www.manpagez.com/man/7/sandbox/",

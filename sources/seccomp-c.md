@@ -4,6 +4,7 @@ subsystem: seccomp
 githubAttestations: 
     kristapsdz kristapsdz/kcgi,
     djmdjm openssh/openssh-portable,
+    rsesek chromium/chromium,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */

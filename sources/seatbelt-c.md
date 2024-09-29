@@ -1,6 +1,6 @@
 lang: C/C++
 system: mac os x
-subsystem: sandbox
+subsystem: seatbelt
 githubAttestations: 
     kristapsdz kristapsdz/kcaldav,
     kristapsdz kristapsdz/kcgi,
@@ -8,6 +8,7 @@ githubAttestations:
     kristapsdz kristapsdz/sblg,
     kristapsdz kristapsdz/sqlite2mdoc,
     djmdjm openssh/openssh-portable,
+    rsesek chromium/chromium,
 
 ```c
 #include <sandbox.h> /* sandbox_init(3), etc. */
