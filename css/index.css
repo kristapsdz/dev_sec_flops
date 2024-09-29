@@ -25,6 +25,17 @@ label				{ cursor: pointer; }
 figure				{ margin-left: 0;
 				  margin-right: 0;
 				  width: 100%; }
+code				{ font-size: smaller; }
+#example			{ display: grid;
+				  gap: 0.5rem 1rem;
+				  grid-template-columns: auto 1fr; }
+#example .fa.fa-minus-circle	{ color: #ff6384; }
+#example div			{ padding-top: 1rem; }
+#example pre			{ margin: 0;
+				  overflow: hidden; }
+#example code			{ background-color: #f3f3f3;
+				  border-radius: 1rem;
+				  padding: 1rem; }
 .byline				{ font-size: 180%;
 				  line-height: 1.2em;
 				  color: #fff; }
@@ -67,7 +78,7 @@ figure				{ margin-left: 0;
 #code 				{ position: fixed;
 				  display: flex;
 				  flex-direction: column;
-				  max-height: calc(100vh - 2rem);
+				  max-height: calc(100vh - 3rem);
 				  box-shadow: 8px 8px 8px rgb(255 255 255 / 25%);
 				  top: 1rem;
 				  left: 50%;
@@ -102,8 +113,7 @@ figure				{ margin-left: 0;
 #code nav label			{ transition: border-bottom 0.25s linear;
 			  	  border-bottom: thin solid rgb(0 0 0 / 10%); }
 #code nav label:hover		{ border-bottom: thin solid rgb(0 0 0 / 70%); }
-#code pre			{ margin: 0;
-				  font-size: smaller; }
+#code pre			{ margin: 1rem; }
 #code .code-views		{ display: none; }
 #view-code:not(:checked) ~ #code-box,
 #view-notes:not(:checked) ~ #code-notes,
@@ -170,6 +180,8 @@ footer				{ font-size: smaller; }
   body > header .github,
   body > header h1		{ display: inline-block; }
   body > header h1		{ font-size: inherit; }
+  #example			{ grid-template-columns: 1fr; }
+  #example div			{ padding-top: 0; }
 }
 
 @media (width < 35em) {
