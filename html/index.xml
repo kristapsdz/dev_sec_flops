@@ -20,31 +20,54 @@
 	</head>
 	<body>
 		<header>
-			<div class="github">
+			<span>
 				<a href="https://github.com/kristapsdz/dev_sec_flops">
 					<i class="fa fa-github"></i>
-					DevSecFlops</a>:
-			</div>
-			<h1>
-				Source code sandboxing
-			</h1>
+					DevSecFlops
+				</a>
+			</span>
 			<nav>
 				<a href="#intro">#intro</a>
 				<a href="#examples">#examples</a>
 				<a href="#casestudy">#casestudy</a>
 				<a href="#findings">#findings</a>
 				<a href="#betterment">#betterment</a>
+				<a href="#thanks">#thanks</a>
 			</nav>
 		</header>
-		<section id="intro">
+		<section>
+			<h1 id="intro">
+				<span>#</span> Source code sandboxing
+			</h1>
 			<p class="byline">
-				In 2024, how easy is it for a developer to <q>sandbox</q> a program
-				by its source code?
+				In 2025, how easy is it for a developer to <q>sandbox</q> a program?
 			</p>
 			<p>
-				Assume that the program wants only to manipulate open file
-				descriptors (e.g., standard IO) and manage its own
-				memory&#8212;regular console stuff.  If the running program tries to
+				By <q>sandboxing</q>, I mean a program limiting its own system
+				resources within its source code.  A classic example is calling
+				<a href="https://man.openbsd.org/chroot">chroot(2)</a> to change the
+				root file-system to an empty directory so that the program cannot
+				scribble into the root file-system:
+			</p>
+			<pre><code class="hljs language-c">int main(void) {
+  /* Program has full file-system access. */
+  chroot("/var/empty");
+  chdir("/");
+  /* File-system root re-rooted in /var/empty. */
+  int fd = open("/etc/passwd", O_RDONLY);
+  /* Tried to open /var/empty/etc/passwd... &#x1F92D; */
+}</code></pre>
+			<p>
+				Operating systems have come a long way since <code>chroot()</code>,
+				and allow developers to limit resources in both fine-grained and
+				coarse-grained ways.  In this article, I'll survey some modern
+				strategies for sandboxing our programs and how easy or hard it might
+				be to do so by drawing from documentation and examples.
+			</p>
+			<p>
+				For example, how can we limit a program to only manipulate
+				already-open file descriptors (e.g., standard IO) and manage its own
+				memory&#8212;regular console stuff?  If the running program tries to
 				do anything else, it must be terminated or otherwise unable to
 				acquire the requested resources (opening files, network sockets,
 				shared memory, etc.).
@@ -54,7 +77,7 @@
 					<i class="fa fa-fw fa-check-circle"></i>
 					This should succeed&#8230;
 				</div>
-				<pre><code class="hljs language-python">print("Hello, world!")</code></pre>
+				<pre><code class="hljs language-python">print("Hello, world! &#x1F44B;")</code></pre>
 				<div>
 					<i class="fa fa-fw fa-minus-circle"></i>
 					This should fail&#8230;
@@ -69,28 +92,38 @@ txt = Path(".profile").read_text()</code></pre>
 connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</div>
 			<p>
-				In this article, I examine different open source systems that could
-				be used to enact such a sandbox, such as
+				How can we implement this in 2025?
+			</p>
+			<p>
+				In the following, I graph how the length of a sandbox tool's
+				documentation (<q>manpage</q>) and length of an example usage.  Why
+				the length of the manpage?  It's the standard way developers
+				interact with tool documentation.  I'll survey a range of open
+				source systems could be used to enact such a sandbox, such as
 				<a href="https://openbsd.org">OpenBSD</a>'s
-				<a href="https://man.openbsd.org/pledge">pledge</a> and
+				<a href="https://man.openbsd.org/pledge">pledge</a>,
 				<a href="https://linux.org">Linux</a>'s
 				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
-				by example.
-				Jump to the <a href="#examples">examples</a> for a full list.
+				and
+				<a href="https://freebsd.org">FreeBSD</a>'s
+				<a href="https://wiki.freebsd.org/Capsicum">Capsicum</a>.
 			</p>
 			<figure id="chart-box">
 				<figcaption>
 					<div>
 						<p>
-							How complex is it to sandbox your source
+							How hard is it to sandbox your source
 							code?
 						</p>
 						<p>
-							This graphs the
-							<strong>text length of all references</strong>
-							that must be read to understand the system
-							(manual pages, etc.) to the
+							This graphs the <strong>text length of
+							references</strong> that must be
+							read to understand the system to the
 							<strong>number of lines in an example</strong>.
+						</p>
+						<p>
+							Jump to <a href="#examples">examples</a>
+							for references and examples.
 						</p>
 					</div>
 				</figcaption>
@@ -104,7 +137,10 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				progressively more complicated systems are in the upper-right.
 			</p>
 		</section>
-		<section id="examples">
+		<section>
+			<h2 id="examples">
+				<span>##</span> Examples
+			</h2>
 			<p>
 				Below is a list of all examples.  Click the folder icon on an
 				example to see its source code, references, and notes.  Which method
@@ -162,16 +198,16 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				</figcaption>
 			</div>
 		</section>
-		<section id="casestudy">
+		<section>
 			<p>
 				These are all trivial examples, and only demonstrate as much as
 				<q>Hello, world</q> programs demonstrate a programming language.
 				Let's refocus on a real world example taken both as a snapshot and
 				as developed over time.
 			</p>
-			<p class="byline">
-				Real-world sandboxing in 2024.
-			</p>
+			<h2 id="casestudy">
+				<span>##</span> Real-world sandboxing
+			</h2>
 			<p>
 				Let's use
 				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>
@@ -191,7 +227,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				<figcaption>
 					<div>
 						<div>
-							Sources...
+							Sources&#8230;
 						</div>
 						<div id="casestudy-links">
 						</div>
@@ -226,9 +262,12 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				</div>
 			</figure>
 		</section>
-		<section id="findings">
-			<p class="byline">
-				Findings so far?  It depends on your environment.
+		<section>
+			<h2 id="findings">
+				<span>##</span> Findings so far
+			</h2>
+			<p>
+				What conclusions can we draw so far? It depends on your environment.
 			</p>
 			<p>
 				<a href="https://linux.org">Linux</a> has a whopping seven-fold
@@ -291,10 +330,10 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				</figure>
 			</div>
 		</section>
-		<section id="betterment">
-			<p class="byline">
-				How can we make this better in 2025?
-			</p>
+		<section>
+			<h2 id="betterment">
+				<span>##</span> Improving in 2026
+			</h2>
 			<p>
 				I'm starting this site to gain a full picture of the <q>sandbox</q>
 				landscape in open systems.  Having a list of possible combinations
@@ -322,6 +361,25 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
 				page, and all possible through pull requests.  I'll merge this into
 				these on an as-needed basis.
+			</p>
+		</section>
+		<section>
+			<h2 id="thanks">
+				<span>##</span> Thank you!
+			</h2>
+			<p>
+				For a scientific treatment of the subject, read
+				<a href="https://arxiv.org/abs/2405.06447">Sandboxing Adoption in Open Source Ecosystems</a>, 
+				Maysara Alhindi and Joseph Hallett, SESoS 2024.
+				I'd like to thank the authors for making their data available for me
+				to incorporate into the statistics.
+			</p>
+			<p>
+				I'd also like to thank
+				Ed Maste (<a href="https://github.com/emaste">emaste</a>),
+				Florian Obser (<a href="https://github.com/fobser">fobser</a>),
+				and Damien Miller (<a href="https://github.com/djmdjm">djmdjm</a>)
+				for their input in the subject matter.
 			</p>
 		</section>
 		<footer>

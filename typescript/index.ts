@@ -890,7 +890,7 @@ window.addEventListener('load', () => {
 	}
 	cols.push(document.createElement('div'));
 	requireHTMLElement('examples-columns-box').replaceChildren(...cols);
-	requireHTMLElement('example').querySelectorAll('pre code').forEach(el => {
+	document.body.querySelectorAll('pre code').forEach(el => {
 		const res = hljs.highlightAuto(<string>el.textContent);
 		el.innerHTML = res.value;
 	});

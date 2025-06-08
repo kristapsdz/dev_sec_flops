@@ -9,17 +9,26 @@ html, body			{ width: calc(100% - 1rem);
 				  font-weight: 400;
 				  font-size: 11.5pt;
 				  font-style: normal; }
+h1				{ font-size: 14pt;
+				  line-height: 1.2em;
+				  font-weight: normal;
+				  margin-left: -0.9em;
+				  color: #fff; }
+h2				{ font-size: 13pt;
+				  line-height: 1.2em;
+				  margin-left: -1.5em;
+				  font-weight: normal;
+				  color: #fff; }
+h2 span,
+h1 span				{ color: yellow; }
 body > header 			{ display: flex;
-				  align-items: center;
-				  gap: 0.5rem; }
-body > header h1		{ margin: 0;
-				  font-size: 14pt;
-				  color: #fff;
-				  flex: 1; }
-body > header nav		{ display: flex;
 				  align-items: center;
 				  font-size: smaller;
 				  gap: 0.5rem; }
+body > header nav		{ display: flex;
+				  gap: 1rem; }
+body > header span		{ flex: 1;
+				  white-space: nowrap; }
 body a				{ color: #fff; }
 label				{ cursor: pointer; }
 figure				{ margin-left: 0;
@@ -33,11 +42,10 @@ code				{ font-size: smaller; }
 #example div			{ padding-top: 1rem; }
 #example pre			{ margin: 0;
 				  overflow: hidden; }
-#example code			{ background-color: #f3f3f3;
+code.hljs			{ background-color: #f3f3f3;
 				  border-radius: 1rem;
 				  padding: 1rem; }
-.byline				{ font-size: 180%;
-				  line-height: 1.2em;
+.byline				{ font-weight: bold;
 				  color: #fff; }
 .empty				{ opacity: 0.5; }
 .fa.fa-exclamation-circle	{ color: #ff6384; }
@@ -170,6 +178,7 @@ footer				{ font-size: smaller; }
   #chart-box			{ flex-direction: column; }
   figcaption			{ max-width: unset;
 				  margin-top: 0; }
+  h1, h2			{ margin-left: 0; }
 }
 
 @media (width < 45em) {
@@ -177,9 +186,6 @@ footer				{ font-size: smaller; }
   body > header,
   body > header nav		{ display: block;
 	  			  text-align: center; }
-  body > header .github,
-  body > header h1		{ display: inline-block; }
-  body > header h1		{ font-size: inherit; }
   #example			{ grid-template-columns: 1fr; }
   #example div			{ padding-top: 0; }
 }

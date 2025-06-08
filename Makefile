@@ -75,6 +75,9 @@ clean:
 distclean: clean
 	rm -rf node_modules
 
+scriptclean:
+	rm -f json/subsystems-sizes.json json/casestudy-sizes.json
+
 json/subsystems-sizes.json: querySizes.sh json/subsystems.json
 	sh ./querySizes.sh >$@
 
