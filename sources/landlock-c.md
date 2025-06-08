@@ -2,6 +2,8 @@ lang: C/C++
 system: linux
 subsystem: landlock
 notes: This example doesn't work yet.
+githubAttestations:
+    Larhzu tukaani-project/xz,
 
 ```c
 #define _GNU_SOURCE
