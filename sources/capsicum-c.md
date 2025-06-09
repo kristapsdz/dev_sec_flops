@@ -11,6 +11,7 @@ githubAttestations:
     rwatson chromium/chromium,
     omar-polo omar-polo/gmid,
     devnexen radareorg/radare2,
+    Larhzu tukaani-project/xz,
 freebsdAttestations:
     oshogbo usr.bin/basename,
     oshogbo usr.bin/col,
