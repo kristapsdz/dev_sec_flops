@@ -30,8 +30,9 @@
 				<a href="#intro">#intro</a>
 				<a href="#examples">#examples</a>
 				<a href="#casestudy">#casestudy</a>
+				<a href="#survey">#survey</a>
 				<a href="#findings">#findings</a>
-				<a href="#betterment">#betterment</a>
+				<a href="#contrib">#contrib</a>
 				<a href="#thanks">#thanks</a>
 			</nav>
 		</header>
@@ -206,7 +207,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				as developed over time.
 			</p>
 			<h2 id="casestudy">
-				<span>##</span> Real-world sandboxing
+				<span>##</span> Case study
 			</h2>
 			<p>
 				Let's use
@@ -263,53 +264,12 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</figure>
 		</section>
 		<section>
-			<h2 id="findings">
-				<span>##</span> Findings so far
+			<h2 id="survey">
+				<span>##</span> Survey
 			</h2>
 			<p>
-				What conclusions can we draw so far? It depends on your environment.
-			</p>
-			<p>
-				<a href="https://linux.org">Linux</a> has a whopping seven-fold
-				increase in reference complexity, and even more for source
-				complexity, over OpenBSD and FreeBSD.
-				<a href="https://docs.kernel.org/userspace-api/landlock.html">Landlock</a>
-				showed promise as a simpler alternative, but has since grown in
-				complexity.
-				<a href="https://openbsd.org">OpenBSD</a> and
-				<a href="https://freebsd.org">FreeBSD</a> rank roughly
-				equivalently, with the former having increased mildly in complexity.
-			</p>
-			<p>
-				The maintenance burden for 
-				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
-				as illustrated by 
-				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>,
-				is considerable.  The burden for the other systems is considerably
-				less&#8212;almost nothing since original implementation.
-			</p>
-			<p>
-				Ominously, 
-				<a href="https://www.apple.com/macos">Mac OS X</a>
-				has deprecated its source sandbox (<q>seatbelt</q>), as has
-				<a href="https://www.java.com/">Java</a> by discontinuing the 
-				<a href="https://docs.oracle.com/javase/tutorial/essential/environment/security.html">JSM</a>.
-			</p>
-			<p>
-				How are these findings reflected in a survey of real-world sandboxed
-				systems?  The chart below counts open source systems using a
-				sandbox.
-			</p>
-			<p>
-				My methodology was to mine the
-				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
-				<a href="https://github.com/openbsd/src">OpenBSD</a> git
-				repositories (specifically <code>usr.bin</code> and
-				<code>usr.sbin</code> for sandbox invocations), then look up the
-				earliest entry for a contributor.  I've added non-BSD systems as I
-				know of them (e.g., Chromium).  I'm not aware of central
-				repositories for Linux sandboxing, so it's hard to gather
-				information.
+				In this section, I survey real-world sandbox users.  The
+				charts below counts open source systems that use a sandbox.
 			</p>
 			<p class="help">
 				<i class="fa fa-exclamation-circle"></i>
@@ -318,6 +278,26 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				contributed to a sandbox effort, please submit an attestation by a
 				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
 				pull request.  Thank you!
+			</p>
+			<p>
+				For "in-house" systems, my methodology was to mine the
+				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
+				<a href="https://github.com/openbsd/src">OpenBSD</a> git
+				repositories (specifically <code>usr.bin</code> and
+				<code>usr.sbin</code> for sandbox invocations), then look up the
+				earliest entry for a contributor.
+			</p>
+			<p>
+				For general open source, I drew from the results of 
+				<i>Sandboxing Adoption in Open Source Ecosystems</i> (see
+				the <a href="#thanks">thanks</a> section), which in turn
+				drew from the third-party software repositories for Linux
+				(Debian and Fedora) and OpenBSD, then analysed the sources
+				for sandbox usage.
+			</p>
+			<p>
+				I'm not aware of central repositories for Linux or FreeBSD
+				sandboxing, so it's hard to gather information.
 			</p>
 			<div id="chart-contrib-box">
 				<figure>
@@ -331,8 +311,51 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</div>
 		</section>
 		<section>
-			<h2 id="betterment">
-				<span>##</span> Improving in 2026
+			<h2 id="findings">
+				<span>##</span> Findings
+			</h2>
+			<p>
+				What have we done well, and what can we do better?
+			</p>
+			<p>
+				OpenBSD's pledge
+				<a href="https://man.openbsd.org/pledge">pledge</a>
+				has been massively successful in getting traction in open source.
+				This is both due to how ports are maintained by OpenBSD
+				developers and the ease at which systems can be extended
+				with sandbox support.
+			</p>
+			<p>
+				<a href="https://linux.org">Linux</a>'s
+				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>
+				is far less successful: it has a whopping seven-fold
+				increase in reference complexity, and even more for source
+				complexity, over OpenBSD and FreeBSD.
+				<a href="https://docs.kernel.org/userspace-api/landlock.html">Landlock</a>
+				showed promise as a simpler alternative, but has since grown in
+				complexity and does not have much uptake.
+				The maintenance burden for 
+				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
+				as illustrated by 
+				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>,
+				is considerable.
+			</p>
+			<p>
+				<a href="https://freebsd.org">FreeBSD</a>'s
+				<a href="https://wiki.freebsd.org/Capsicum">Capsicum</a>
+				has fairly good traction within FreeBSD, but not elsewhere.
+			</p>
+			<p>
+				Ominously, 
+				<a href="https://www.apple.com/macos">Mac OS X</a>
+				has deprecated its source sandbox (<q>seatbelt</q>), as has
+				<a href="https://www.java.com/">Java</a> by discontinuing the 
+				<a href="https://docs.oracle.com/javase/tutorial/essential/environment/security.html">JSM</a>.
+			</p>
+		</section>
+		<section>
+			<h2 id="contrib">
+				<span>##</span> Contributing
 			</h2>
 			<p>
 				I'm starting this site to gain a full picture of the <q>sandbox</q>
