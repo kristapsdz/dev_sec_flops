@@ -44,8 +44,8 @@
 				In 2025, how easy is it for a developer to <q>sandbox</q> a program?
 			</p>
 			<p>
-				By <q>sandboxing</q>, I mean a program limiting its own system
-				resources within its source code.  A classic example is calling
+				<i>Sandboxing</i> is a program limiting available system resources
+				from within its source code.  A classic example is calling
 				<a href="https://man.openbsd.org/chroot">chroot(2)</a> to change the
 				root file-system to an empty directory so that the program cannot
 				scribble into the root file-system:
@@ -268,8 +268,9 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				<span>##</span> Survey
 			</h2>
 			<p>
-				In this section, I survey real-world sandbox users.  The
-				charts below counts open source systems that use a sandbox.
+				In this section, I survey real-world sandbox users in 
+				<strong id="systems-count"></strong> open source systems using one or
+				more sandbox.
 			</p>
 			<p class="help">
 				<i class="fa fa-exclamation-circle"></i>
@@ -284,7 +285,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
 				<a href="https://github.com/openbsd/src">OpenBSD</a> git
 				repositories (specifically <code>usr.bin</code> and
-				<code>usr.sbin</code> for sandbox invocations), then look up the
+				<code>usr.sbin</code>) for sandbox invocations, then look up the
 				earliest entry for a contributor.
 			</p>
 			<p>
@@ -293,7 +294,8 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				the <a href="#thanks">thanks</a> section), which in turn
 				drew from the third-party software repositories for Linux
 				(Debian and Fedora) and OpenBSD, then analysed the sources
-				for sandbox usage.
+				for sandbox usage.  I only included those systems that had a
+				specific commit and author for adding the sandbox support.
 			</p>
 			<p>
 				I'm not aware of central repositories for Linux or FreeBSD

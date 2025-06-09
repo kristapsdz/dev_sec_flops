@@ -786,6 +786,7 @@ function drawChart()
 {
 	const subsysTallies: Record<string, TallyInput> = {};
 	const sysTallies: Record<string, TallyInput> = {};
+	const allSystems = new Set<string>();
 
 	/*
 	 * Put all examples into their subsystem dataset, then system averages,
@@ -793,7 +794,6 @@ function drawChart()
 	 */
 
 	for (const article of data.articles) {
-		console.log('article: ' + article.base);
 		const systems = new Set<string>();
 		const subsysName = article.keys['subsystem'];
 		const sysName = article.keys['system'];
@@ -826,6 +826,7 @@ function drawChart()
 			Number(article.keys.lines);
 		sysTallies[sysName].samples++;
 		sysTallies[sysName].users += systems.size;
+		systems.forEach(sys => allSystems.add(sys));
 	}
 
 	/*
@@ -863,6 +864,8 @@ function drawChart()
 
 	/* Create the charts themselves. */
 
+	requireHTMLElement('systems-count').replaceChildren
+		(document.createTextNode(allSystems.size.toString()));
 	chartScatter('chart-scatter');
 	chartSourcesRefs('chart-systems', sysTalliesArray,
 		'complexity by operating system',

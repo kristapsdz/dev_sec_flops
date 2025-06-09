@@ -39,7 +39,7 @@ code				{ font-size: smaller; }
 				  gap: 0.5rem 1rem;
 				  grid-template-columns: auto 1fr; }
 #example .fa.fa-minus-circle	{ color: #ff6384; }
-#example div			{ padding-top: 1rem; }
+#example div			{ padding-top: 0.9rem; }
 #example pre			{ margin: 0;
 				  overflow: hidden; }
 code.hljs			{ background-color: #f3f3f3;
