@@ -43,6 +43,8 @@ githubAttestations:
     dkopecek USBGuard/usbguard,
     letoram letoram/arcan,
     ThomasHabets ThomasHabets/arping,
+    omar-polo omar-polo/gmid,
+    fcambus fcambus/logswan,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */

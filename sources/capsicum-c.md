@@ -9,6 +9,8 @@ githubAttestations:
     kristapsdz kristapsdz/lowdown,
     djmdjm openssh/openssh-portable,
     rwatson chromium/chromium,
+    omar-polo omar-polo/gmid,
+    devnexen radareorg/radare2,
 freebsdAttestations:
     oshogbo usr.bin/basename,
     oshogbo usr.bin/col,

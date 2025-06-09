@@ -4,6 +4,8 @@ subsystem: landlock
 notes: This example doesn't work yet.
 githubAttestations:
     Larhzu tukaani-project/xz,
+    omar-polo omar-polo/gmid,
+    regit OISF/suricata,
 
 ```c
 #define _GNU_SOURCE
