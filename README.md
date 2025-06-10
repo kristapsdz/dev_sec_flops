@@ -3,10 +3,6 @@
 This is a repository for an analysis and survey of source code sandboxing.  It's
 still in progress.
 
-*Please don't post this repository for broader consumption until it's ready,
-thank you!*  However, if you want to contribute attestations or sandbox systems,
-please do.
-
 An **attestation** means that you or someone you know has used a software
 sandbox (e.g., [pledge](https://man.openbsd.org/pledge)) in your software.  This
 means that you or they personally interfaced with the sandbox or made a
