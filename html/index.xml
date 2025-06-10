@@ -28,7 +28,7 @@
 			</span>
 			<nav>
 				<a href="#intro">#intro</a>
-				<a href="#examples">#examples</a>
+				<a href="#systems">#systems</a>
 				<a href="#casestudy">#casestudy</a>
 				<a href="#survey">#survey</a>
 				<a href="#findings">#findings</a>
@@ -38,17 +38,18 @@
 		</header>
 		<section>
 			<h1 id="intro">
-				<span>#</span> Source code sandboxing
+				<span>#</span> source code sandboxing
 			</h1>
 			<p class="byline">
 				In 2025, how easy is it for a developer to <q>sandbox</q> a program?
 			</p>
 			<p>
-				<i>Sandboxing</i> is a program limiting available system resources
-				from within its source code.  A classic example is calling
+				<i>Sandboxing</i> is when a developer limits available system
+				resources to a program from within its own source code.  A classic
+				example is calling
 				<a href="https://man.openbsd.org/chroot">chroot(2)</a> to change the
 				root file-system to an empty directory so that the program cannot
-				scribble into the root file-system:
+				scribble into the root file-system.
 			</p>
 			<pre><code class="hljs language-c">int main(void) {
   /* Program has full file-system access. */
@@ -60,18 +61,34 @@
 }</code></pre>
 			<p>
 				Operating systems have come a long way since <code>chroot()</code>,
-				and allow developers to limit resources in both fine-grained and
-				coarse-grained ways.  In this article, I'll survey some modern
-				strategies for sandboxing our programs and how easy or hard it might
-				be to do so by drawing from documentation and examples.
+				and allow developers to limit resources far beyond just the
+				file-system root.  In this article, I'll survey some modern tools
+				for sandboxing and how easy or hard it might be to do so by drawing
+				from documentation and examples.  <strong>This is not a research
+				paper</strong>: it's a survey and guide.
 			</p>
 			<p>
-				For example, how can we limit a program to only manipulate
-				already-open file descriptors (e.g., standard IO) and manage its own
-				memory&#8212;regular console stuff?  If the running program tries to
-				do anything else, it must be terminated or otherwise unable to
-				acquire the requested resources (opening files, network sockets,
-				shared memory, etc.).
+				We'll cover the main open source operating systems with sandbox
+				tools: <a href="https://linux.org">Linux</a>,
+				<a href="https://openbsd.org">OpenBSD</a>, and
+				<a href="https://freebsd.org">FreeBSD</a> (including
+				<a href="https://dragonflybsd.org">DragonFlyBSD</a>).
+				Mac OS X gets limited mention, as does Java.
+				If you know of other operating systems with such tools 
+				(e.g., 
+				<a href="https://netbsd.org">NetBSD</a>'s
+				<a href="https://man.netbsd.org/NetBSD-7.0.1/secmodel.9">secmodel</a>),
+				please raise an issue or a
+				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
+				pull request.
+			</p>
+			<p>
+				Without further ado: in 2025, with what tools can we limit a program
+				to only already-open file descriptors (e.g., standard IO) and memory
+				management&#8212;regular console activities&#8212;on these operating
+				systems?  If the running program tries to do anything else, it must
+				be terminated or otherwise unable to acquire the requested resources
+				(files, sockets, shared memory, etc.).
 			</p>
 			<div id="example">
 				<div>
@@ -93,21 +110,11 @@ txt = Path(".profile").read_text()</code></pre>
 connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</div>
 			<p>
-				How can we implement this in 2025?
-			</p>
-			<p>
-				In the following, I graph how the length of a sandbox tool's
-				documentation (<q>manpage</q>) and length of an example usage.  Why
-				the length of the manpage?  It's the standard way developers
-				interact with tool documentation.  I'll survey a range of open
-				source systems could be used to enact such a sandbox, such as
-				<a href="https://openbsd.org">OpenBSD</a>'s
-				<a href="https://man.openbsd.org/pledge">pledge</a>,
-				<a href="https://linux.org">Linux</a>'s
-				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
-				and
-				<a href="https://freebsd.org">FreeBSD</a>'s
-				<a href="https://wiki.freebsd.org/Capsicum">Capsicum</a>.
+				In the following, I graph how the length of a tool's documentation
+				(<q>manpage</q>) and length of an example usage.  Why the length of
+				the manpage?  It's the standard way developers interact with tool
+				documentation; and in a way, measures the cognitive load required to
+				understand and use the tool.
 			</p>
 			<figure id="chart-box">
 				<figcaption>
@@ -123,7 +130,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 							<strong>number of lines in an example</strong>.
 						</p>
 						<p>
-							Jump to <a href="#examples">examples</a>
+							Jump to <a href="#systems">systems</a>
 							for references and examples.
 						</p>
 					</div>
@@ -133,22 +140,22 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				</div>
 			</figure>
 			<p>
-				Systems easy to understand (<q>references</q>) and implement
-				(<q>source code</q>) are grouped in the lower-left, while
-				progressively more complicated systems are in the upper-right.
+				Systems easy to understand (short references) and implement (short
+				source code) are grouped in the lower-left, while progressively more
+				complicated systems are in the upper-right.
 			</p>
 		</section>
 		<section>
-			<h2 id="examples">
-				<span>##</span> Examples
+			<h2 id="systems">
+				<span>##</span> systems
 			</h2>
 			<p>
-				Below is a list of all examples.  Click the folder icon on an
-				example to see its source code, references, and notes.  Which method
-				would you choose?  Sources readable on a normal mobile phone (&lt;20
-				lines) have lines show in blue, barely readable (20&#8211;30 lines)
-				in orange, and above in red.  Deprecated sandboxes are marked next
-				to the subsytem name.
+				Below is a list of all tools available on our operating systems.
+				Click the folder icon on an example to see its source code,
+				references, and notes.  Which method would you choose?  Sources
+				readable on a normal mobile phone (&lt;20 lines) have lines show in
+				blue, barely readable (20&#8211;30 lines) in orange, and above in
+				red.  Deprecated sandboxes are marked next to the subsytem name.
 			</p>
 			<div class="table">
 				<div class="table-head">
@@ -159,44 +166,27 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				</div>
 			</div>
 			<p>
+				In the above, I've also add wrappers for these systems in different
+				languages.  I don't include library <q>helpers</q> such as 
+				<a href="https://github.com/seccomp/libseccomp">libseccomp</a>,
+				since they don't (much) change the cognitive overhead in reading the
+				canonical documentation.  Ultimately, any sandbox tool will be
+				implemented in the kernel.
+			</p>
+			<p>
 				We can further clarify this data by grouping by operating systems
-				and sandboxes&#8212;environment.  How hard it is to implement a
-				sandbox in your environment of choice?
+				and sandboxes.  How hard it is to implement a sandbox in your
+				environment of choice?
 			</p>
 			<div id="chart-multi-box">
 				<figure>
-					<canvas id="chart-systems"></canvas>
-					<canvas id="chart-subsystems"></canvas>
-				</figure>
-				<figcaption>
 					<div>
-						<p>
-							Moving from right to left in these
-							graphs&#8212;reducing complexity&#8212;puts
-							to practice Jerry Saltzer's reflections
-							on Multics, which featured a predecessor to
-							modern call-based capabilities systems
-							(emphasis mine):
-						</p>
-						<p>
-							<q>The user&#8230; must figure out for
-								himself how to accomplish his
-								intentions amid a myriad of
-								possibilities, not all of which he
-								understands&#8230;
-								<strong> The solution to this
-									problem lies in better
-									understanding the nature of
-									the typical user's mental
-									description of protection
-									intent, and then devising
-									interfaces which permit more
-									direct specification of that
-									protection intent.</strong></q>
-							[<a href="https://dl.acm.org/doi/pdf/10.1145/361011.361067">ref</a>]
-						</p>
+						<canvas id="chart-systems"></canvas>
 					</div>
-				</figcaption>
+					<div>
+						<canvas id="chart-subsystems"></canvas>
+					</div>
+				</figure>
 			</div>
 		</section>
 		<section>
@@ -207,7 +197,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				as developed over time.
 			</p>
 			<h2 id="casestudy">
-				<span>##</span> Case study
+				<span>##</span> case study
 			</h2>
 			<p>
 				Let's use
@@ -265,7 +255,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 		</section>
 		<section>
 			<h2 id="survey">
-				<span>##</span> Survey
+				<span>##</span> survey
 			</h2>
 			<p>
 				In this section, I survey real-world sandbox users in 
@@ -314,29 +304,27 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 		</section>
 		<section>
 			<h2 id="findings">
-				<span>##</span> Findings
+				<span>##</span> findings
 			</h2>
 			<p>
-				What have we done well, and what can we do better?
-			</p>
-			<p>
-				OpenBSD's pledge
+				It's clear that <a href="https://openbsd.org">OpenBSD</a>'s
 				<a href="https://man.openbsd.org/pledge">pledge</a>
-				has been massively successful in getting traction in open source.
-				This is both due to how ports are maintained by OpenBSD
-				developers and the ease at which systems can be extended
-				with sandbox support.
+				has been massively successful in getting traction in open source,
+				both within OpenBSD and for third-party systems.  This is likely due
+				both to how ports are maintained by OpenBSD developers and the ease
+				at which systems can be extended with sandbox support.
+				The documentation and reference examples are succinct and easy to
+				digest.
 			</p>
 			<p>
 				<a href="https://linux.org">Linux</a>'s
 				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>
-				is far less successful: it has a whopping seven-fold
-				increase in reference complexity, and even more for source
-				complexity, over OpenBSD and FreeBSD.
+				is far more complicated: it has a seven-fold increase in reference
+				complexity, and even more for source complexity, over OpenBSD and
+				FreeBSD.
 				<a href="https://docs.kernel.org/userspace-api/landlock.html">Landlock</a>
-				showed promise as a simpler alternative, but has since grown in
-				complexity and does not have much uptake.
-				The maintenance burden for 
+				showed promise as a simpler Linux alternative.  The maintenance
+				burden for 
 				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>,
 				as illustrated by 
 				<a href="https://github.com/openssh/openssh-portable">openssh-portable</a>,
@@ -345,7 +333,8 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			<p>
 				<a href="https://freebsd.org">FreeBSD</a>'s
 				<a href="https://wiki.freebsd.org/Capsicum">Capsicum</a>
-				has fairly good traction within FreeBSD, but not elsewhere.
+				has fairly good traction within FreeBSD.  Like OpenBSD, its
+				documentation and reference examples are easy to digest.
 			</p>
 			<p>
 				Ominously, 
@@ -357,7 +346,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 		</section>
 		<section>
 			<h2 id="contrib">
-				<span>##</span> Contributing
+				<span>##</span> contributing
 			</h2>
 			<p>
 				I'm starting this site to gain a full picture of the <q>sandbox</q>
@@ -374,30 +363,22 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				really are protected, and start a conversation about why systems are
 				more popular, and what we can do to raise the state of security on
 				less-popular systems.
-				To wit, I've added <q>attestations</q> to each example in the
+				You can easily add attestations to systems where you've contributed
+				a security sandbox with a
 				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
-				repository.  Just open a pull request with your GitHub name (for
-				now, just GitHub&#8212;I'll add more later) and add the repository
-				to which you've contributed security sandboxing.
-			</p>
-			<p>
-				Full instructions on how to add examples, sandbox, and attestations
-				are all on the 
-				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
-				page, and all possible through pull requests.  I'll merge this into
-				these on an as-needed basis.
+				pull request.
 			</p>
 		</section>
 		<section>
 			<h2 id="thanks">
-				<span>##</span> Thank you!
+				<span>##</span> thank you!
 			</h2>
 			<p>
 				For a scientific treatment of the subject, read
 				<a href="https://arxiv.org/abs/2405.06447">Sandboxing Adoption in Open Source Ecosystems</a>, 
-				Maysara Alhindi and Joseph Hallett, SESoS 2024.
-				I'd like to thank the authors for making their data available for me
-				to incorporate into the statistics.
+				Maysara Alhindi and Joseph Hallett, SESoS 2024.  I'd like to thank
+				the authors for making their data available for me to incorporate
+				into the statistics.
 			</p>
 			<p>
 				I'd also like to thank

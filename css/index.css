@@ -138,19 +138,16 @@ code.hljs			{ background-color: #f3f3f3;
 				  text-overflow: ellipsis; }
 #code-references,
 #code-notes			{ padding: 1rem; }
-#chart-multi-box > *		{ flex: 1; }
 #chart-casestudy-box,
 #chart-casestudy-history-box,
 #chart-contrib-box > figure,
 #chart-multi-box > figure,
-#chart-multi-box,
 #chart-box			{ display: flex;
 				  gap: 1em; }
-#chart-multi-box > figure	{ flex-direction: column; }
 #chart-casestudy-history-box > div,
 #chart-casestudy-box > div,
 #chart-contrib-box > figure > div,
-#chart-multi-box > div,
+#chart-multi-box > figure > div,
 #chart-box > div		{ flex: 1; }
 figcaption			{ margin-top: 0.75rem;
 				  width: 100%;
@@ -191,7 +188,7 @@ footer				{ font-size: smaller; }
 }
 
 @media (width < 35em) {
-  #examples .table		{ grid-template-columns: 1fr 1fr auto auto; }
-  #examples .table-row > :nth-child(1)
+  #systems .table		{ grid-template-columns: 1fr 1fr auto auto; }
+  #systems .table-row > :nth-child(1)
   				{ display: none; }
 }
