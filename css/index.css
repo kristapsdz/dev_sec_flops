@@ -171,7 +171,6 @@ footer				{ font-size: smaller; }
 	  			  gap: 0.5rem; }
   #chart-casestudy-history-box,	
   #chart-casestudy-box,	
-  #chart-multi-box,	
   #chart-box			{ flex-direction: column; }
   figcaption			{ max-width: unset;
 				  margin-top: 0; }
@@ -179,6 +178,7 @@ footer				{ font-size: smaller; }
 }
 
 @media (width < 45em) {
+  #chart-multi-box > figure,
   #chart-contrib-box > figure	{ flex-direction: column; }
   body > header,
   body > header nav		{ display: block;
