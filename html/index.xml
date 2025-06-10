@@ -264,14 +264,14 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</p>
 			<p class="help">
 				<i class="fa fa-exclamation-circle"></i>
-				<strong>This is very incomplete!</strong>
+				<strong>This is far from complete!</strong>
 				Help make these charts more meaningful: if you've significantly
 				contributed to a sandbox effort, please submit an attestation by a
 				<a href="https://github.com/kristapsdz/dev_sec_flops">GitHub</a>
 				pull request.  Thank you!
 			</p>
 			<p>
-				For "in-house" systems, my methodology was to mine the
+				For <q>in-house</q> systems, my methodology was to mine the
 				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
 				<a href="https://github.com/openbsd/src">OpenBSD</a> git
 				repositories (specifically <code>usr.bin</code> and
