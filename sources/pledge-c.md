@@ -58,6 +58,10 @@ githubAttestations:
     n0la ggreer/the_silver_searcher,
     nicm tmate-io/tmate,
     bluhm bluhm/udpbench,
+    rsmarples NetworkConfiguration/dhcpcd,
+    msantos msantos/alcove,
+    devnexen randombit/botan,
+    valoq pwmt/zathura,
 openbsdAttestations:
     deraadt src/usr.bin/apply,
     ratchov usr.bin/aucat,

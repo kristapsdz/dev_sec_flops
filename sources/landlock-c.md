@@ -5,6 +5,8 @@ githubAttestations:
     Larhzu tukaani-project/xz,
     omar-polo omar-polo/gmid,
     regit OISF/suricata,
+    redpig google/minijail,
+    valoq pwmt/zathura,
 
 ```c
 #define _GNU_SOURCE

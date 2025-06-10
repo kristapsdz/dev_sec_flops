@@ -12,6 +12,11 @@ githubAttestations:
     omar-polo omar-polo/gmid,
     devnexen radareorg/radare2,
     Larhzu tukaani-project/xz,
+    trasz irssi/irssi,
+    rsmarples NetworkConfiguration/dhcpcd,
+    msantos msantos/alcove,
+    loganaden the-tcpdump-group/tcpdump,
+    devnexen randombit/botan,
 freebsdAttestations:
     oshogbo usr.bin/basename,
     oshogbo usr.bin/col,

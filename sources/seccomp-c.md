@@ -45,6 +45,10 @@ githubAttestations:
     ThomasHabets ThomasHabets/arping,
     omar-polo omar-polo/gmid,
     fcambus fcambus/logswan,
+    rsmarples NetworkConfiguration/dhcpcd,
+    msantos msantos/alcove,
+    redpig google/minijail,
+    valoq pwmt/zathura,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */

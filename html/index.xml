@@ -110,8 +110,8 @@ txt = Path(".profile").read_text()</code></pre>
 connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</div>
 			<p>
-				In the following, I graph how the length of a tool's documentation
-				(<q>manpage</q>) and length of an example usage.  Why the length of
+				In the following, I plot the length of a tool's documentation
+				(<q>manpage</q>) over the length of an example usage.  Why the length of
 				the manpage?  It's the standard way developers interact with tool
 				documentation; and in a way, measures the cognitive load required to
 				understand and use the tool.
@@ -271,25 +271,32 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				pull request.  Thank you!
 			</p>
 			<p>
-				For <q>in-house</q> systems, my methodology was to mine the
+				For <q>in-house</q> systems, I mined the
 				<a href="https://github.com/freebsd/freebsd-src">FreeBSD</a> and
 				<a href="https://github.com/openbsd/src">OpenBSD</a> git
 				repositories (specifically <code>usr.bin</code> and
-				<code>usr.sbin</code>) for sandbox invocations, then look up the
+				<code>usr.sbin</code>) for sandbox invocations, then looked up the
 				earliest entry for a contributor.
 			</p>
 			<p>
 				For general open source, I drew from the results of 
 				<i>Sandboxing Adoption in Open Source Ecosystems</i> (see
 				the <a href="#thanks">thanks</a> section), which in turn
-				drew from the third-party software repositories for Linux
-				(Debian and Fedora) and OpenBSD, then analysed the sources
-				for sandbox usage.  I only included those systems that had a
-				specific commit and author for adding the sandbox support.
+				searched third-party software repositories for
+				<a href="https://docs.kernel.org/userspace-api/seccomp_filter.html">seccomp</a>
+				(Debian and Fedora) and
+				<a href="https://man.openbsd.org/pledge">pledge</a>.
+				I only included those systems that had a specific commit
+				and author for adding the sandbox support.
 			</p>
 			<p>
-				I'm not aware of central repositories for Linux or FreeBSD
-				sandboxing, so it's hard to gather information.
+				Lastly, I used
+				<a href="https://github.com">GitHub</a> search for key
+				functions used in sandboxing.  This was particularly
+				useful for 
+				<a href="https://wiki.freebsd.org/Capsicum">Capsicum</a>
+				and
+				<a href="https://docs.kernel.org/userspace-api/landlock.html">Landlock</a>.
 			</p>
 			<div id="chart-contrib-box">
 				<figure>
