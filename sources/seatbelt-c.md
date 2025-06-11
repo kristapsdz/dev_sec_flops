@@ -9,6 +9,7 @@ githubAttestations:
     kristapsdz kristapsdz/sqlite2mdoc,
     djmdjm openssh/openssh-portable,
     rsesek chromium/chromium,
+    devnexen memcached/memcached,
 
 ```c
 #include <sandbox.h> /* sandbox_init(3), etc. */
