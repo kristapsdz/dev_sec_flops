@@ -56,6 +56,8 @@ githubAttestations:
     tych0 checkpoint-restore/criu,
     giuseppe containers/conmon,
     cjdelisle cjdelisle/cjdns,
+    practicalswift bitcoin/bitcoin,
+
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */
