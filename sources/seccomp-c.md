@@ -36,7 +36,6 @@ githubAttestations:
     millert sudo-project/sudo,
     stefanberger stefanberger/swtpm,
     poettering systemd/systemd,
-    valoq pwmt/zathura,
     DaveMielke brltty/brltty,
     stoeckmann stoeckmann/xwallpaper,
     francma francma/wob,
@@ -49,6 +48,14 @@ githubAttestations:
     msantos msantos/alcove,
     redpig google/minijail,
     valoq pwmt/zathura,
+    hanwen universal-ctags/ctags,
+    vincentbernat lldpd/lldpd,
+    RH-steve-grubb linux-application-whitelisting/fapolicyd,
+    mslusarz envytools/envytools,
+    phst emacs-mirror/emacs,
+    tych0 checkpoint-restore/criu,
+    giuseppe containers/conmon,
+    cjdelisle cjdelisle/cjdns,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */
