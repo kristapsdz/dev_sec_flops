@@ -155,7 +155,7 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 				references, and notes.  Which method would you choose?  Sources
 				readable on a normal mobile phone (&lt;20 lines) have lines show in
 				blue, barely readable (20&#8211;30 lines) in orange, and above in
-				red.  Deprecated sandboxes are marked next to the subsytem name.
+				red.  Deprecated sandboxes are marked next to the subsystem name.
 			</p>
 			<div class="table">
 				<div class="table-head">
