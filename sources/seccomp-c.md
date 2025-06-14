@@ -8,7 +8,6 @@ githubAttestations:
     fcambus ansilove/ansilove,
     julian-klode Debian/apt,
     fcambus fcambus/bdf2sfd,
-    DaveMielke brltty/brltty,
     mlichvar mlichvar/chrony,
     giuseppe containers/crun,
     zoulasc file/file,
@@ -17,7 +16,6 @@ githubAttestations:
     alexlarsson flatpack/flatpack,
     nmav gnutls/gnutls,
     jorisvink jorisvink/kore,
-    fcambus fcambus/logswan,
     hallyn lxc/lxc,
     viraptor memcached/memcached,
     aszlig NixOS/nix,
@@ -57,7 +55,15 @@ githubAttestations:
     giuseppe containers/conmon,
     cjdelisle cjdelisle/cjdns,
     practicalswift bitcoin/bitcoin,
-
+    vanhauser-thc AFLplusplus/AFLplusplus,
+    giuseppe projectatomic/bwrap-oci,
+    hadess GNOME/gnome-desktop,
+    letoams libreswan/libreswan,
+    ntpreleng ntp-project/ntp,
+    aperezdc aperezdc/signify,
+    AkihiroSuda rootless-containers/slirp4netns,
+    xtkoba eafer/rdrview,
+    mato Solo5/solo5,
 
 ```c
 #include <sys/prctl.h> /* prctl(2) */

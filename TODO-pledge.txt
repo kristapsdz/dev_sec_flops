@@ -1,0 +1,27 @@
+catgirl					# Not on github
+colorls					# Not on github
+desktop-file-utils			# Not on github
+dicepassc				# Doesn't exist...?
+freebee					# Doesn't exist...?
+gelatod					# Not on github
+geomyidae				# Not on github
+iblock					# Not on github
+ii					# Not on github (suckless)
+kristall				# From vendored cmark
+mangl					# From vendored mandoc
+mcast-proxy				# Not actually pledged?
+mcds					# Not on github
+mozilla-thunderbird			# Not on github (mozilla)
+pivy					# Not upstream?
+pounce					# Not on github
+ppsspp					# Not upstream?
+ranval					# Not on github
+sic					# Not on github (suckless)
+siren					# Not on github
+spidermonkey102				# Not on github (mozilla)
+st					# Not on github
+truncate				# Ported from freebsd/not on github
+vger					# Not on github
+warzone2100				# Not referenced
+xfe					# Not on github
+xmem					# Not on github

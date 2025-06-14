@@ -1,0 +1,28 @@
+bpftrace 				# Never committed.
+brlapi 					# Really brltty?
+care 					# Part of proot
+chrome-remote-desktop 			# Cannot find
+chromedriver				# Cannot find
+crit					# Doesn't actually use...?
+ctags					# Really universal-ctags?
+dhcpcd					# Generic name
+geany					# Vendors universal-ctags
+gir1.2					# No idea
+gsi-openssh				# Forked from openssh
+guile-gnutls				# From gnutls
+icecat					# Firefox
+knot-host				# Not referenced
+man-db					# Not on github
+mingw32					# Not on github
+mingw64					# Not on github
+passt					# Not on github
+redeclipse-common			# Not referenced
+seamonkey				# Not on github
+slick-greeter				# Not referenced
+sntp					# Not referenced (common name)
+thunderbird				# Not on github
+tor					# Not on github
+tracker					# Not on github (GNOME)
+udev					# Not referenced (common name)
+vsftpd					# Not on github
+xen					# Not clearly referenced (and not on github)

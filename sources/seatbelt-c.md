@@ -10,6 +10,9 @@ githubAttestations:
     djmdjm openssh/openssh-portable,
     rsesek chromium/chromium,
     devnexen memcached/memcached,
+    randombit randombit/botan,
+    guijan guijan/dictpw,
+    jedisct1 ginhom/dnscrypt-proxy,
 
 ```c
 #include <sandbox.h> /* sandbox_init(3), etc. */

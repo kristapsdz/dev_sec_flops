@@ -17,6 +17,11 @@ githubAttestations:
     msantos msantos/alcove,
     loganaden the-tcpdump-group/tcpdump,
     devnexen randombit/botan,
+    Partmedia SSHGuard/sshguard,
+    omar-polo ThomasAdam/got-portable,
+    guijan guijan/dictpw,
+    eafer eafer/rdrview,
+    sg2342 Solo5/solo5,
 freebsdAttestations:
     oshogbo usr.bin/basename,
     oshogbo usr.bin/col,

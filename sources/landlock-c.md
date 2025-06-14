@@ -7,6 +7,8 @@ githubAttestations:
     regit OISF/suricata,
     redpig google/minijail,
     valoq pwmt/zathura,
+    omar-polo telescope-browser/telescope,
+    ThomasAdam ThomasAdam/got-portable,
 
 ```c
 #define _GNU_SOURCE
