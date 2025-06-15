@@ -48,6 +48,7 @@ code.hljs			{ background-color: #f3f3f3;
 .byline				{ font-weight: bold;
 				  color: #fff; }
 .empty				{ opacity: 0.5; }
+.fa.fa-question-circle		{ color: orange; }
 .fa.fa-exclamation-circle	{ color: #ff6384; }
 .table				{ display: grid;
 				  width: 100%;
@@ -175,20 +176,14 @@ footer				{ font-size: smaller; }
   figcaption			{ max-width: unset;
 				  margin-top: 0; }
   h1, h2			{ margin-left: 0; }
+  #chart-multi-box > figure,
+  #chart-contrib-box > figure	{ flex-direction: column; }
 }
 
 @media (width < 45em) {
-  #chart-multi-box > figure,
-  #chart-contrib-box > figure	{ flex-direction: column; }
   body > header,
   body > header nav		{ display: block;
 	  			  text-align: center; }
   #example			{ grid-template-columns: 1fr; }
   #example div			{ padding-top: 0; }
-}
-
-@media (width < 35em) {
-  #systems .table		{ grid-template-columns: 1fr 1fr auto auto; }
-  #systems .table-row > :nth-child(1)
-  				{ display: none; }
 }

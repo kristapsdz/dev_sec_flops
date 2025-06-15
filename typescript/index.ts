@@ -128,7 +128,7 @@ function chartSourcesRefs(id: string, tallies: Tally[], title: string,
 			y: {
 				title: {
 					display: true,
-					text: 'source code',
+					text: 'source code lines',
 					color: '#36a2eb',
 				},
 				ticks: {
@@ -230,7 +230,7 @@ function chartScatter(id: string)
 			x: {
 				title: {
 					display: true,
-					text: 'source code',
+					text: 'source code lines',
 					color: '#fff',
 				},
 				ticks: {
@@ -646,7 +646,7 @@ function drawCasestudy()
 			y: {
 				title: {
 					display: true,
-					text: 'source code',
+					text: 'source code lines',
 					color: '#36a2eb',
 				},
 				ticks: {
