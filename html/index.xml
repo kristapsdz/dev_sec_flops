@@ -390,8 +390,11 @@ connection = http.client.HTTPSConnection("www.bsd.lv")</code></pre>
 			</h2>
 			<p>
 				For a scientific treatment of the subject, read
-				<a href="https://arxiv.org/abs/2405.06447">Sandboxing Adoption in Open Source Ecosystems</a>, 
-				Maysara Alhindi and Joseph Hallett, SESoS 2024.  I'd like to thank
+				<a href="https://arxiv.org/abs/2405.06447">Sandboxing Adoption in Open Source Ecosystems</a>
+				and
+				<a href="https://arxiv.org/abs/2506.10234">Playing in the Sandbox: A Study on the Usability of Seccomp</a>,
+				Maysara Alhindi and Joseph Hallett.
+				I'd like to thank
 				the authors for making their data available for me to incorporate
 				into the statistics.
 			</p>
